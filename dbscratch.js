@@ -27,3 +27,30 @@ User.sync({force: true}).then(function () {
 User.findOne().then(function (user) {
     console.log(user.firstName);
 });
+
+
+/*
+Combination of date and ordinal unique for the row. Ordinals can change therefore should not be the PK.
+Ordinals always start at 0 for the first transaction of the day and increment thereafter.
+*/
+
+var Transaction = sequelize.define('transaction', {
+	id: {
+		type: Sequelize.INTEGER,
+		primaryKey: true,
+		autoIncrement: true
+	},
+
+	date: { type: Sequelize.DATE },
+	ordinal: { type: Sequelize.INTEGER },
+	party: { type: Sequelize.STRING },
+	amount: { type: Sequelize.DECIMAL },
+
+	type: { type: Sequelize.STRING },
+	particulars: { type: Sequelize.STRING },
+	code: { type: Sequelize.STRING },
+	reference: { type: Sequelize.STRING },
+	subsidiary: { type: Sequelize.STRING }, // e.g. suffix of card, for shared accounts
+}, {
+	freezeTableName: true
+});
