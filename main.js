@@ -1,28 +1,23 @@
 var parser = require('./lib/parser');
 var database = require('./lib/database');
 
-var files = process.argv.filter(parser.knownFormat);
+database.connect('postgres://luke.gumbley:@localhost:5432/luke.gumbley', { });
 
-files.forEach(function(name) {
-	parser.read(name).then(function(data) {
-		var rows = data.rows;
-		delete data.rows;
-		console.log(data);
-		console.log(rows[0]);
+// read all supplied files, create DB
+Promise.all([
+	Promise.all(process.argv.filter(parser.knownFormat).map(parser.read)),
+	database.sync()
+]).then(function(results) {
+	// add transactions to DB
+	var files = results[0];
+	return Promise.all(files.map(function(file) {
+		console.log(file.rows[0]);
+		return database.transaction.create(file.rows[0]);
+	}));
+}).then(function() {
+	// read transactions back from DB
+	console.log('FROM DB!');
+	return database.transaction.findOne().then(function (transaction) {
+	    console.log(transaction.dataValues);
 	});
-});
-
-database.connect('postgres://luke.gumbley:@localhost:5432/luke.gumbley', { logging: false });
-
-database.sync().then(function () {
-	database.user.create({
-		firstName: 'John',
-		lastName: 'Hancock'
-	});
-});
-
-/*
-database.user.findOne().then(function (user) {
-    console.log(user.firstName);
-});
-*/
+}).catch(function(err) { console.log(err); });
