@@ -3,12 +3,14 @@ var database = require('./lib/database');
 
 var files = process.argv.filter(parser.knownFormat);
 
-files.forEach(function(name) { parser.read(name, function(data) {
-	var rows = data.rows;
-	delete data.rows;
-	console.log(data);
-	console.log(rows[0]);
-})});
+files.forEach(function(name) {
+	parser.read(name).then(function(data) {
+		var rows = data.rows;
+		delete data.rows;
+		console.log(data);
+		console.log(rows[0]);
+	});
+});
 
 database.connect('postgres://luke.gumbley:@localhost:5432/luke.gumbley', { logging: false });
 
