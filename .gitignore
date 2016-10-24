@@ -28,3 +28,7 @@ node_modules
 
 # Test data
 data
+
+# IntelliJ files
+.idea
+sludge.iml

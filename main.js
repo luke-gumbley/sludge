@@ -11,7 +11,6 @@ Promise.all([
 	// add transactions to DB
 	var files = results[0];
 	return Promise.all(files.map(function(file) {
-		console.log(file.rows[0]);
 		return database.transaction.create(file.rows[0]);
 	}));
 }).then(function() {
