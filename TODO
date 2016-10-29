@@ -1,26 +1,26 @@
 TODO LIST FOR SLUDGE (rough roadmap)
 
-1.  Hard-code adding files straight into Transactions DB (just dupe, no stress)
-2.  Create classification IDs with ancillary data (int ID that correlates to a particular named bucket, with target level, zero date and periodicity)
-3.  Hard-code base list of buckets
-4.  Create basic UI for classifying transactions
-5.  Add basic UI for importing files
-6.  Report on current vs. expected bucket size.
+✓ 1.  Hard-code adding files straight into Transactions DB (just dupe, no stress)
+✓ 2.  Create classification IDs with ancillary data (int ID that correlates to a particular named bucket, with target level, zero date and periodicity)
+  3.  Hard-code base list of buckets
+  4.  Create basic UI for classifying transactions
+  5.  Add basic UI for importing files
+  6.  Report on current vs. expected bucket size.
 
 --- BASIC FUNCTIONALITY COMPLETE (DEMONSTRATABLE)
 
-7.  Create basic-case handler for import overlaps
-8.  Visualise in some way completeness of transaction record.
+  7.  Create basic-case handler for import overlaps
+  8.  Visualise in some way completeness of transaction record.
 
 --- USABLE WITH SOME ASSISTANCE
 
-9.  Create table holding ordered rules for classifying transaction (regex text match?)
-10. Automate classification to bucket where a matching rule is found
-11. Create basic UI for adding and editing buckets
+  9.  Create table holding ordered rules for classifying transaction (regex text match?)
+  10. Automate classification to bucket where a matching rule is found
+  11. Create basic UI for adding and editing buckets
 
---- USABLE BY WITHOUT ASSISTANCE
+--- USABLE WITHOUT ASSISTANCE
 
-12. Reverse-engineer mobile app protocols to permit automatic transaction retrieval
-13. Investigate Yodlee feeds
-14. Mobile-enable classifier
-15. Integrate Google authentication
+  12. Reverse-engineer mobile app protocols to permit automatic transaction retrieval
+  13. Investigate Yodlee feeds
+  14. Mobile-enable classifier
+  15. Integrate Google authentication
