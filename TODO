@@ -2,7 +2,7 @@ TODO LIST FOR SLUDGE (rough roadmap)
 
 ✓ 1.  Hard-code adding files straight into Transactions DB (just dupe, no stress)
 ✓ 2.  Create classification IDs with ancillary data (int ID that correlates to a particular named bucket, with target level, zero date and periodicity)
-  3.  Hard-code base list of buckets
+✓ 3.  Hard-code base list of buckets
   4.  Create basic UI for classifying transactions
   5.  Add basic UI for importing files
   6.  Report on current vs. expected bucket size.

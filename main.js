@@ -21,9 +21,9 @@ Promise.all([
 
 	return Promise.all(files.map(function(file) { return database.transaction.bulkCreate(file.rows); }));
 }).then(function() {
-	// read transactions back from DB
+	// read buckets back from DB
 	console.log('FROM DB!');
-	return database.transaction.findOne().then(function (transaction) {
-	    console.log(transaction.dataValues);
+	return database.bucket.findOne().then(function (item) {
+		console.log(item.dataValues);
 	});
 }).catch(function(err) { console.log(err); });
