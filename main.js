@@ -1,7 +1,6 @@
 var parser = require('./lib/parser');
 var database = require('./lib/database');
-
-database.connect('postgres://luke.gumbley:@localhost:5432/luke.gumbley', { });
+var api = require('./lib/api');
 
 // read buckets, create DB
 Promise.all([
@@ -20,10 +19,4 @@ Promise.all([
 	var files = results[0];
 
 	return Promise.all(files.map(function(file) { return database.transaction.bulkCreate(file.rows); }));
-}).then(function() {
-	// read buckets back from DB
-	console.log('FROM DB!');
-	return database.bucket.findOne().then(function (item) {
-		console.log(item.dataValues);
-	});
 }).catch(function(err) { console.log(err); });
