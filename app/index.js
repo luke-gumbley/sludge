@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Transaction from './Transaction';
 
 ReactDOM.render(
-<h1>Hello, world!</h1>,
+	<Transaction party="me" type="thing" particulars="part" code="cod" reference="ref" amount="19.43" />
+	,
 	document.getElementById('root')
 );
