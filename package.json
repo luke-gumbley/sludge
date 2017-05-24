@@ -21,7 +21,8 @@
     "webpack": "^2.4.1"
   },
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "watch": "webpack --progress --colors --watch"
   },
   "repository": {
     "type": "git",
