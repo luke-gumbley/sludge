@@ -1,26 +1,16 @@
 import React from 'react';
+import Bucket from './Bucket.js';
 
 class Transaction extends React.Component {
 	constructor(props) {
 		super(props);
-		//this.state = {date: new Date()};
+
+ 		this.handleBucketChange = this.handleBucketChange.bind(this);
 	}
 
-	/*
-	componentDidMount() {
-		this.timerID = setInterval( () => this.tick(), 1000 );
+	handleBucketChange(bucket) {
+		console.log(bucket);
 	}
-
-	componentWillUnmount() {
-		clearInterval(this.timerID);
-	}
-
-	tick() {
-		this.setState({
-			date: new Date()
-		});
-	}
-	 */
 
 	render() {
 		return (
@@ -31,6 +21,7 @@ class Transaction extends React.Component {
 				<div>{this.props.code}</div>
 				<div>{this.props.reference}</div>
 				<div>{this.props.amount}</div>
+				<Bucket bucket={this.props.bucket} onBucketChange={this.handleBucketChange} />
 			</div>
 		);
 	}
