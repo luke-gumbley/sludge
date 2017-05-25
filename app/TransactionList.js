@@ -8,7 +8,7 @@ class TransactionList extends React.Component {
 	}
 
 	componentDidMount() {
-		fetch("http://localhost:3000/transaction")
+		fetch("http://localhost:8080/transaction")
 			.then(r => r.json())
 			.then(data => this.setState({transactions: data}))
 			.catch(ex => {console.log('whoops!'); console.log(ex); });
@@ -16,7 +16,7 @@ class TransactionList extends React.Component {
 
 	render() {
 		var transactions = this.state.transactions.map(transaction => {
-			return (<Transaction key={transaction.id} {...transaction} />);
+			return (<Transaction key={transaction.id} transaction={transaction} />);
 		});
 		return (<div>{transactions}</div>);
 	}
