@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TransactionList from './TransactionList';
+import Sludge from './Sludge.js';
 
 ReactDOM.render(
-	<TransactionList />
+	<Sludge />
 	,
 	document.getElementById('root')
 );
