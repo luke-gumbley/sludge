@@ -1,8 +1,8 @@
 import React from 'react';
 import { render } from 'react-dom';
-import Sludge from './components/Sludge.js';
+import Root from './containers/Root';
 
 render(
-	<Sludge />,
+	<Root />,
 	document.getElementById('root')
 );

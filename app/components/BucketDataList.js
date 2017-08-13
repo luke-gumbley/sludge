@@ -6,7 +6,3 @@ export default class BucketDataList extends Component {
 		return (<datalist id="buckets">{buckets}</datalist>);
 	}
 }
-
-BucketDataList.defaultProps = {
-	buckets: []
-};

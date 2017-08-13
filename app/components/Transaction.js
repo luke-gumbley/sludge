@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Bucket from './Bucket.js';
+import Bucket from './Bucket';
 
 export default class Transaction extends Component {
 	render() {

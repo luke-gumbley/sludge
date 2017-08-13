@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Transaction from './Transaction.js';
+import Transaction from './Transaction';
 
 export default class TransactionList extends Component {
 	render() {
@@ -9,7 +9,3 @@ export default class TransactionList extends Component {
 		return (<div>{transactions}</div>);
 	}
 }
-
-TransactionList.defaultProps = {
-	transactions: []
-};
