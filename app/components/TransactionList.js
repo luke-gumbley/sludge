@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Transaction from './Transaction.js';
 
-class TransactionList extends React.Component {
+export default class TransactionList extends Component {
 	render() {
 		var transactions = this.props.transactions.map(transaction => {
 			return (<Transaction key={transaction.id} transaction={transaction} />);
@@ -10,4 +10,6 @@ class TransactionList extends React.Component {
 	}
 }
 
-module.exports = TransactionList;
+TransactionList.defaultProps = {
+	transactions: []
+};

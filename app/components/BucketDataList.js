@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-class BucketDataList extends React.Component {
+export default class BucketDataList extends Component {
 	render() {
 		var buckets = this.props.buckets.map(bucket => { return (<option key={bucket.id} value={bucket.name} />); });
 		return (<datalist id="buckets">{buckets}</datalist>);
 	}
 }
 
-module.exports = BucketDataList;
+BucketDataList.defaultProps = {
+	buckets: []
+};
