@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import TransactionList from '../components/TransactionList';
 import BucketDataList from '../components/BucketDataList';
+import {
+  fetchBuckets
+} from '../actions/buckets';
 
 class Sludge extends Component {
 	render() {
@@ -12,6 +15,12 @@ class Sludge extends Component {
 			</div>
 		);
 	}
+
+	componentDidMount() {
+		const { dispatch } = this.props;
+		dispatch(fetchBuckets());
+	}
+
 }
 
 function mapStateToProps(state) {
