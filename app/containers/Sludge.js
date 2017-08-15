@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import TransactionList from '../components/TransactionList';
 import BucketDataList from '../components/BucketDataList';
-import {
-  fetchBuckets
-} from '../actions/buckets';
+
+import { fetchBuckets } from '../actions/buckets';
+import { fetchTransactions } from '../actions/transactions';
 
 class Sludge extends Component {
 	render() {
@@ -19,6 +19,7 @@ class Sludge extends Component {
 	componentDidMount() {
 		const { dispatch } = this.props;
 		dispatch(fetchBuckets());
+		dispatch(fetchTransactions());
 	}
 
 }
