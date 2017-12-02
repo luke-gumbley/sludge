@@ -1,5 +1,6 @@
 export const REQUEST_BUCKETS = 'REQUEST_BUCKETS';
 export const RECEIVE_BUCKETS = 'RECEIVE_BUCKETS';
+export const RECEIVE_BUCKET = 'RECEIVE_BUCKET';
 
 function requestBuckets() {
 	return {
@@ -14,6 +15,13 @@ function receiveBuckets(json) {
 	};
 }
 
+function receiveBucket(json) {
+	return {
+		type: RECEIVE_BUCKET,
+		bucket: json
+	};
+}
+
 export function fetchBuckets() {
 	return dispatch => {
 		dispatch(requestBuckets());
@@ -21,4 +29,25 @@ export function fetchBuckets() {
 			.then(response => response.json())
 			.then(json => dispatch(receiveBuckets(json)));
 	};
+}
+
+export function createBucket(name) {
+	return dispatch => {
+		dispatch(requestBuckets());
+		return fetch('http://localhost:8080/bucket', {
+			method: 'POST',
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ name: name })
+		}).then(response => response.json())
+			.then(json => dispatch(receiveBucket(json)));
+	};
+}
+
+export function getBucket(name) {
+	return (dispatch, getState) => {
+		return (getState().buckets ? Promise.resolve() : dispatch(fetchBuckets()) ).then(() => {
+			var bucket = getState().buckets.items.find(b => b.name == name);
+			return bucket ? Promise.resolve(bucket) : dispatch(createBucket(name));
+		});
+	}
 }
