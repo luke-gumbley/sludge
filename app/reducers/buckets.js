@@ -1,7 +1,7 @@
 import {
-	REQUEST_BUCKETS,
-	RECEIVE_BUCKETS,
-	RECEIVE_BUCKET
+	GET_BUCKETS_REQUEST,
+	GET_BUCKETS_RESPONSE,
+	CREATE_BUCKET_RESPONSE
 } from '../actions/buckets';
 
 function buckets(
@@ -12,16 +12,16 @@ function buckets(
 	action
 ) {
 	switch (action.type) {
-		case REQUEST_BUCKETS:
+		case GET_BUCKETS_REQUEST:
 			return Object.assign({}, state, {
 				isFetching: true
 			});
-		case RECEIVE_BUCKETS:
+		case GET_BUCKETS_RESPONSE:
 			return Object.assign({}, state, {
 				isFetching: false,
 				items: action.buckets.reduce((items, b) => { items[b.id] = b; return items; }, {})
 			});
-		case RECEIVE_BUCKET:
+		case CREATE_BUCKET_RESPONSE:
 			var items = Object.assign({}, state.items);
 			items[action.bucket.id] = action.bucket;
 			return Object.assign({}, state, { items: items });
