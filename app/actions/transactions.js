@@ -55,7 +55,7 @@ function patchTransaction(dispatch, id, patch) {
 
 export function categoriseTransaction(id, bucketName) {
 	return dispatch => {
-		dispatch(getBucket(bucketName))
+		(bucketName ? dispatch(getBucket(bucketName)) : Promise.resolve({ id: null }))
 			.then(bucket => {
 				return patchTransaction(dispatch, id, [{ "op": "replace", "path": "/bucketId", "value": bucket.id }]);
 			});

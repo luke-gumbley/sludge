@@ -47,7 +47,10 @@ export function createBucket(name) {
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ name: name })
 		}).then(response => response.json())
-			.then(bucket => dispatch(createBucketResponse(bucket)));
+			.then(bucket => {
+				dispatch(createBucketResponse(bucket));
+				return bucket;
+			});
 	};
 }
 
