@@ -45,9 +45,7 @@ export function createBucket(name) {
 
 export function getBucket(name) {
 	return (dispatch, getState) => {
-		return (getState().buckets ? Promise.resolve() : dispatch(fetchBuckets()) ).then(() => {
-			var bucket = getState().buckets.items.find(b => b.name == name);
-			return bucket ? Promise.resolve(bucket) : dispatch(createBucket(name));
-		});
+		var bucket = Object.values(getState().buckets.items).find(b => b.name == name);
+		return bucket ? Promise.resolve(bucket) : dispatch(createBucket(name));
 	}
 }

@@ -10,8 +10,8 @@ class Sludge extends Component {
 	render() {
 		return (
 			<div>
-				<TransactionList transactions={this.props.transactions.items} />
-				<BucketDataList buckets={this.props.buckets.items} />
+				<TransactionList transactions={Object.values(this.props.transactions.items)} />
+				<BucketDataList buckets={Object.values(this.props.buckets.items)} />
 			</div>
 		);
 	}

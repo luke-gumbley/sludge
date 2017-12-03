@@ -9,7 +9,7 @@ class Bucket extends Component {
 
 function mapStateToProps(state, props) {
 	return {
-		bucket: (state.buckets.items || []).find(b => b.id == props.bucketId) || {}
+		bucket: state.buckets.items[props.bucketId] || {}
 	};
 }
 

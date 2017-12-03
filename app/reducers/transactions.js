@@ -6,7 +6,7 @@ import {
 function transactions(
 	state = {
 		isFetching: false,
-		items: []
+		items: {}
 	},
 	action
 ) {
@@ -18,7 +18,7 @@ function transactions(
 		case RECEIVE_TRANSACTIONS:
 			return Object.assign({}, state, {
 				isFetching: false,
-				items: action.transactions
+				items: action.transactions.reduce((items, t) => { items[t.id] = t; return items; }, {})
 			});
 		default:
 			return state;

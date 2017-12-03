@@ -7,7 +7,7 @@ import {
 function buckets(
 	state = {
 		isFetching: false,
-		items: []
+		items: {}
 	},
 	action
 ) {
@@ -19,12 +19,12 @@ function buckets(
 		case RECEIVE_BUCKETS:
 			return Object.assign({}, state, {
 				isFetching: false,
-				items: action.buckets
+				items: action.buckets.reduce((items, b) => { items[b.id] = b; return items; }, {})
 			});
 		case RECEIVE_BUCKET:
-			return Object.assign({}, state, {
-				items: (state.items || []).filter(b => b.id !==  action.bucket.id).concat([action.bucket])
-			});
+			var items = Object.assign({}, state.items);
+			items[action.bucket.id] = action.bucket;
+			return Object.assign({}, state, { items: items });
 		default:
 			return state;
 	}
