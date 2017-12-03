@@ -9,24 +9,24 @@ function getBucketsRequest() {
 	};
 }
 
-function getBucketsResponse(json) {
+function getBucketsResponse(buckets) {
 	return {
 		type: GET_BUCKETS_RESPONSE,
-		buckets: json
+		buckets: buckets
 	};
 }
 
-function createBucketRequest(json) {
+function createBucketRequest(name) {
 	return {
 		type: CREATE_BUCKET_REQUEST,
-		bucket: json
+		name: name
 	};
 }
 
-function createBucketResponse(json) {
+function createBucketResponse(bucket) {
 	return {
 		type: CREATE_BUCKET_RESPONSE,
-		bucket: json
+		bucket: bucket
 	};
 }
 
@@ -35,19 +35,19 @@ export function getBuckets() {
 		dispatch(getBucketsRequest());
 		return fetch('http://localhost:8080/bucket')
 			.then(response => response.json())
-			.then(json => dispatch(getBucketsResponse(json)));
+			.then(buckets => dispatch(getBucketsResponse(buckets)));
 	};
 }
 
 export function createBucket(name) {
 	return dispatch => {
-		dispatch(createBucketRequest());
+		dispatch(createBucketRequest(name));
 		return fetch('http://localhost:8080/bucket', {
 			method: 'POST',
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ name: name })
 		}).then(response => response.json())
-			.then(json => dispatch(createBucketResponse(json)));
+			.then(bucket => dispatch(createBucketResponse(bucket)));
 	};
 }
 

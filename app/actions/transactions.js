@@ -12,10 +12,10 @@ function getTransactionsRequest() {
 	};
 }
 
-function getTransactionsResponse(json) {
+function getTransactionsResponse(transactions) {
 	return {
 		type: GET_TRANSACTIONS_RESPONSE,
-		transactions: json
+		transactions: transactions
 	};
 }
 
@@ -24,7 +24,7 @@ export function getTransactions() {
 		dispatch(getTransactionsRequest());
 		return fetch('http://localhost:8080/transaction')
 			.then(response => response.json())
-			.then(json => dispatch(getTransactionsResponse(json)));
+			.then(transactions => dispatch(getTransactionsResponse(transactions)));
 	};
 }
 
@@ -35,10 +35,10 @@ export function patchTransactionRequest(id) {
 	};
 }
 
-export function patchTransactionResponse(id) {
+export function patchTransactionResponse(transaction) {
 	return {
 		type: PATCH_TRANSACTION_RESPONSE,
-		id: id
+		transaction: transaction
 	};
 }
 
@@ -48,7 +48,8 @@ function patchTransaction(dispatch, id, patch) {
 			method: 'PATCH',
 			headers: { "Content-Type": "application/json-patch+json" },
 			body: JSON.stringify(patch),
-		}).then(json => dispatch(patchTransactionResponse(id)))
+		}).then(response => response.json())
+		.then(transaction => dispatch(patchTransactionResponse(transaction)))
 		.catch(ex => {console.log('whoops!'); console.log(ex); });
 }
 
