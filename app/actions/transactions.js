@@ -1,30 +1,30 @@
 import {applyPatch, createPatch, createTests} from 'rfc6902';
 import {getBucket} from './buckets';
 
-export const REQUEST_TRANSACTIONS = 'REQUEST_TRANSACTIONS';
-export const RECEIVE_TRANSACTIONS = 'RECEIVE_TRANSACTIONS';
+export const GET_TRANSACTIONS_REQUEST = 'GET_TRANSACTIONS_REQUEST';
+export const GET_TRANSACTIONS_RESPONSE = 'GET_TRANSACTIONS_RESPONSE';
 export const PATCH_TRANSACTION_REQUEST = 'PATCH_TRANSACTION_REQUEST';
 export const PATCH_TRANSACTION_RESPONSE = 'PATCH_TRANSACTION_RESPONSE';
 
-function requestTransactions() {
+function getTransactionsRequest() {
 	return {
-		type: REQUEST_TRANSACTIONS
+		type: GET_TRANSACTIONS_REQUEST
 	};
 }
 
-function receiveTransactions(json) {
+function getTransactionsResponse(json) {
 	return {
-		type: RECEIVE_TRANSACTIONS,
+		type: GET_TRANSACTIONS_RESPONSE,
 		transactions: json
 	};
 }
 
-export function fetchTransactions() {
+export function getTransactions() {
 	return dispatch => {
-		dispatch(requestTransactions());
+		dispatch(getTransactionsRequest());
 		return fetch('http://localhost:8080/transaction')
 			.then(response => response.json())
-			.then(json => dispatch(receiveTransactions(json)));
+			.then(json => dispatch(getTransactionsResponse(json)));
 	};
 }
 

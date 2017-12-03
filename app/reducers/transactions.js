@@ -1,6 +1,6 @@
 import {
-	REQUEST_TRANSACTIONS,
-	RECEIVE_TRANSACTIONS
+	GET_TRANSACTIONS_REQUEST,
+	GET_TRANSACTIONS_RESPONSE
 } from '../actions/transactions';
 
 function transactions(
@@ -11,11 +11,11 @@ function transactions(
 	action
 ) {
 	switch (action.type) {
-		case REQUEST_TRANSACTIONS:
+		case GET_TRANSACTIONS_REQUEST:
 			return Object.assign({}, state, {
 				isFetching: true
 			});
-		case RECEIVE_TRANSACTIONS:
+		case GET_TRANSACTIONS_RESPONSE:
 			return Object.assign({}, state, {
 				isFetching: false,
 				items: action.transactions.reduce((items, t) => { items[t.id] = t; return items; }, {})
