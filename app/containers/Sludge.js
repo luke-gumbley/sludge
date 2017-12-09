@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import TransactionList from '../components/TransactionList';
 import BucketDataList from '../components/BucketDataList';
+import Header from './Header';
 
 import { getBuckets } from '../actions/buckets';
 import { getTransactions } from '../actions/transactions';
@@ -10,6 +11,7 @@ class Sludge extends Component {
 	render() {
 		return (
 			<div>
+				<Header />
 				<TransactionList transactions={Object.values(this.props.transactions.items)} />
 				<BucketDataList buckets={Object.values(this.props.buckets.items)} />
 			</div>
