@@ -4,7 +4,7 @@ var api = require('./lib/api');
 
 // read buckets, create DB
 Promise.all([
-	parser.read('data/buckets.csv',{ columns: true }, function(err, rows) { return rows; }),
+	parser.readFile('data/buckets.csv',{ columns: true }, function(err, rows) { return rows; }),
 	database.sync()
 ]).then(function(results) {
 	// read all supplied transaction files, add buckets to DB
