@@ -5,6 +5,8 @@ export const GET_TRANSACTIONS_REQUEST = 'GET_TRANSACTIONS_REQUEST';
 export const GET_TRANSACTIONS_RESPONSE = 'GET_TRANSACTIONS_RESPONSE';
 export const PATCH_TRANSACTION_REQUEST = 'PATCH_TRANSACTION_REQUEST';
 export const PATCH_TRANSACTION_RESPONSE = 'PATCH_TRANSACTION_RESPONSE';
+export const POST_STATEMENT_REQUEST = 'POST_STATEMENT_REQUEST';
+export const POST_STATEMENT_RESPONSE = 'POST_STATEMENT_RESPONSE';
 
 function getTransactionsRequest() {
 	return {
@@ -59,5 +61,32 @@ export function categoriseTransaction(id, bucketName) {
 			.then(bucket => {
 				return patchTransaction(dispatch, id, [{ "op": "replace", "path": "/bucketId", "value": bucket.id }]);
 			});
+	};
+}
+
+export function postStatementRequest() {
+	return {
+		type: POST_STATEMENT_REQUEST
+	};
+}
+
+export function postStatementResponse() {
+	return {
+		type: POST_STATEMENT_RESPONSE
+	};
+}
+
+export function postStatement(filename, data) {
+	return dispatch => {
+		dispatch(postStatementRequest());
+		return fetch(`/statements/${filename}`, {
+				method: 'POST',
+				headers: { "Content-Type": "application/octet-stream" },
+				body: data
+			}).then(() => {
+				dispatch(postStatementResponse());
+				return dispatch(getTransactions()); // super naive
+			}).catch(ex => {console.log('whoops!'); console.log(ex); });
+
 	};
 }

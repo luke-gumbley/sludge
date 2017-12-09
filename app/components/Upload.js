@@ -5,26 +5,15 @@ export default class Upload extends Component {
 
 	constructor() {
 		super();
-		this.uploadFile = this.uploadFile.bind(this);
 		this.readFile = this.readFile.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 	}
 
-	uploadFile(filename, data) {
-		fetch(`/statements/${filename}`, {
-				method: 'POST',
-				headers: { "Content-Type": "application/octet-stream" },
-				body: data
-			}).then(response => response.json())
-			.then(success => console.log(success))
-			.catch(ex => {console.log('whoops!'); console.log(ex); });
-	}
-
 	readFile(file) {
-		const uploadFile = this.uploadFile;
+		const onFile = this.props.onFile;
   		const reader = new FileReader();
 
-  		reader.onload = e => uploadFile(file.name, e.currentTarget.result);
+  		reader.onload = e => onFile(file.name, e.currentTarget.result);
   		reader.readAsText(file);
 	}
 
