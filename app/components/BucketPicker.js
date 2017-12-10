@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-class Bucket extends Component {
+class BucketPicker extends Component {
 	constructor() {
 		super();
 		this.handleBlur = this.handleBlur.bind(this);
@@ -23,4 +23,4 @@ function mapStateToProps(state, props) {
 	};
 }
 
-export default connect(mapStateToProps)(Bucket);
+export default connect(mapStateToProps)(BucketPicker);

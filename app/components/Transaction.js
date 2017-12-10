@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Bucket from './Bucket';
+import BucketPicker from './BucketPicker';
 import { categoriseTransaction } from '../actions/transactions.js';
 import { connect } from 'react-redux';
 
@@ -14,7 +14,7 @@ class Transaction extends Component {
 				<div>{this.props.transaction.code}</div>
 				<div>{this.props.transaction.reference}</div>
 				<div>{this.props.transaction.amount}</div>
-				<Bucket bucketId={this.props.transaction.bucketId} onChange={bucket => this.props.onChange(this.props.transaction.id, bucket)} />
+				<BucketPicker bucketId={this.props.transaction.bucketId} onChange={bucket => this.props.onChange(this.props.transaction.id, bucket)} />
 			</div>
 		);
 	}
