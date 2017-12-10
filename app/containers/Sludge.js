@@ -4,6 +4,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
 import TransactionList from '../components/TransactionList';
+import BucketList from '../components/BucketList';
 import BucketDataList from '../components/BucketDataList';
 import Header from './Header';
 
@@ -24,7 +25,7 @@ class Sludge extends Component {
 						<TransactionList transactions={Object.values(this.props.transactions.items)} />
 					</TabPanel>
 					<TabPanel>
-						<span>Yeah, yeah, some crap.</span>
+						<BucketList buckets={Object.values(this.props.buckets.items)} />
 					</TabPanel>
 				</Tabs>
 				<BucketDataList buckets={Object.values(this.props.buckets.items)} />
