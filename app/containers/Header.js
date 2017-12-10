@@ -9,7 +9,6 @@ class Header extends Component {
 	render() {
 		return (
 			<div className='container'>
-				<div className='cell'></div>
 				<div className='cell'>
 					<Upload onFile={ this.props.handleFile }/>
 				</div>

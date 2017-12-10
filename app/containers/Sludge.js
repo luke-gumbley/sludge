@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+
 import TransactionList from '../components/TransactionList';
 import BucketDataList from '../components/BucketDataList';
 import Header from './Header';
@@ -12,7 +15,18 @@ class Sludge extends Component {
 		return (
 			<div>
 				<Header />
-				<TransactionList transactions={Object.values(this.props.transactions.items)} />
+				<Tabs>
+					<TabList>
+						<Tab>Transactions</Tab>
+						<Tab>Buckets</Tab>
+					</TabList>
+					<TabPanel>
+						<TransactionList transactions={Object.values(this.props.transactions.items)} />
+					</TabPanel>
+					<TabPanel>
+						<span>Yeah, yeah, some crap.</span>
+					</TabPanel>
+				</Tabs>
 				<BucketDataList buckets={Object.values(this.props.buckets.items)} />
 			</div>
 		);
