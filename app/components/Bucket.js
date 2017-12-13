@@ -27,7 +27,7 @@ export default class Bucket extends Component {
 				<div>{renderAmount(this.props.bucket)}</div>
 
 				<div>{renderPeriod(this.props.bucket)}</div>
-				<div>{moment(this.props.bucket.zeroDate).format('l')}</div>
+				<div>{moment(this.props.bucket.nextDate).format('l')}</div>
 				<div>{renderRate(this.props.bucket)}</div>
 
 				<div>over/under</div>
