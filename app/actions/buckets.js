@@ -1,3 +1,6 @@
+import Big from 'big.js';
+import moment from 'Moment';
+
 export const GET_BUCKETS_REQUEST = 'GET_BUCKETS_REQUEST';
 export const GET_BUCKETS_RESPONSE = 'GET_BUCKETS_RESPONSE';
 export const CREATE_BUCKET_REQUEST = 'CREATE_BUCKET_REQUEST';
@@ -35,7 +38,14 @@ export function getBuckets() {
 		dispatch(getBucketsRequest());
 		return fetch('http://localhost:8080/bucket')
 			.then(response => response.json())
-			.then(buckets => dispatch(getBucketsResponse(buckets)));
+			.then(buckets => {
+				buckets.forEach(bucket => {
+					bucket.nextDate = moment(bucket.nextDate);
+					bucket.amount = new Big(bucket.amount);
+					bucket.balance = new Big(bucket.balance);
+				})
+				return dispatch(getBucketsResponse(buckets));
+			});
 	};
 }
 

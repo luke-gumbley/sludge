@@ -2,6 +2,11 @@ var parser = require('./lib/parser');
 var database = require('./lib/database');
 var api = require('./lib/api');
 
+process.on('unhandledRejection', (reason, p) => {
+  console.log('Unhandled Rejection at:', p, 'reason:', reason);
+});
+
+/*
 // read buckets, create DB
 Promise.all([
 	parser.readFile('data/buckets.csv',{ columns: true }, function(err, rows) { return rows; }),
@@ -20,3 +25,4 @@ Promise.all([
 
 	return Promise.all(files.map(function(file) { return database.transaction.bulkCreate(file.rows); }));
 }).catch(function(err) { console.log(err); });
+*/

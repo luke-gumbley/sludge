@@ -1,4 +1,7 @@
 import {applyPatch, createPatch, createTests} from 'rfc6902';
+import Big from 'big.js';
+import moment from 'Moment';
+
 import {getBucket} from './buckets';
 
 export const GET_TRANSACTIONS_REQUEST = 'GET_TRANSACTIONS_REQUEST';
@@ -26,7 +29,13 @@ export function getTransactions() {
 		dispatch(getTransactionsRequest());
 		return fetch('http://localhost:8080/transaction')
 			.then(response => response.json())
-			.then(transactions => dispatch(getTransactionsResponse(transactions)));
+			.then(transactions => {
+				transactions.forEach(transaction => {
+					transaction.date = moment(transaction.date);
+					transaction.amount = new Big(transaction.amount);
+				});
+				return dispatch(getTransactionsResponse(transactions));
+			});
 	};
 }
 
