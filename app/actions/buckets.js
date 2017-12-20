@@ -41,6 +41,7 @@ export function getBuckets() {
 			.then(buckets => {
 				buckets.forEach(bucket => {
 					bucket.nextDate = moment(bucket.nextDate);
+					bucket.zeroDate = moment(bucket.zeroDate);
 					bucket.amount = new Big(bucket.amount);
 					bucket.balance = new Big(bucket.balance);
 				})

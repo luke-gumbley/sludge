@@ -15,10 +15,22 @@ export default class Bucket extends Component {
 				+ (bucket.periodDays ? `${bucket.periodDays}d` : '');
 		};
 
+		const prev = bucket => {
+			return moment(bucket.nextDate)
+				.subtract(bucket.periodMonths,'months')
+				.subtract(bucket.periodDays, 'days');
+		}
+
+		const days = bucket => {
+			return bucket.nextDate.diff(prev(bucket),'days');
+		}
+
 		const renderRate = bucket => {
-			var next = moment(bucket.zeroDate);
-			var prev = moment(next).subtract(bucket.periodMonths,'months').subtract(bucket.periodDays, 'days');
-			return '$' + (bucket.amount / next.diff(prev,'days')).toFixed(2);
+			return '$' + (bucket.amount / days(bucket)).toFixed(2);
+		};
+
+		const renderBalance = bucket => {
+			return '$' + bucket.balance.plus(bucket.amount.mul(moment().diff(bucket.zeroDate, 'days', true) / days(bucket))).toFixed(2);
 		};
 
 		return (
@@ -30,7 +42,7 @@ export default class Bucket extends Component {
 				<div>{this.props.bucket.nextDate.format('l')}</div>
 				<div>{renderRate(this.props.bucket)}</div>
 
-				<div>over/under</div>
+				<div>{renderBalance(this.props.bucket)}</div>
 				<div>vis</div>
 			</div>
 		);
