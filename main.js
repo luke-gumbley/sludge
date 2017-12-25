@@ -1,3 +1,6 @@
+var fs = require('fs');
+var csv = require('csv');
+
 var parser = require('./lib/parser');
 var database = require('./lib/database');
 var api = require('./lib/api');
@@ -6,23 +9,13 @@ process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at:', p, 'reason:', reason);
 });
 
-// read buckets, create DB
-Promise.all([
-	parser.readFile('data/buckets.csv',{ columns: true }, function(err, rows) { return rows; }),
-	database.sync()
-]).then(function(results) {
-	// read all supplied transaction files, add buckets to DB
-	var buckets = results[0];
+database.sync().then(() => {
+	// read all supplied statements
+	process.argv.map(parser.parse)
+		.reduce((acc, val) => acc.concat(val))
+		.forEach(format => format.pipe(database.transactions()));
 
-	return Promise.all([
-		// parser.parse no longer returns a promise but a bunch of readable streams that may produce transaction data.
-		// TODO: add stream processor to cope with this data (add ordinal, commit or discard, etc)
-		Promise.all(process.argv.map(parser.parse)),
-		database.bucket.bulkCreate(buckets)
-	]);
-}).then(function(results) {
-	// add transactions to DB
-	var files = results[0];
-
-	return Promise.all(files.map(function(file) { return database.transaction.bulkCreate(file.rows); }));
+	// read all buckets
+	let parser = csv.parse({ columns: true }, (err, buckets) => { database.bucket.bulkCreate(buckets); } );
+	fs.createReadStream('data/buckets.csv').pipe(parser);
 }).catch(function(err) { console.log(err); });
