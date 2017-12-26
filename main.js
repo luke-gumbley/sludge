@@ -1,9 +1,9 @@
 var fs = require('fs');
 var csv = require('csv');
 
-var parser = require('./lib/parser');
-var database = require('./lib/database');
-var api = require('./lib/api');
+const parser = require('./lib/parser');
+const database = require('./lib/database');
+const api = require('./lib/api');
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at:', p, 'reason:', reason);
@@ -11,11 +11,11 @@ process.on('unhandledRejection', (reason, p) => {
 
 database.sync().then(() => {
 	// read all supplied statements
-	process.argv.map(parser.parse)
+	process.argv.slice(1).map(filename => parser.parse(filename))
 		.reduce((acc, val) => acc.concat(val))
 		.forEach(format => format.pipe(database.transactions()));
 
 	// read all buckets
-	let parser = csv.parse({ columns: true }, (err, buckets) => { database.bucket.bulkCreate(buckets); } );
-	fs.createReadStream('data/buckets.csv').pipe(parser);
+	let csvParser = csv.parse({ columns: true }, (err, buckets) => { database.bucket.bulkCreate(buckets); } );
+	fs.createReadStream('data/buckets.csv').pipe(csvParser);
 }).catch(function(err) { console.log(err); });
