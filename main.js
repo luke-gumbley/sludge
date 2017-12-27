@@ -13,6 +13,7 @@ database.sync().then(() => {
 	// read all supplied statements
 	process.argv.slice(1).map(filename => parser.parse(filename))
 		.reduce((acc, val) => acc.concat(val))
+		.filter(format => format.parsable() !== false);
 		.forEach(format => format.pipe(database.transactions()));
 
 	// read all buckets
