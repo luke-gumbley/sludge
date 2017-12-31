@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'Moment';
+import GlyphButton from './GlyphButton';
 
 export default class Bucket extends Component {
 
@@ -44,6 +45,7 @@ export default class Bucket extends Component {
 
 				<div>{renderBalance(this.props.bucket)}</div>
 				<div>vis</div>
+				<div><GlyphButton glyph="pencil" onClick={this.props.onEdit} /></div>
 			</div>
 		);
 	}
