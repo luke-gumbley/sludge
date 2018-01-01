@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'Moment';
 import GlyphButton from './GlyphButton';
+import { editBucket } from '../actions/buckets.js';
 
-export default class Bucket extends Component {
+class Bucket extends Component {
 
 	render() {
 		const renderAmount = bucket => {
@@ -45,8 +46,16 @@ export default class Bucket extends Component {
 
 				<div>{renderBalance(this.props.bucket)}</div>
 				<div>vis</div>
-				<div><GlyphButton glyph="pencil" onClick={this.props.onEdit} /></div>
+				<div><GlyphButton glyph="pencil" onClick={() => this.props.onEdit(this.props.bucket.id)} /></div>
 			</div>
 		);
 	}
 }
+
+function mapDispatchToProps(dispatch) {
+	return {
+		onEdit: id => dispatch(editBucket(id))
+	};
+}
+
+export default connect(null, mapDispatchToProps)(Bucket);

@@ -11,6 +11,14 @@ html {
 	background: #f9f9f9
 }
 
+label {
+	display: block;
+}
+
+label input {
+	float: right;
+}
+
 .left {
 	float: left
 }

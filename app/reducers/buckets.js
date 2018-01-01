@@ -1,7 +1,9 @@
 import {
 	GET_BUCKETS_REQUEST,
 	GET_BUCKETS_RESPONSE,
-	CREATE_BUCKET_RESPONSE
+	CREATE_BUCKET_RESPONSE,
+	PATCH_BUCKET_RESPONSE,
+	EDIT_BUCKET
 } from '../actions/buckets';
 
 function buckets(
@@ -22,9 +24,14 @@ function buckets(
 				items: action.buckets.reduce((items, b) => { items[b.id] = b; return items; }, {})
 			});
 		case CREATE_BUCKET_RESPONSE:
+		case PATCH_BUCKET_RESPONSE:
 			var items = Object.assign({}, state.items);
 			items[action.bucket.id] = action.bucket;
 			return Object.assign({}, state, { items: items });
+		case EDIT_BUCKET:
+			return Object.assign({}, state, {
+				editBucketId: action.id
+			});
 		default:
 			return state;
 	}

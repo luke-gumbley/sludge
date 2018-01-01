@@ -24,18 +24,25 @@ function getTransactionsResponse(transactions) {
 	};
 }
 
+function augment(transactions) {
+	if(!Array.isArray(transactions))
+		return augment([transactions])[0];
+
+	transactions.forEach(transaction => {
+		transaction.date = moment(transaction.date);
+		transaction.amount = new Big(transaction.amount);
+	});
+
+	return transactions;
+}
+
 export function getTransactions() {
 	return dispatch => {
 		dispatch(getTransactionsRequest());
 		return fetch('http://localhost:8080/transaction')
 			.then(response => response.json())
-			.then(transactions => {
-				transactions.forEach(transaction => {
-					transaction.date = moment(transaction.date);
-					transaction.amount = new Big(transaction.amount);
-				});
-				return dispatch(getTransactionsResponse(transactions));
-			});
+			.then(augment)
+			.then(transactions => dispatch(getTransactionsResponse(transactions)));
 	};
 }
 
@@ -60,8 +67,9 @@ function patchTransaction(dispatch, id, patch) {
 			headers: { "Content-Type": "application/json-patch+json" },
 			body: JSON.stringify(patch),
 		}).then(response => response.json())
-		.then(transaction => dispatch(patchTransactionResponse(transaction)))
-		.catch(ex => {console.log('whoops!'); console.log(ex); });
+			.then(augment)
+			.then(transaction => dispatch(patchTransactionResponse(transaction)))
+			.catch(ex => {console.log('whoops!'); console.log(ex); });
 }
 
 export function categoriseTransaction(id, bucketName) {

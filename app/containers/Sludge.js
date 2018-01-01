@@ -6,6 +6,7 @@ import 'react-tabs/style/react-tabs.css';
 import TransactionList from '../components/TransactionList';
 import BucketList from '../components/BucketList';
 import BucketDataList from '../components/BucketDataList';
+import BucketEditor from '../components/BucketEditor';
 import Header from './Header';
 
 import { getBuckets } from '../actions/buckets';
@@ -29,6 +30,7 @@ class Sludge extends Component {
 					</TabPanel>
 				</Tabs>
 				<BucketDataList buckets={Object.values(this.props.buckets.items)} />
+				<BucketEditor bucketId={this.props.buckets.editBucketId}/>
 			</div>
 		);
 	}
