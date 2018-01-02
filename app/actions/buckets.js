@@ -18,21 +18,21 @@ function getBucketsRequest() {
 function getBucketsResponse(buckets) {
 	return {
 		type: GET_BUCKETS_RESPONSE,
-		buckets: buckets
+		buckets
 	};
 }
 
-function createBucketRequest(name) {
+function createBucketRequest(bucket) {
 	return {
 		type: CREATE_BUCKET_REQUEST,
-		name: name
+		bucket
 	};
 }
 
 function createBucketResponse(bucket) {
 	return {
 		type: CREATE_BUCKET_RESPONSE,
-		bucket: bucket
+		bucket
 	};
 }
 
@@ -60,13 +60,13 @@ export function getBuckets() {
 	};
 }
 
-export function createBucket(name) {
+export function createBucket(bucket) {
 	return dispatch => {
-		dispatch(createBucketRequest(name));
+		dispatch(createBucketRequest(bucket));
 		return fetch('http://localhost:8080/bucket', {
 			method: 'POST',
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ name: name })
+			body: JSON.stringify(bucket)
 		}).then(response => response.json())
 			.then(augment)
 			.then(bucket => {
@@ -79,21 +79,21 @@ export function createBucket(name) {
 export function getBucket(name) {
 	return (dispatch, getState) => {
 		var bucket = Object.values(getState().buckets.items).find(b => b.name == name);
-		return bucket ? Promise.resolve(bucket) : dispatch(createBucket(name));
+		return bucket ? Promise.resolve(bucket) : dispatch(createBucket({ name }));
 	}
 }
 
 export function patchBucketRequest(id) {
 	return {
 		type: PATCH_BUCKET_REQUEST,
-		id: id
+		id
 	};
 }
 
 export function patchBucketResponse(bucket) {
 	return {
 		type: PATCH_BUCKET_RESPONSE,
-		bucket: bucket
+		bucket
 	};
 }
 
@@ -115,7 +115,6 @@ export function updateBucket(bucket) {
 			.filter(prop => prop != 'id')
 			.map(prop => ({ "op": "replace", "path": `/${prop}`, "value": bucket[prop] }));
 
-		dispatch(editBucket(null));
 		return patchBucket(dispatch, bucket.id, patch);;
 	};
 }
@@ -123,6 +122,6 @@ export function updateBucket(bucket) {
 export function editBucket(id) {
 	return {
 		type: EDIT_BUCKET,
-		id: id
+		id
 	};
 }
