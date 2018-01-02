@@ -4,7 +4,7 @@ import Big from 'big.js';
 import moment from 'Moment';
 import Modal from 'react-modal';
 
-import { updateBucket } from '../actions/buckets.js';
+import { updateBucket, editBucket } from '../actions/buckets.js';
 import Bucket from './Bucket';
 
 class BucketEditor extends Component {
@@ -29,13 +29,14 @@ class BucketEditor extends Component {
 	}
 
 	render() {
-		return (<Modal isOpen={this.props.bucketId !== null && this.props.bucketId !== undefined}>
+		return (<Modal onRequestClose={this.props.onRequestClose} isOpen={this.props.bucketId !== null && this.props.bucketId !== undefined}>
 			<form onSubmit={this.handleSubmit}>
 				<label>Name: <input name='name' defaultValue={this.props.bucket.name} /></label>
 				<label>Amount: <input name='amount' defaultValue={this.props.bucket.amount.toFixed(2)} /></label>
 				<label>Days: <input name='periodDays' defaultValue={this.props.bucket.periodDays} /></label>
 				<label>Months: <input name='periodMonths' defaultValue={this.props.bucket.periodMonths} /></label>
 				<label>Next: <input name='nextDate' defaultValue={this.props.bucket.nextDate.format('l')} /></label>
+				<span className='button left' onClick={this.props.onRequestClose}>Cancel</span>
 				<button className='button right' type='submit'>Save</button>
 			</form>
 		</Modal>);
@@ -50,7 +51,8 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onSubmit: bucket => dispatch(updateBucket(bucket))
+		onSubmit: bucket => dispatch(updateBucket(bucket)),
+		onRequestClose: bucket => dispatch(editBucket(null))
 	};
 }
 
