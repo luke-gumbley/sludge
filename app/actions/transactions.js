@@ -39,7 +39,7 @@ function augment(transactions) {
 export function getTransactions() {
 	return dispatch => {
 		dispatch(getTransactionsRequest());
-		return fetch('https://localhost:8443/transaction')
+		return fetch('https://localhost:8443/api/transaction', { credentials: 'same-origin' })
 			.then(response => response.json())
 			.then(augment)
 			.then(transactions => dispatch(getTransactionsResponse(transactions)));
@@ -62,8 +62,9 @@ export function patchTransactionResponse(transaction) {
 
 function patchTransaction(dispatch, id, patch) {
 	dispatch(patchTransactionRequest(id));
-	return fetch('https://localhost:8443/transaction/' + id, {
+	return fetch('https://localhost:8443/api/transaction/' + id, {
 			method: 'PATCH',
+			credentials: 'same-origin',
 			headers: { "Content-Type": "application/json-patch+json" },
 			body: JSON.stringify(patch),
 		}).then(response => response.json())
@@ -98,6 +99,7 @@ export function postStatement(filename, data) {
 		dispatch(postStatementRequest());
 		return fetch(`/statements/${filename}`, {
 				method: 'POST',
+				credentials: 'same-origin',
 				headers: { "Content-Type": "application/octet-stream" },
 				body: data
 			}).then(() => {
