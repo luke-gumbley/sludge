@@ -11,3 +11,9 @@ data/
 # IntelliJ files
 .idea
 sludge.iml
+
+# Dev SSL cert
+certs/*.csr
+certs/*.crt
+certs/*.key
+certs/passphrase
