@@ -53,7 +53,7 @@ function augment(buckets) {
 export function getBuckets() {
 	return dispatch => {
 		dispatch(getBucketsRequest());
-		return fetch('https://localhost:8443/api/bucket', { credentials: 'same-origin' })
+		return fetch('https://localhost:8443/api/bucket')
 			.then(response => response.json())
 			.then(augment)
 			.then(buckets => dispatch(getBucketsResponse(buckets)));
@@ -65,7 +65,6 @@ export function createBucket(bucket) {
 		dispatch(createBucketRequest(bucket));
 		return fetch('https://localhost:8443/api/bucket', {
 			method: 'POST',
-			credentials: 'same-origin',
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify(bucket)
 		}).then(response => response.json())
@@ -102,7 +101,6 @@ function patchBucket(dispatch, id, patch) {
 	dispatch(patchBucketRequest(id));
 	return fetch('https://localhost:8443/api/bucket/' + id, {
 			method: 'PATCH',
-			credentials: 'same-origin',
 			headers: { "Content-Type": "application/json-patch+json" },
 			body: JSON.stringify(patch),
 		}).then(response => response.json())
