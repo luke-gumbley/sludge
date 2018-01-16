@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 import Modal from 'react-modal';
 import Cookies from 'js-cookie';
 import Root from './containers/Root';
+import styles from './sludge.css';
 
 // naive convenience function for supplying tokens and xsrf header
 const nativeFetch = fetch;

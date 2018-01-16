@@ -25,4 +25,4 @@ TODO LIST FOR SLUDGE (rough roadmap)
   12. Reverse-engineer mobile app protocols to permit automatic transaction retrieval
   13. Investigate Yodlee feeds
   14. Mobile-enable classifier
-  15. Integrate Google authentication
+✓ 15. Integrate Google authentication

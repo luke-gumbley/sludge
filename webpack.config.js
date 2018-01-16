@@ -1,4 +1,6 @@
 var path = require('path');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
 	entry: './app/index.js',
@@ -9,9 +11,12 @@ module.exports = {
 	module: {
 		rules: [
 			{ test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" },
-			{ test: /\.css$/, loader: 'style-loader' },
-			{ test: /\.css$/, loader: 'css-loader', query: { modules: true, localIdentName: '[local]' } }
+			{ test: /\.css/, use: ExtractTextPlugin.extract({ fallback: "style-loader", use: "css-loader" }) }
 		]
 	},
-	devtool: 'source-map'
+	devtool: 'source-map',
+	plugins: [
+		new HtmlWebpackPlugin({ template: 'app/index.html' }),
+		new ExtractTextPlugin("styles.css")
+	]
 };
