@@ -1,5 +1,6 @@
 # Compiled outputs
 dist/
+sludge.zip
 
 # Dependency directory
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
@@ -20,3 +21,6 @@ certs/*.csr
 certs/*.crt
 certs/*.key
 certs/passphrase
+
+# Dev environment
+.env

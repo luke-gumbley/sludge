@@ -1,3 +1,4 @@
+require('dotenv').config();
 var fs = require('fs');
 var csv = require('csv');
 
@@ -9,7 +10,9 @@ process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at:', p, 'reason:', reason);
 });
 
-database.sync().then(() => {
+database.connect();
+/*
+database.connect().then(() => {
 	// read all supplied statements
 	process.argv.slice(1).map(filename => parser.parse(filename))
 		.reduce((acc, val) => acc.concat(val))
@@ -20,3 +23,4 @@ database.sync().then(() => {
 	let csvParser = csv.parse({ columns: true }, (err, buckets) => { database.bucket.bulkCreate(buckets); } );
 	fs.createReadStream('data/buckets.csv').pipe(csvParser);
 }).catch(function(err) { console.log(err); });
+*/

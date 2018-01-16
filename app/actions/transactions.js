@@ -39,7 +39,7 @@ function augment(transactions) {
 export function getTransactions() {
 	return dispatch => {
 		dispatch(getTransactionsRequest());
-		return fetch('https://localhost:8443/api/transaction')
+		return fetch('/api/transaction')
 			.then(response => response.json())
 			.then(augment)
 			.then(transactions => dispatch(getTransactionsResponse(transactions)));
@@ -62,7 +62,7 @@ export function patchTransactionResponse(transaction) {
 
 function patchTransaction(dispatch, id, patch) {
 	dispatch(patchTransactionRequest(id));
-	return fetch('https://localhost:8443/api/transaction/' + id, {
+	return fetch('/api/transaction/' + id, {
 			method: 'PATCH',
 			headers: { "Content-Type": "application/json-patch+json" },
 			body: JSON.stringify(patch),

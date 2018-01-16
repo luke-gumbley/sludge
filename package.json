@@ -9,6 +9,7 @@
     "body-parser": "1.17.2",
     "cookie-parser": "^1.4.3",
     "csv": "^0.4.6",
+    "dotenv": "^4.0.0",
     "express": "^4.16.2",
     "js-cookie": "^2.2.0",
     "jsonwebtoken": "^8.1.0",
@@ -40,7 +41,7 @@
     "webpack": "^3.10.0"
   },
   "scripts": {
-    "build": "webpack",
+    "build": "webpack; zip -r sludge.zip app dist lib server.js package.json",
     "watch": "webpack --progress --colors --watch"
   },
   "repository": {
