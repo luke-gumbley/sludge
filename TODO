@@ -8,6 +8,8 @@ TODO LIST FOR SLUDGE (rough roadmap)
 ✓ 5.  Add basic UI for importing files
 ✓ 6.  Report on current vs. expected bucket size.
 ✓ 6a. Add support for storing the account and other group info per-transaction
+  6b. Transactions are displayed in pageable form, most recent first
+  6c. Option to show only uncategorised transactions
 
 --- BASIC FUNCTIONALITY COMPLETE (DEMONSTRATABLE)
 
@@ -19,10 +21,11 @@ TODO LIST FOR SLUDGE (rough roadmap)
   9.  Create table holding ordered rules for classifying transaction (regex text match?)
   10. Automate classification to bucket where a matching rule is found
 ✓ 11. Create basic UI for adding and editing buckets
+  11a. Create bucket import/export endpoints and UI for editing buckets externally
 
 --- USABLE WITHOUT ASSISTANCE
 
-✓ 11a. Host in AWS
+✓ 11b. Host in AWS
   12. Reverse-engineer mobile app protocols to permit automatic transaction retrieval
   13. Investigate Yodlee feeds
   14. Mobile-enable classifier
