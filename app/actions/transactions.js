@@ -96,7 +96,7 @@ export function postStatementResponse() {
 export function postStatement(filename, data) {
 	return dispatch => {
 		dispatch(postStatementRequest());
-		return fetch(`/statements/${filename}`, {
+		return fetch(`/api/statements/${filename}`, {
 				method: 'POST',
 				headers: { "Content-Type": "application/octet-stream" },
 				body: data
