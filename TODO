@@ -11,7 +11,7 @@ TODO LIST FOR SLUDGE (rough roadmap)
 
 --- BASIC FUNCTIONALITY COMPLETE (DEMONSTRATABLE)
 
-  7.  Create basic-case handler for import overlaps
+✓ 7.  Create basic-case handler for import overlaps
   8.  Visualise in some way completeness of transaction record.
 
 --- USABLE WITH SOME ASSISTANCE
@@ -22,6 +22,7 @@ TODO LIST FOR SLUDGE (rough roadmap)
 
 --- USABLE WITHOUT ASSISTANCE
 
+✓ 11a. Host in AWS
   12. Reverse-engineer mobile app protocols to permit automatic transaction retrieval
   13. Investigate Yodlee feeds
   14. Mobile-enable classifier
