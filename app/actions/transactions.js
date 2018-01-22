@@ -39,7 +39,7 @@ function augment(transactions) {
 export function getTransactions() {
 	return dispatch => {
 		dispatch(getTransactionsRequest());
-		return fetch('/api/transaction')
+		return fetch('/api/transactions')
 			.then(response => response.json())
 			.then(augment)
 			.then(transactions => dispatch(getTransactionsResponse(transactions)));
@@ -62,7 +62,7 @@ export function patchTransactionResponse(transaction) {
 
 function patchTransaction(dispatch, id, patch) {
 	dispatch(patchTransactionRequest(id));
-	return fetch('/api/transaction/' + id, {
+	return fetch('/api/transactions/' + id, {
 			method: 'PATCH',
 			headers: { "Content-Type": "application/json-patch+json" },
 			body: JSON.stringify(patch),
@@ -96,7 +96,7 @@ export function postStatementResponse() {
 export function postStatement(filename, data) {
 	return dispatch => {
 		dispatch(postStatementRequest());
-		return fetch(`/api/statements/${filename}`, {
+		return fetch(`/api/transactions/import/${filename}`, {
 				method: 'POST',
 				headers: { "Content-Type": "text/csv" },
 				body: data
