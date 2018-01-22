@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import BucketPicker from './BucketPicker';
 import { categoriseTransaction } from '../actions/transactions.js';
 import { connect } from 'react-redux';
-import moment from 'Moment';
+import moment from 'moment';
 
 class Transaction extends Component {
 

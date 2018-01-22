@@ -1,5 +1,5 @@
 import Big from 'big.js';
-import moment from 'Moment';
+import moment from 'moment';
 
 export const GET_BUCKETS_REQUEST = 'GET_BUCKETS_REQUEST';
 export const GET_BUCKETS_RESPONSE = 'GET_BUCKETS_RESPONSE';
@@ -8,6 +8,8 @@ export const CREATE_BUCKET_RESPONSE = 'CREATE_BUCKET_RESPONSE';
 export const PATCH_BUCKET_REQUEST = 'PATCH_BUCKET_REQUEST';
 export const PATCH_BUCKET_RESPONSE = 'PATCH_BUCKET_RESPONSE';
 export const EDIT_BUCKET = 'EDIT_BUCKET';
+export const IMPORT_BUCKETS_REQUEST = 'IMPORT_BUCKETS_REQUEST';
+export const IMPORT_BUCKETS_RESPONSE = 'IMPORT_BUCKETS_RESPONSE';
 
 function getBucketsRequest() {
 	return {
@@ -123,5 +125,33 @@ export function editBucket(id) {
 	return {
 		type: EDIT_BUCKET,
 		id
+	};
+}
+
+export function importBucketsRequest() {
+	return {
+		type: IMPORT_BUCKETS_REQUEST
+	};
+}
+
+export function importBucketsResponse(buckets) {
+	return {
+		type: IMPORT_BUCKETS_RESPONSE,
+		buckets
+	};
+}
+
+export function importBuckets(data) {
+	return dispatch => {
+		dispatch(importBucketsRequest());
+		return fetch(`/api/bucket/import`, {
+				method: 'POST',
+				headers: { "Content-Type": "text/csv" },
+				body: data
+			}).then(res => res.json())
+			.then(augment)
+			.then(buckets => dispatch(importBucketsResponse(buckets)))
+			.catch(ex => {console.log('whoops!'); console.log(ex); });
+
 	};
 }

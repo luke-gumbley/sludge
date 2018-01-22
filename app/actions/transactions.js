@@ -1,6 +1,6 @@
 import {applyPatch, createPatch, createTests} from 'rfc6902';
 import Big from 'big.js';
-import moment from 'Moment';
+import moment from 'moment';
 
 import {getBucket} from './buckets';
 
@@ -98,7 +98,7 @@ export function postStatement(filename, data) {
 		dispatch(postStatementRequest());
 		return fetch(`/api/statements/${filename}`, {
 				method: 'POST',
-				headers: { "Content-Type": "application/octet-stream" },
+				headers: { "Content-Type": "text/csv" },
 				body: data
 			}).then(() => {
 				dispatch(postStatementResponse());

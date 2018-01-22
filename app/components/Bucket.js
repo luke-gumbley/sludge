@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import moment from 'Moment';
+import moment from 'moment';
 import GlyphButton from './GlyphButton';
 import { editBucket } from '../actions/buckets.js';
 

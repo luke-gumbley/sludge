@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Big from 'big.js';
-import moment from 'Moment';
+import moment from 'moment';
 import Modal from 'react-modal';
 
 import { createBucket, updateBucket, editBucket } from '../actions/buckets.js';

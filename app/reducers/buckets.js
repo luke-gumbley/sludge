@@ -1,6 +1,7 @@
 import {
 	GET_BUCKETS_REQUEST,
 	GET_BUCKETS_RESPONSE,
+	IMPORT_BUCKETS_RESPONSE,
 	CREATE_BUCKET_RESPONSE,
 	PATCH_BUCKET_RESPONSE,
 	EDIT_BUCKET
@@ -18,6 +19,7 @@ function buckets(
 			return Object.assign({}, state, {
 				isFetching: true
 			});
+		case IMPORT_BUCKETS_RESPONSE:
 		case GET_BUCKETS_RESPONSE:
 			return Object.assign({}, state, {
 				isFetching: false,
