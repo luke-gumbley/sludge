@@ -15,7 +15,7 @@ import { getTransactions } from '../actions/transactions';
 class Sludge extends Component {
 	render() {
 		return (
-			<div>
+			<div className='main'>
 				<Header />
 				<Tabs>
 					<TabList>
@@ -23,7 +23,7 @@ class Sludge extends Component {
 						<Tab>Buckets</Tab>
 					</TabList>
 					<TabPanel>
-						<TransactionList transactions={Object.values(this.props.transactions.items)} />
+						<TransactionList transactions={Object.values(this.props.transactions.items).sort((a,b) => a.date > b.date ? -1 : a.date < b.date ? 1 : a.ordinal > b.ordinal ? -1 : 1)} total={this.props.transactions.total} />
 					</TabPanel>
 					<TabPanel>
 						<BucketList buckets={Object.values(this.props.buckets.items)} />
@@ -38,7 +38,6 @@ class Sludge extends Component {
 	componentDidMount() {
 		const { dispatch } = this.props;
 		dispatch(getBuckets());
-		dispatch(getTransactions());
 	}
 
 }

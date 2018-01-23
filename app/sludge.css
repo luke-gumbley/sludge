@@ -7,6 +7,30 @@
 	padding: 0
 }
 
+html, body, #root {
+	height: 100%
+}
+
+.main {
+	height: 100%;
+	display: flex;
+	flex-flow: column nowrap;
+}
+
+.react-tabs {
+	flex: 1;
+	display: flex;
+	flex-flow: column nowrap;
+}
+
+.react-tabs__tab-list {
+	flex: 0;
+}
+
+.react-tabs__tab-panel {
+	flex: 1;
+}
+
 html {
 	background: #f9f9f9
 }
@@ -21,14 +45,6 @@ label {
 label input {
 	position: absolute;
 	right: 0px;
-}
-
-.left {
-	float: left
-}
-
-.right {
-	float: right
 }
 
 .container {

@@ -41,8 +41,8 @@ class BucketEditor extends Component {
 				<label>Days: <input name='periodDays' defaultValue={this.props.bucket.periodDays} /></label>
 				<label>Months: <input name='periodMonths' defaultValue={this.props.bucket.periodMonths} /></label>
 				<label>Next: <input name='nextDate' defaultValue={this.props.bucket.nextDate.format('l')} /></label>
-				<button className='button right' type='submit'>Save</button>
-				<span className='button left' onClick={this.props.onRequestClose}>Cancel</span>
+				<span className='button' onClick={this.props.onRequestClose}>Cancel</span>
+				<button className='button' type='submit'>Save</button>
 			</form>
 		</Modal>);
 	}

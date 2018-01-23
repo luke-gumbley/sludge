@@ -7,7 +7,8 @@ import {
 function transactions(
 	state = {
 		isFetching: false,
-		items: {}
+		items: {},
+		total: 1,
 	},
 	action
 ) {
@@ -17,9 +18,13 @@ function transactions(
 				isFetching: true
 			});
 		case GET_TRANSACTIONS_RESPONSE:
+			const items = Object.assign({}, state.items)
+			action.transactions.forEach(t => items[t.id] = t);
+
 			return Object.assign({}, state, {
 				isFetching: false,
-				items: action.transactions.reduce((items, t) => { items[t.id] = t; return items; }, {})
+				items,
+				total: action.total
 			});
 		case PATCH_TRANSACTION_RESPONSE:
 			var items = Object.assign({}, state.items);

@@ -17,10 +17,12 @@ function getTransactionsRequest() {
 	};
 }
 
-function getTransactionsResponse(transactions) {
+function getTransactionsResponse(transactions, offset, total) {
 	return {
 		type: GET_TRANSACTIONS_RESPONSE,
-		transactions: transactions
+		transactions: transactions,
+		offset,
+		total
 	};
 }
 
@@ -36,13 +38,12 @@ function augment(transactions) {
 	return transactions;
 }
 
-export function getTransactions() {
+export function getTransactions(offset, limit) {
 	return dispatch => {
 		dispatch(getTransactionsRequest());
-		return fetch('/api/transactions')
+		return fetch(`/api/transactions?offset=${offset || 0}&limit=${limit || 10}`)
 			.then(response => response.json())
-			.then(augment)
-			.then(transactions => dispatch(getTransactionsResponse(transactions)));
+			.then(result => dispatch(getTransactionsResponse(augment(result.transactions), result.offset, result.total)));
 	};
 }
 
@@ -101,8 +102,7 @@ export function postStatement(filename, data) {
 				headers: { "Content-Type": "text/csv" },
 				body: data
 			}).then(() => {
-				dispatch(postStatementResponse());
-				return dispatch(getTransactions()); // super naive
+				return dispatch(postStatementResponse());
 			}).catch(ex => {console.log('whoops!'); console.log(ex); });
 
 	};
