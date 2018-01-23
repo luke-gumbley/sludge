@@ -6,6 +6,7 @@ import 'react-virtualized/styles.css';
 import BucketPicker from './BucketPicker';
 import { categoriseTransaction } from '../actions/transactions.js';
 import { getTransactions } from '../actions/transactions.js';
+import { getSortedTransactions } from '../selectors/transactions.js';
 
 class TransactionList extends Component {
 
@@ -68,11 +69,14 @@ class TransactionList extends Component {
 	}
 }
 
-function mapDispatchToProps(dispatch) {
-	return {
-		onChange: (id, bucket) => dispatch(categoriseTransaction(id, bucket)),
-		loadMoreRows: options => dispatch(getTransactions(options.startIndex, options.stopIndex - options.startIndex))
-	};
-}
+const mapStateToProps = state => ({
+	transactions: getSortedTransactions(state),
+	total: state.transactions.total
+});
 
-export default connect(null, mapDispatchToProps)(TransactionList);
+const mapDispatchToProps = dispatch => ({
+	onChange: (id, bucket) => dispatch(categoriseTransaction(id, bucket)),
+	loadMoreRows: ({ startIndex, stopIndex }) => dispatch(getTransactions(startIndex, stopIndex - startIndex))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TransactionList);
