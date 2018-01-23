@@ -47,6 +47,10 @@ label input {
 	right: 0px;
 }
 
+.transactionAmount {
+	text-align: right;
+}
+
 .container {
 	display: flex;
 	width: 100%
