@@ -13,18 +13,15 @@ class Bucket extends Component {
 		};
 
 		const renderPeriod = bucket => {
-			return (bucket.periodMonths ? `${bucket.periodMonths}mo ` : '')
-				+ (bucket.periodDays ? `${bucket.periodDays}d` : '');
+			return bucket.period + ' ' + bucket.periodUnit;
 		};
 
 		const prev = bucket => {
-			return moment(bucket.nextDate)
-				.subtract(bucket.periodMonths,'months')
-				.subtract(bucket.periodDays, 'days');
+			return moment(bucket.nextDate).subtract(bucket.period,bucket.periodUnit)
 		}
 
 		const days = bucket => {
-			return bucket.nextDate.diff(prev(bucket),'days');
+			return bucket.nextDate.diff(prev(bucket),'days', true);
 		}
 
 		const renderRate = bucket => {

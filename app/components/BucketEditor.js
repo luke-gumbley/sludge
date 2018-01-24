@@ -19,8 +19,8 @@ class BucketEditor extends Component {
 		let bucket = {
 			name: inputs['name'].value,
 			amount: new Big(inputs['amount'].value),
-			periodDays: inputs['periodDays'].value,
-			periodMonths: inputs['periodMonths'].value,
+			period: inputs['period'].value,
+			periodUnit: inputs['periodUnit'].value,
 			nextDate: moment(new Date(inputs['nextDate'].value))
 		};
 
@@ -35,12 +35,25 @@ class BucketEditor extends Component {
 
 	render() {
 		return (<Modal onRequestClose={this.props.onRequestClose} isOpen={this.props.bucketId !== undefined}>
-			<form onSubmit={this.handleSubmit}>
-				<label>Name: <input autoFocus name='name' defaultValue={this.props.bucket.name} /></label>
-				<label>Amount: <input name='amount' defaultValue={this.props.bucket.amount.toFixed(2)} /></label>
-				<label>Days: <input name='periodDays' defaultValue={this.props.bucket.periodDays} /></label>
-				<label>Months: <input name='periodMonths' defaultValue={this.props.bucket.periodMonths} /></label>
-				<label>Next: <input name='nextDate' defaultValue={this.props.bucket.nextDate.format('l')} /></label>
+			<form id='bucketForm' className='grid' onSubmit={this.handleSubmit}>
+				<label htmlFor='bucketName'>Name:</label>
+				<input id='bucketName' autoFocus name='name' defaultValue={this.props.bucket.name} />
+
+				<label htmlFor='bucketAmount'>Amount:</label>
+				<input id='bucketAmount' name='amount' defaultValue={this.props.bucket.amount.toFixed(2)} />
+
+				<label htmlFor='bucketPeriod'>Period:</label>
+				<div className='grid'>
+				<input id='bucketPeriod' name='period' defaultValue={this.props.bucket.period} size={6}/>
+				<select id='bucketPeriodUnit' name='periodUnit' defaultValue={this.props.bucket.periodUnit}>
+					<option>months</option>
+					<option>days</option>
+				</select>
+				</div>
+
+				<label htmlFor='bucketNextDate'>Next:</label>
+				<input id='bucketNextDate' name='nextDate' defaultValue={this.props.bucket.nextDate.format('l')} />
+
 				<span className='button' onClick={this.props.onRequestClose}>Cancel</span>
 				<button className='button' type='submit'>Save</button>
 			</form>

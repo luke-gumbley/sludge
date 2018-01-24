@@ -1,18 +1,16 @@
 * {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	border: none;
 	margin: 0;
-	padding: 0
+	padding: 0;
 }
 
-html, body, #root {
-	height: 100%
+html, body, #root, .main {
+	height: 100%;
+	background: #f9f9f9;
 }
 
 .main {
-	height: 100%;
 	display: flex;
 	flex-flow: column nowrap;
 }
@@ -31,22 +29,6 @@ html, body, #root {
 	flex: 1;
 }
 
-html {
-	background: #f9f9f9
-}
-
-label {
-	margin: 5px;
-	position: relative;
-	display: block;
-	width: 100%;
-}
-
-label input {
-	position: absolute;
-	right: 0px;
-}
-
 .transactionAmount {
 	text-align: right;
 }
@@ -57,19 +39,25 @@ label input {
 }
 
 .container div {
-    flex: 1;
+	flex: 1;
 }
 
-.cell {
-	padding: 5px;
+.grid {
+	display: grid;
+	grid-gap: 0.5em;
+	grid-template-columns: repeat(2, 1fr);
 }
 
-.item {
+#bucketForm {
+	grid-template-rows: repeat(4, 1fr) auto;
+}
+
+label {
+	margin: auto 0;
 }
 
 .button {
     background-color: #4CAF50;
-    border: none;
     color: white;
     padding: 10px 24px;
 	margin: 5px;
@@ -78,7 +66,6 @@ label input {
     display: inline-block;
 	font-size: 12px;
 	font-family: 'system-ui';
-	position: relative;
 	border-radius:4px;
 	cursor: pointer;
 }

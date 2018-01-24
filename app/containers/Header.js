@@ -10,16 +10,10 @@ class Header extends Component {
 
 	render() {
 		return (
-			<div className='container'>
-				<div className='cell'>
-					<Upload text='Upload statement' onFile={ this.props.handleStatement }/>
-				</div>
-				<div className='cell'>
-					<Download text='Download buckets' url='/api/buckets/export' />
-				</div>
-				<div className='cell'>
-					<Upload text='Upload buckets' onFile={ this.props.handleBuckets }/>
-				</div>
+			<div>
+				<Upload text='Upload statement' onFile={ this.props.handleStatement }/>
+				<Download text='Download buckets' url='/api/buckets/export' />
+				<Upload text='Upload buckets' onFile={ this.props.handleBuckets }/>
 			</div>
 		);
 	}
