@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
+import FilterBar from '../components/FilterBar';
 import TransactionList from '../components/TransactionList';
 import BucketList from '../components/BucketList';
 import BucketDataList from '../components/BucketDataList';
@@ -23,6 +24,7 @@ class Sludge extends Component {
 						<Tab>Buckets</Tab>
 					</TabList>
 					<TabPanel>
+						<FilterBar filter={this.props.transactions.filter} />
 						<TransactionList />
 					</TabPanel>
 					<TabPanel>

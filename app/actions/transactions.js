@@ -10,6 +10,7 @@ export const PATCH_TRANSACTION_REQUEST = 'PATCH_TRANSACTION_REQUEST';
 export const PATCH_TRANSACTION_RESPONSE = 'PATCH_TRANSACTION_RESPONSE';
 export const POST_STATEMENT_REQUEST = 'POST_STATEMENT_REQUEST';
 export const POST_STATEMENT_RESPONSE = 'POST_STATEMENT_RESPONSE';
+export const UPDATE_FILTER = 'UPDATE_FILTER';
 
 function getTransactionsRequest() {
 	return {
@@ -105,5 +106,12 @@ export function postStatement(filename, data) {
 				return dispatch(postStatementResponse());
 			}).catch(ex => {console.log('whoops!'); console.log(ex); });
 
+	};
+}
+
+export function updateFilter(filter) {
+	return {
+		type: UPDATE_FILTER,
+		filter
 	};
 }

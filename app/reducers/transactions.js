@@ -1,12 +1,14 @@
 import {
 	GET_TRANSACTIONS_REQUEST,
 	GET_TRANSACTIONS_RESPONSE,
-	PATCH_TRANSACTION_RESPONSE
+	PATCH_TRANSACTION_RESPONSE,
+	UPDATE_FILTER
 } from '../actions/transactions';
 
 function transactions(
 	state = {
 		isFetching: false,
+		filter: {},
 		items: {},
 		total: 1,
 	},
@@ -30,6 +32,8 @@ function transactions(
 			var items = Object.assign({}, state.items);
 			items[action.transaction.id] = action.transaction;
 			return Object.assign({}, state, { items: items });
+		case UPDATE_FILTER:
+			return Object.assign({}, state, { filter: action.filter });
 		default:
 			return state;
 	}
