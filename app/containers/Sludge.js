@@ -26,10 +26,10 @@ class Sludge extends Component {
 						<TransactionList />
 					</TabPanel>
 					<TabPanel>
-						<BucketList buckets={Object.values(this.props.buckets.items)} />
+						<BucketList />
 					</TabPanel>
 				</Tabs>
-				<BucketDataList buckets={Object.values(this.props.buckets.items)} />
+				<BucketDataList />
 				<BucketEditor bucketId={this.props.buckets.editBucketId}/>
 			</div>
 		);

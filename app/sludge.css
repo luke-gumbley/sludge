@@ -8,6 +8,8 @@
 html, body, #root, .main {
 	height: 100%;
 	background: #f9f9f9;
+	font-family: Helvetica, sans-serif;
+	font-size: 12px;
 }
 
 .main {

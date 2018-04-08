@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Bucket from './Bucket';
 import GlyphButton from './GlyphButton';
 import { editBucket } from '../actions/buckets.js';
+import { getBuckets } from '../selectors/buckets.js';
 
 class BucketList extends Component {
 	render() {
@@ -19,10 +20,12 @@ class BucketList extends Component {
 	}
 }
 
-function mapDispatchToProps(dispatch) {
-	return {
-		onAdd: bucket => dispatch(editBucket(null)),
-	};
-}
+const mapStateToProps = state => ({
+	buckets: getBuckets(state)
+});
 
-export default connect(null, mapDispatchToProps)(BucketList);
+const mapDispatchToProps = dispatch => ({
+	onAdd: bucket => dispatch(editBucket(null))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(BucketList);
