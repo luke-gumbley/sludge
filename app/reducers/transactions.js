@@ -33,7 +33,7 @@ function transactions(
 			items[action.transaction.id] = action.transaction;
 			return Object.assign({}, state, { items: items });
 		case UPDATE_FILTER:
-			return Object.assign({}, state, { filter: action.filter });
+			return { isFetching: false, filter: action.filter, items: {}, total: 1 };
 		default:
 			return state;
 	}

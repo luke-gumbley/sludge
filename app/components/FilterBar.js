@@ -27,7 +27,10 @@ class FilterBar extends Component {
 			'Bucket': 150
 		}
 
-		var accounts = [''].concat(this.props.accounts).map(account => { return (<option key={account}>{account}</option>); });
+		const accounts = [''].concat(this.props.accounts).map(account => { return (<option key={account}>{account}</option>); });
+
+		const bucketFilters = [{ key: null, value: '<None>', default: true}]
+			.concat(this.props.buckets.map(b => ({ key: b.id, value: b.name}) ));
 
 		return (
 			<div className='filterBar'>
@@ -42,7 +45,7 @@ class FilterBar extends Component {
 				<div style={{flexBasis: '140px'}} />
 				<div style={{flexBasis: '100px'}} />
 				<div style={{flexBasis: '150px'}}>
-					<Filter value={this.props.filter.bucket} values={this.props.buckets} defaults={['<None>']} onBlur={this.props.onFilter('bucket')} property='name' placeholder='Filter buckets...'/>
+					<Filter defaultKey={this.props.filter.bucketId} values={bucketFilters} onBlur={this.props.updateFilter('bucketId')} placeholder='Filter buckets...'/>
 				</div>
 			</div>
 		);
@@ -51,7 +54,7 @@ class FilterBar extends Component {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		onFilter: prop => ( value => dispatch(updateFilter({ [prop]: value })) )
+		updateFilter: prop => ( value => dispatch(updateFilter({ [prop]: (value || { key: undefined }).key })) )
 	};
 }
 

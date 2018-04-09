@@ -39,7 +39,7 @@ class TransactionList extends Component {
 			{({height, width}) => (
 				<InfiniteLoader
 						isRowLoaded={this.isRowLoaded}
-						loadMoreRows={this.props.loadMoreRows}
+						loadMoreRows={this.props.loadMoreRows(this.props.filter)}
 						rowCount={this.props.total}
 						minimumBatchSize={30}
 						threshold={60} >
@@ -72,12 +72,16 @@ class TransactionList extends Component {
 
 const mapStateToProps = state => ({
 	transactions: getSortedTransactions(state),
-	total: state.transactions.total
+	total: state.transactions.total,
+	filter: state.transactions.filter
 });
 
 const mapDispatchToProps = dispatch => ({
 	onChange: (id, bucket) => dispatch(categoriseTransaction(id, bucket)),
-	loadMoreRows: ({ startIndex, stopIndex }) => dispatch(getTransactions(startIndex, stopIndex - startIndex))
+	loadMoreRows: filter => ( ({ startIndex, stopIndex }) => {
+		console.log('loadMoreRows', startIndex, stopIndex, filter);
+		return dispatch(getTransactions(startIndex, stopIndex - startIndex, filter));
+	} )
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TransactionList);

@@ -4,28 +4,27 @@ import Autosuggest from 'react-autosuggest';
 
 export default class Filter extends Component {
 
+	// props.values = [{ key: 10, value: 'foobar', default: true }]
+
 	constructor(props) {
 		super(props);
 
-		console.log('MAKEY FILTER VAL '.concat(props.value));
 		this.state = {
-			value: props.value || '',
+			value: (props.values.find(v => v.key === props.defaultKey) || { value: props.defaultValue || '' }).value,
 			suggestions: []
 		};
 	}
 
 	static defaultProps = {
-		values: [],
-		defaults: []
+		values: []
 	};
 
 	getSuggestions = value => {
 		const val = value.trim().toLowerCase();
-		const valueFilter = v => !val.length
-			|| this.getSuggestionValue(v).toLowerCase().slice(0, val.length) === val;
+		const valueFilter = v => !v.default && (!val.length
+			|| this.getSuggestionValue(v).toLowerCase().slice(0, val.length) === val);
 
-		return this.props.defaults
-			.map(d => this.props.property ? {[this.props.property]: d} : d)
+		return this.props.values.filter(v => v.default)
 			.concat(this.props.values.filter(valueFilter));
 	};
 
@@ -34,7 +33,9 @@ export default class Filter extends Component {
 	};
 
 	handleBlur = (event, { highlightedSuggestion }) => {
-		this.props.onBlur(event.target.value);
+		this.props.onBlur(event.target.value === ''
+			? undefined
+			: this.props.values.find(s => s.value === event.target.value))
 	};
 
 	onChange = (event, { newValue, method }) => {
@@ -45,7 +46,7 @@ export default class Filter extends Component {
 		this.setState({ suggestions: [] });
 	};
 
-	getSuggestionValue = s => this.props.property ? s[this.props.property] : s;
+	getSuggestionValue = s => s.value;
 
 	renderSuggestion = suggestion => {
 		return (<div>{this.getSuggestionValue(suggestion)}</div>);
