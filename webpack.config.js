@@ -1,8 +1,9 @@
-var path = require('path');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
+	mode: 'development',
 	entry: './app/index.js',
 	output: {
 		filename: 'bundle.js',
@@ -11,12 +12,12 @@ module.exports = {
 	module: {
 		rules: [
 			{ test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" },
-			{ test: /\.css/, use: ExtractTextPlugin.extract({ fallback: "style-loader", use: "css-loader" }) }
+			{ test: /\.css$/, use: [ MiniCssExtractPlugin.loader, "css-loader" ] }
 		]
 	},
 	devtool: 'source-map',
 	plugins: [
 		new HtmlWebpackPlugin({ template: 'app/index.html' }),
-		new ExtractTextPlugin("styles.css")
+		new MiniCssExtractPlugin({filename: "[name].css",chunkFilename: "[id].css"})
 	]
 };

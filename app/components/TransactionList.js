@@ -12,34 +12,54 @@ class TransactionList extends Component {
 
 	constructor() {
 		super();
-		this.renderPicker = this.renderPicker.bind(this);
-		this.isRowLoaded = this.isRowLoaded.bind(this);
-		this.rowGetter = this.rowGetter.bind(this);
+
+		this.infiniteLoader = React.createRef();
+
+		// TODO: Super hinky. Why not just use props for this? It'd be cleaner.
+		this.state = {
+			loaded: 0,
+		};
 	}
 
-	isRowLoaded({ index }) {
-		return !!this.props.transactions[index];
+	static getDerivedStateFromProps(nextProps, prevState) {
+		return !nextProps.transactions || nextProps.transactions.length === 0
+			? { loaded: 0 }
+			: null;
 	}
 
-	rowGetter({ index }) {
+	isRowLoaded = ({ index }) => {
+		return this.state.loaded > index || !!this.props.transactions[index];
+	};
+
+	rowGetter = ({ index }) => {
 		const transaction = this.props.transactions[index];
 		return (transaction && Object.assign({}, transaction, {
 			date: transaction.date.format('l'),
 			amount: transaction.amount.toFixed(2)
 		})) || {};
-	}
+	};
 
-	renderPicker(options) {
+	renderPicker = options => {
 		const transaction = options.rowData;
 		return transaction ? <BucketPicker bucketId={transaction.bucketId} onChange={bucket => this.props.onChange(transaction.id, bucket)} /> : <div />
-	}
+	};
+
+	loadMoreRows = ({ startIndex, stopIndex }) => {
+		this.setState({ loaded: stopIndex + 1 });
+		return this.props.getDispatch()(getTransactions(startIndex, stopIndex - startIndex, this.props.filter));
+	};
 
 	render() {
+		if(this.props.transactions.length === 0 && this.infiniteLoader.current) {
+			this.infiniteLoader.current.resetLoadMoreRowsCache();
+		}
+
 		return (<AutoSizer>
 			{({height, width}) => (
 				<InfiniteLoader
+						ref={this.infiniteLoader}
 						isRowLoaded={this.isRowLoaded}
-						loadMoreRows={this.props.loadMoreRows(this.props.filter)}
+						loadMoreRows={this.loadMoreRows}
 						rowCount={this.props.total}
 						minimumBatchSize={30}
 						threshold={60} >
@@ -78,10 +98,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
 	onChange: (id, bucket) => dispatch(categoriseTransaction(id, bucket)),
-	loadMoreRows: filter => ( ({ startIndex, stopIndex }) => {
-		console.log('loadMoreRows', startIndex, stopIndex, filter);
-		return dispatch(getTransactions(startIndex, stopIndex - startIndex, filter));
-	} )
+	// TODO: Hinkyyyyyyyyyy
+	getDispatch: () => dispatch
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TransactionList);

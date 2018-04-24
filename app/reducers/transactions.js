@@ -8,7 +8,7 @@ import {
 function transactions(
 	state = {
 		isFetching: false,
-		filter: {},
+		filter: { bucketId: undefined },
 		items: {},
 		total: 1,
 	},
