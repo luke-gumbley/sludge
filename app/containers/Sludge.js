@@ -40,6 +40,7 @@ class Sludge extends Component {
 	componentDidMount() {
 		const { dispatch } = this.props;
 		dispatch(getBuckets());
+		dispatch(getTransactions(0, 10, this.props.transactions.filter));
 	}
 
 }

@@ -39,10 +39,15 @@ function augment(transactions) {
 	return transactions;
 }
 
-export function getTransactions(offset, limit) {
+export function getTransactions(offset, limit, filter) {
 	return dispatch => {
 		dispatch(getTransactionsRequest());
-		return fetch(`/api/transactions?offset=${offset || 0}&limit=${limit || 10}`)
+
+		const bucketFilter = filter.bucketId === undefined
+			? ''
+			: '&bucketId=' + filter.bucketId;
+
+		return fetch(`/api/transactions?offset=${offset || 0}&limit=${limit || 10}${bucketFilter}`)
 			.then(response => response.json())
 			.then(result => dispatch(getTransactionsResponse(augment(result.transactions), result.offset, result.total)));
 	};
@@ -110,8 +115,9 @@ export function postStatement(filename, data) {
 }
 
 export function updateFilter(filter) {
-	return {
-		type: UPDATE_FILTER,
-		filter
+	return dispatch => {
+		const filterAction = dispatch({ type: UPDATE_FILTER, filter });
+		dispatch(getTransactions(0, 10, filter));
+		return filterAction;
 	};
 }
