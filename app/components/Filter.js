@@ -35,7 +35,7 @@ export default class Filter extends Component {
 	handleBlur = (event, { highlightedSuggestion }) => {
 		this.props.onBlur(event.target.value === ''
 			? undefined
-			: this.props.values.find(s => s.value === event.target.value))
+			: this.props.values.find(s => s.value === event.target.value), this.props.defaultKey)
 	};
 
 	onChange = (event, { newValue, method }) => {

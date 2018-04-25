@@ -54,7 +54,10 @@ class FilterBar extends Component {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		updateFilter: prop => ( value => dispatch(updateFilter({ [prop]: (value || { key: undefined }).key })) )
+		updateFilter: prop => ((value, prev) => {
+			const key = (value || { key: undefined }).key;
+			return prev !== key && dispatch(updateFilter({ [prop]: key }));
+		})
 	};
 }
 
