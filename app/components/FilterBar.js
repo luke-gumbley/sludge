@@ -27,7 +27,7 @@ class FilterBar extends Component {
 			'Bucket': 150
 		}
 
-		const accounts = [''].concat(this.props.accounts).map(account => { return (<option key={account}>{account}</option>); });
+		const accountFilters = this.props.accounts.map(account => ({ key: account, value: account }));
 
 		const bucketFilters = [{ key: null, value: '<None>', default: true}]
 			.concat(this.props.buckets.map(b => ({ key: b.id, value: b.name}) ));
@@ -36,8 +36,12 @@ class FilterBar extends Component {
 			<div className='filterBar'>
 				<div style={{flexBasis: '80px'}} />
 				<div style={{flexBasis: '150px'}}>
-					<select>{accounts}</select>
-				</div>
+					<Filter
+						defaultKey={this.props.filter.account}
+						values={accountFilters}
+						onBlur={this.props.updateFilter('account')}
+						placeholder='Filter account...' />
+					</div>
 				<div style={{flexBasis: '50px'}} />
 				<div style={{flex: '150px'}} />
 				<div style={{flexBasis: '140px'}} />
@@ -45,7 +49,11 @@ class FilterBar extends Component {
 				<div style={{flexBasis: '140px'}} />
 				<div style={{flexBasis: '100px'}} />
 				<div style={{flexBasis: '150px'}}>
-					<Filter defaultKey={this.props.filter.bucketId} values={bucketFilters} onBlur={this.props.updateFilter('bucketId')} placeholder='Filter buckets...'/>
+					<Filter
+						defaultKey={this.props.filter.bucketId}
+						values={bucketFilters}
+						onBlur={this.props.updateFilter('bucketId')}
+						placeholder='Filter buckets...' />
 				</div>
 			</div>
 		);
