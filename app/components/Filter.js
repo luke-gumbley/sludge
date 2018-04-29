@@ -32,10 +32,14 @@ export default class Filter extends Component {
 		this.setState({ suggestions: this.getSuggestions(value) });
 	};
 
-	handleBlur = (event, { highlightedSuggestion }) => {
-		this.props.onBlur(event.target.value === ''
+	handleKeyPress = (event) => {
+		if(event.key === 'Enter') this.handleBlur();
+	};
+
+	handleBlur = (event) => {
+		this.props.onBlur(this.state.value === ''
 			? undefined
-			: this.props.values.find(s => s.value === event.target.value), this.props.defaultKey)
+			: (this.props.values.find(s => s.value === this.state.value) || { key: undefined }).key, this.props.defaultKey)
 	};
 
 	onChange = (event, { newValue, method }) => {
@@ -63,6 +67,7 @@ export default class Filter extends Component {
 				inputProps={{
 					placeholder: this.props.placeholder,
 					value: this.state.value,
+					onKeyPress: this.handleKeyPress,
 					onChange: this.onChange,
 					onBlur: this.handleBlur}} />);
 	}

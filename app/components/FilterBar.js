@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Filter from '../components/Filter';
+import Search from '../components/Search';
 import { getSortedTransactions } from '../selectors/transactions.js';
 import { getBuckets } from '../selectors/buckets.js';
 import { updateFilter } from '../actions/transactions.js';
@@ -43,10 +44,12 @@ class FilterBar extends Component {
 						placeholder='Filter account...' />
 					</div>
 				<div style={{flexBasis: '50px'}} />
-				<div style={{flex: '150px'}} />
-				<div style={{flexBasis: '140px'}} />
-				<div style={{flexBasis: '140px'}} />
-				<div style={{flexBasis: '140px'}} />
+				<div style={{flex: '570px'}}>
+					<Search
+						defaultValue={this.props.filter.search}
+						onBlur={this.props.updateFilter('search')}
+						placeholder='Search...' />
+				</div>
 				<div style={{flexBasis: '100px'}} />
 				<div style={{flexBasis: '150px'}}>
 					<Filter
@@ -63,8 +66,7 @@ class FilterBar extends Component {
 const mapDispatchToProps = dispatch => {
 	return {
 		updateFilter: prop => ((value, prev) => {
-			const key = (value || { key: undefined }).key;
-			return prev !== key && dispatch(updateFilter({ [prop]: key }));
+			return prev !== value && dispatch(updateFilter({ [prop]: value }));
 		})
 	};
 }

@@ -8,7 +8,7 @@ import {
 function transactions(
 	state = {
 		isFetching: false,
-		filter: { bucketId: undefined, account: undefined },
+		filter: { bucketId: undefined, account: undefined, search: undefined },
 		items: {},
 		total: 0
 	},
@@ -33,7 +33,8 @@ function transactions(
 			items[action.transaction.id] = action.transaction;
 			return Object.assign({}, state, { items: items });
 		case UPDATE_FILTER:
-			return { isFetching: false, filter: action.filter, items: {}, total: 0 };
+			const filter = Object.assign({}, state.filter, action.filter);
+			return { isFetching: false, filter, items: {}, total: 0 };
 		default:
 			return state;
 	}
