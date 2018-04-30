@@ -1,11 +1,4 @@
-import React from 'react';
-import { render } from 'react-dom';
-import Modal from 'react-modal';
 import Cookies from 'js-cookie';
-import Root from './containers/Root';
-import styles from './sludge.css';
-
-history.replaceState(history.state, '', '/');
 
 // naive convenience function for supplying tokens and xsrf header
 const nativeFetch = fetch;
@@ -17,6 +10,14 @@ fetch = function(input, init) {
 	);
 	return nativeFetch.call(this, input, init);
 }
+
+import React from 'react';
+import { render } from 'react-dom';
+import Modal from 'react-modal';
+import Root from './containers/Root';
+import styles from './sludge.css';
+
+history.replaceState(history.state, '', '/');
 
 render(
 	<Root />,
