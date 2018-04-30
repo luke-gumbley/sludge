@@ -15,16 +15,9 @@ class TransactionList extends Component {
 
 		this.infiniteLoader = React.createRef();
 
-		// TODO: Super hinky. Why not just use props for this? It'd be cleaner.
 		this.state = {
 			loaded: 0,
 		};
-	}
-
-	static getDerivedStateFromProps(nextProps, prevState) {
-		return !nextProps.transactions || nextProps.transactions.length === 0
-			? { loaded: 0 }
-			: null;
 	}
 
 	isRowLoaded = ({ index }) => {
@@ -46,21 +39,31 @@ class TransactionList extends Component {
 
 	loadMoreRows = ({ startIndex, stopIndex }) => {
 		this.setState({ loaded: stopIndex + 1 });
-		return this.props.getDispatch()(getTransactions(startIndex, stopIndex - startIndex, this.props.filter));
+		return this.props.dispatch(getTransactions(startIndex, stopIndex - startIndex, this.props.filter));
 	};
 
-	render() {
-		if(this.props.transactions.length === 0 && this.infiniteLoader.current) {
-			this.infiniteLoader.current.resetLoadMoreRowsCache();
-		}
+	componentDidMount() {
+		// load first set
+		this.loadMoreRows({startIndex: 0, stopIndex: 10});
+	}
 
+	componentDidUpdate(prevProps, prevState, snapshot) {
+		if(this.props.total === undefined && prevProps.total !== undefined) {
+			if(this.infiniteLoader.current)
+				this.infiniteLoader.current.resetLoadMoreRowsCache();
+			// load further sets
+			this.loadMoreRows({startIndex: 0, stopIndex: 10});
+		}
+	}
+
+	render() {
 		return (<AutoSizer>
 			{({height, width}) => (
 				<InfiniteLoader
 						ref={this.infiniteLoader}
 						isRowLoaded={this.isRowLoaded}
 						loadMoreRows={this.loadMoreRows}
-						rowCount={this.props.total}
+						rowCount={this.props.total || 0}
 						minimumBatchSize={30}
 						threshold={60} >
 					{({ onRowsRendered, registerChild }) => (
@@ -69,7 +72,7 @@ class TransactionList extends Component {
 								height={height}
 								headerHeight={20}
 								rowHeight={30}
-								rowCount={this.props.total}
+								rowCount={this.props.total || 0}
 								rowGetter={this.rowGetter}
 								onRowsRendered={onRowsRendered}
 								ref={registerChild} >
@@ -98,8 +101,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
 	onChange: (id, bucket) => dispatch(categoriseTransaction(id, bucket)),
-	// TODO: Hinkyyyyyyyyyy
-	getDispatch: () => dispatch
+	dispatch
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TransactionList);

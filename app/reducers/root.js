@@ -7,4 +7,7 @@ const rootReducer = combineReducers({
 	buckets
 });
 
-export default rootReducer;
+export default function(state, action) {
+	console.log(action.type);
+	return rootReducer(state, action);
+}

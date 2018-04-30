@@ -10,7 +10,7 @@ function transactions(
 		isFetching: false,
 		filter: { bucketId: undefined, account: undefined, search: undefined },
 		items: {},
-		total: 0
+		total: undefined
 	},
 	action
 ) {
@@ -34,7 +34,7 @@ function transactions(
 			return Object.assign({}, state, { items: items });
 		case UPDATE_FILTER:
 			const filter = Object.assign({}, state.filter, action.filter);
-			return { isFetching: false, filter, items: {}, total: 0 };
+			return { isFetching: false, filter, items: {}, total: undefined };
 		default:
 			return state;
 	}

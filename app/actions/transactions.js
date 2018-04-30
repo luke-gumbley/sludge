@@ -119,9 +119,8 @@ export function postStatement(filename, data) {
 }
 
 export function updateFilter(filter) {
-	return dispatch => {
-		const filterAction = dispatch({ type: UPDATE_FILTER, filter });
-		dispatch(getTransactions(0, 10, filter));
-		return filterAction;
+	return {
+		type: UPDATE_FILTER,
+		filter
 	};
 }
