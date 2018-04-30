@@ -44,7 +44,8 @@ class TransactionList extends Component {
 
 	componentDidMount() {
 		// load first set
-		this.loadMoreRows({startIndex: 0, stopIndex: 10});
+		if(this.props.total === undefined)
+			this.loadMoreRows({startIndex: 0, stopIndex: 10});
 	}
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
