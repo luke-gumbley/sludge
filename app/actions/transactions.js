@@ -43,7 +43,7 @@ export function getTransactions(offset, limit, filter) {
 	return dispatch => {
 		dispatch(getTransactionsRequest());
 
-		const accountFilter = filter.bucketId === undefined
+		const accountFilter = filter.account === undefined
 			? ''
 			: '&account=' + filter.account;
 
