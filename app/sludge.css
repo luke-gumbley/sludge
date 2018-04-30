@@ -86,13 +86,17 @@ label {
 	cursor: pointer;
 }
 
+.upload {
+	position: relative;
+}
+
 .upload input {
 	opacity: 0;
 	position: absolute;
 	right: 0px;
 	top: 0px;
-	line-height: 48px;
 	width: 100%;
+	height: 100%;
 }
 
 .react-autosuggest__container {
