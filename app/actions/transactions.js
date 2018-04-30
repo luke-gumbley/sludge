@@ -51,7 +51,11 @@ export function getTransactions(offset, limit, filter) {
 			? ''
 			: '&bucketId=' + filter.bucketId;
 
-		return fetch(`/api/transactions?offset=${offset || 0}&limit=${limit || 10}${accountFilter}${bucketFilter}`)
+		const searchFilter = filter.search === undefined
+			? ''
+			: '&search=' + encodeURIComponent(filter.search);
+
+		return fetch(`/api/transactions?offset=${offset || 0}&limit=${limit || 10}${accountFilter}${bucketFilter}${searchFilter}`)
 			.then(response => response.json())
 			.then(result => dispatch(getTransactionsResponse(augment(result.transactions), result.offset, result.total)));
 	};
