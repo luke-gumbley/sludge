@@ -39,7 +39,7 @@ class TransactionList extends Component {
 
 	loadMoreRows = ({ startIndex, stopIndex }) => {
 		this.setState({ loaded: stopIndex + 1 });
-		return this.props.dispatch(getTransactions(startIndex, stopIndex - startIndex, this.props.filter));
+		return this.props.dispatch(getTransactions(startIndex, stopIndex - startIndex + 1, this.props.filter));
 	};
 
 	componentDidMount() {
