@@ -10,7 +10,8 @@ import {
 function buckets(
 	state = {
 		isFetching: false,
-		items: {}
+		items: {},
+		editBucketId: undefined
 	},
 	action
 ) {

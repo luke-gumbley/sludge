@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Rule from './Rule';
 import GlyphButton from './GlyphButton';
+import { editRule } from '../actions/rules.js';
 import { getRules } from '../selectors/rules.js';
 
 class RuleList extends Component {
@@ -13,7 +14,7 @@ class RuleList extends Component {
 			{rules}
 			<div className='container'>
 				<div style={{flex: 2}}></div>
-				<div><GlyphButton glyph="plus" /></div>
+				<div><GlyphButton glyph="plus" onClick={this.props.onAdd} /></div>
 			</div>
 		</div>);
 	}
@@ -23,4 +24,8 @@ const mapStateToProps = state => ({
 	rules: getRules(state)
 });
 
-export default connect(mapStateToProps)(RuleList);
+const mapDispatchToProps = dispatch => ({
+	onAdd: rule => dispatch(editRule(null))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(RuleList);
