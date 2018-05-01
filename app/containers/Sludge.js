@@ -5,13 +5,15 @@ import 'react-tabs/style/react-tabs.css';
 
 import FilterBar from '../components/FilterBar';
 import TransactionList from '../components/TransactionList';
+import RuleList from '../components/RuleList';
 import BucketList from '../components/BucketList';
 import BucketDataList from '../components/BucketDataList';
 import BucketEditor from '../components/BucketEditor';
 import Header from './Header';
 
-import { getBuckets } from '../actions/buckets';
 import { getTransactions } from '../actions/transactions';
+import { getRules } from '../actions/rules';
+import { getBuckets } from '../actions/buckets';
 
 class Sludge extends Component {
 	render() {
@@ -29,6 +31,7 @@ class Sludge extends Component {
 						<TransactionList />
 					</TabPanel>
 					<TabPanel>
+						<RuleList />
 					</TabPanel>
 					<TabPanel>
 						<BucketList />
@@ -42,6 +45,7 @@ class Sludge extends Component {
 
 	componentDidMount() {
 		const { dispatch } = this.props;
+		dispatch(getRules());
 		dispatch(getBuckets());
 	}
 
