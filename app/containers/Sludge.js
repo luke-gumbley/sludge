@@ -21,11 +21,14 @@ class Sludge extends Component {
 				<Tabs>
 					<TabList>
 						<Tab>Transactions</Tab>
+						<Tab>Rules</Tab>
 						<Tab>Buckets</Tab>
 					</TabList>
 					<TabPanel>
 						<FilterBar filter={this.props.transactions.filter} />
 						<TransactionList />
+					</TabPanel>
+					<TabPanel>
 					</TabPanel>
 					<TabPanel>
 						<BucketList />
