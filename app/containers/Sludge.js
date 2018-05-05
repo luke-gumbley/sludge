@@ -6,6 +6,7 @@ import 'react-tabs/style/react-tabs.css';
 import FilterBar from '../components/FilterBar';
 import TransactionList from '../components/TransactionList';
 import RuleList from '../components/RuleList';
+import RuleEditor from '../components/RuleEditor';
 import BucketList from '../components/BucketList';
 import BucketDataList from '../components/BucketDataList';
 import BucketEditor from '../components/BucketEditor';
@@ -38,6 +39,7 @@ class Sludge extends Component {
 					</TabPanel>
 				</Tabs>
 				<BucketDataList />
+				<RuleEditor ruleId={this.props.rules.editRuleId}/>
 				<BucketEditor bucketId={this.props.buckets.editBucketId}/>
 			</div>
 		);
@@ -52,10 +54,11 @@ class Sludge extends Component {
 }
 
 function mapStateToProps(state) {
-	const { transactions, buckets } = state;
+	const { transactions, rules, buckets } = state;
 
 	return {
 		transactions,
+		rules,
 		buckets
 	};
 }

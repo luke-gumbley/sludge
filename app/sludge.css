@@ -12,6 +12,19 @@ html, body, #root, .main {
 	font-size: 12px;
 }
 
+form input {
+    padding: 10px;
+    font-family: Helvetica, sans-serif;
+    font-weight: 300;
+    font-size: 12px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+}
+
+label {
+	margin: auto 0;
+}
+
 .main {
 	display: flex;
 	flex-flow: column nowrap;
@@ -62,10 +75,6 @@ html, body, #root, .main {
 
 #bucketForm {
 	grid-template-rows: repeat(4, 1fr) auto;
-}
-
-label {
-	margin: auto 0;
 }
 
 .button {

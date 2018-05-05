@@ -5,15 +5,10 @@ import moment from 'moment';
 import Modal from 'react-modal';
 
 import { createBucket, updateBucket, editBucket } from '../actions/buckets.js';
-import Bucket from './Bucket';
 
 class BucketEditor extends Component {
-	constructor() {
-		super();
-		this.handleSubmit = this.handleSubmit.bind(this);
-	}
 
-	handleSubmit(evt) {
+	handleSubmit = (evt) => {
 		const inputs = evt.target.elements;
 
 		let bucket = {
