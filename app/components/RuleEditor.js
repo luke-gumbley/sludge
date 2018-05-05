@@ -2,22 +2,25 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Modal from 'react-modal';
 
-import { editRule } from '../actions/rules.js';
+import BucketPicker from './BucketPicker';
+import { createRule, editRule } from '../actions/rules.js';
 
 class RuleEditor extends Component {
 
 	handleSubmit = (evt) => {
 		const inputs = evt.target.elements;
 
-		let bucket = {
+		let rule = {
 			account: inputs['account'].value,
 			search: inputs['search'].value,
+			bucket: inputs['bucket'].value
 		};
 
 		if(this.props.ruleId !== null)
 			rule.id = this.props.ruleId;
 
 		this.props.onRequestClose();
+		this.props.onSubmit(rule, createRule);
 
 		evt.preventDefault();
 	}
@@ -30,6 +33,9 @@ class RuleEditor extends Component {
 
 				<label htmlFor='ruleAccount'>Account:</label>
 				<input id='ruleAccount' name='account' defaultValue={this.props.rule.account} />
+
+				<label htmlFor='ruleBucket'>Bucket:</label>
+				<BucketPicker bucketId={this.props.rule.bucketId} />
 
 				<span className='button' onClick={this.props.onRequestClose}>Cancel</span>
 				<button className='button' type='submit'>Save</button>
@@ -46,6 +52,7 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
 	return {
+		onSubmit: (rule, method) => dispatch(method(rule)),
 		onRequestClose: () => dispatch(editRule(undefined))
 	};
 }

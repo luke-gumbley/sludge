@@ -13,7 +13,7 @@ class RuleList extends Component {
 		return (<div>
 			{rules}
 			<div className='container'>
-				<div style={{flex: 2}}></div>
+				<div style={{flex: 3}}></div>
 				<div><GlyphButton glyph="plus" onClick={this.props.onAdd} /></div>
 			</div>
 		</div>);

@@ -8,12 +8,12 @@ class BucketPicker extends Component {
 	}
 
 	handleBlur(e) {
-		if(e.target.value !== (this.props.bucket.name || ''))
+		if(e.target.value !== (this.props.bucket.name || '') && this.props.onChange)
 			this.props.onChange(e.target.value);
 	}
 
 	render() {
-		return (<input type="text" list="buckets" onBlur={this.handleBlur} defaultValue={this.props.bucket.name} />);
+		return (<input type="text" list="buckets" name="bucket" onBlur={this.handleBlur} defaultValue={this.props.bucket.name} />);
 	}
 }
 
