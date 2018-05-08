@@ -7,6 +7,8 @@ export const CREATE_RULE_REQUEST = 'CREATE_RULE_REQUEST';
 export const CREATE_RULE_RESPONSE = 'CREATE_RULE_RESPONSE';
 export const PATCH_RULE_REQUEST = 'PATCH_RULE_REQUEST';
 export const PATCH_RULE_RESPONSE = 'PATCH_RULE_RESPONSE';
+export const IMPORT_RULES_REQUEST = 'IMPORT_RULES_REQUEST';
+export const IMPORT_RULES_RESPONSE = 'IMPORT_RULES_RESPONSE';
 
 function getRulesRequest() {
 	return {
@@ -119,5 +121,32 @@ export function updateRule(rule) {
 
 				return patchRule(dispatch, rule.id, patch);;
 			})
+	};
+}
+
+export function importRulesRequest() {
+	return {
+		type: IMPORT_RULES_REQUEST
+	};
+}
+
+export function importRulesResponse(rules) {
+	return {
+		type: IMPORT_RULES_RESPONSE,
+		rules
+	};
+}
+
+export function importRules(data) {
+	return dispatch => {
+		dispatch(importRulesRequest());
+		return fetch(`/api/rules/import`, {
+				method: 'POST',
+				headers: { "Content-Type": "text/csv" },
+				body: data
+			}).then(res => res.json())
+			.then(rules => dispatch(importRulesResponse(rules)))
+			.catch(ex => {console.log('whoops!'); console.log(ex); });
+
 	};
 }

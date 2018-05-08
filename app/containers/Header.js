@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import { postStatement } from '../actions/transactions.js';
 import { importBuckets } from '../actions/buckets.js';
+import { importRules } from '../actions/rules.js';
 import Upload from '../components/Upload';
 import Download from '../components/Download';
 
@@ -15,6 +16,7 @@ class Header extends Component {
 				<Download text='Download buckets' filename='buckets.csv' url='/api/buckets/export' />
 				<Upload text='Upload buckets' onFile={ this.props.handleBuckets }/>
 				<Download text='Download rules' filename='rules.csv' url='/api/rules/export' />
+				<Upload text='Upload rules' onFile={ this.props.handleRules }/>
 			</div>
 		);
 	}
@@ -23,7 +25,8 @@ class Header extends Component {
 function mapDispatchToProps(dispatch) {
 	return {
 		handleStatement: (filename, data) => dispatch(postStatement(filename, data)),
-		handleBuckets: (filename, data) => dispatch(importBuckets(data))
+		handleBuckets: (filename, data) => dispatch(importBuckets(data)),
+		handleRules: (filename, data) => dispatch(importRules(data)),
 	};
 }
 

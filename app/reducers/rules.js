@@ -1,9 +1,10 @@
 import {
 	GET_RULES_REQUEST,
+	IMPORT_RULES_RESPONSE,
 	GET_RULES_RESPONSE,
 	CREATE_RULE_RESPONSE,
 	PATCH_RULE_RESPONSE,
-	EDIT_RULE
+	EDIT_RULE,
 } from '../actions/rules';
 
 function rules(
@@ -19,6 +20,7 @@ function rules(
 			return Object.assign({}, state, {
 				isFetching: true
 			});
+		case IMPORT_RULES_RESPONSE:
 		case GET_RULES_RESPONSE:
 			return Object.assign({}, state, {
 				isFetching: false,
