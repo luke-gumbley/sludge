@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import GlyphButton from './GlyphButton';
+import { editRule } from '../actions/rules.js';
 
 class Rule extends Component {
 
@@ -10,10 +11,16 @@ class Rule extends Component {
 				<div>{this.props.rule.account}</div>
 				<div>{this.props.rule.search}</div>
 				<div>{this.props.bucket.name}</div>
-				<div><GlyphButton glyph="pencil"/></div>
+				<div><GlyphButton glyph="pencil" onClick={() => this.props.onEdit(this.props.rule.id)} /></div>
 			</div>
 		);
 	}
+}
+
+function mapDispatchToProps(dispatch) {
+	return {
+		onEdit: id => dispatch(editRule(id))
+	};
 }
 
 function mapStateToProps(state, props) {
@@ -22,4 +29,4 @@ function mapStateToProps(state, props) {
 	};
 }
 
-export default connect(mapStateToProps)(Rule);
+export default connect(mapStateToProps, mapDispatchToProps)(Rule);

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Modal from 'react-modal';
 
 import BucketPicker from './BucketPicker';
-import { createRule, editRule } from '../actions/rules.js';
+import { createRule, updateRule, editRule } from '../actions/rules.js';
 
 class RuleEditor extends Component {
 
@@ -20,7 +20,7 @@ class RuleEditor extends Component {
 			rule.id = this.props.ruleId;
 
 		this.props.onRequestClose();
-		this.props.onSubmit(rule, createRule);
+		this.props.onSubmit(rule, this.props.ruleId !== null ? updateRule : createRule);
 
 		evt.preventDefault();
 	}
