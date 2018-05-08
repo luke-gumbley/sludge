@@ -2,19 +2,14 @@ import React, { Component } from 'react';
 import { saveAs } from 'file-saver';
 
 export default class Download extends Component {
-	static defaultProps = { text: 'Download' }
+	static defaultProps = { text: 'Download', filename: 'default.csv' }
 
-	constructor() {
-		super();
-		this.handleClick = this.handleClick.bind(this);
-	}
-
-	handleClick(e) {
+	handleClick = e => {
 		fetch(this.props.url).then(response => response.blob()).then(blob => {
-			saveAs(blob, "buckets.csv");
+			saveAs(blob, this.props.filename);
 		}).catch(ex => {console.log('whoops!'); console.log(ex); });
-//		var blob = new Blob([response.body], {type: "text/plain;charset=utf-8"});
-	}
+		//var blob = new Blob([response.body], {type: "text/plain;charset=utf-8"});
+	};
 
 	render() {
 		return (

@@ -12,8 +12,9 @@ class Header extends Component {
 		return (
 			<div>
 				<Upload text='Upload statement' onFile={ this.props.handleStatement }/>
-				<Download text='Download buckets' url='/api/buckets/export' />
+				<Download text='Download buckets' filename='buckets.csv' url='/api/buckets/export' />
 				<Upload text='Upload buckets' onFile={ this.props.handleBuckets }/>
+				<Download text='Download rules' filename='rules.csv' url='/api/rules/export' />
 			</div>
 		);
 	}
