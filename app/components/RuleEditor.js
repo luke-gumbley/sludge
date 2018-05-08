@@ -13,7 +13,7 @@ class RuleEditor extends Component {
 		let rule = {
 			account: inputs['account'].value,
 			search: inputs['search'].value,
-			bucket: inputs['bucket'].value
+			bucketName: inputs['bucket'].value
 		};
 
 		if(this.props.ruleId !== null)

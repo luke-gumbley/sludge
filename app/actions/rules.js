@@ -54,11 +54,11 @@ function createRuleResponse(rule) {
 function populateBucket(dispatch, rule) {
 	const bucketPromise = Number.isInteger(rule.bucketId)
 		? Promise.resolve({ id: rule.bucketId })
-		: dispatch(getBucket(rule.bucket))
+		: dispatch(getBucket(rule.bucketName))
 
 	return bucketPromise.then(bucket => {
-		if(rule.bucket)
-			delete rule.bucket;
+		if(rule.bucketName)
+			delete rule.bucketName;
 
 		rule.bucketId = bucket.id;
 		return rule;
