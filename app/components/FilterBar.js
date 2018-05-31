@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Filter from '../components/Filter';
 import Search from '../components/Search';
+import GlyphButton from '../components/GlyphButton';
 import { getSortedTransactions } from '../selectors/transactions.js';
 import { getBuckets } from '../selectors/buckets.js';
 import { updateFilter } from '../actions/transactions.js';
+import { editRule } from '../actions/rules.js';
 
 class FilterBar extends Component {
 
@@ -44,11 +46,14 @@ class FilterBar extends Component {
 						placeholder='Filter account...' />
 					</div>
 				<div style={{flexBasis: '50px'}} />
-				<div style={{flex: '570px'}}>
+				<div style={{flex: '570px', position: 'relative'}}>
 					<Search
 						defaultValue={this.props.filter.search}
 						onBlur={this.props.updateFilter('search')}
 						placeholder='Search...' />
+					<div style={{ position: 'absolute', right: 0, top: 0, padding: '18px 10px' }}>
+						<GlyphButton glyph="magic" onClick={this.props.addRule(this.props.filter)} />
+					</div>
 				</div>
 				<div style={{flexBasis: '100px'}} />
 				<div style={{flexBasis: '150px'}}>
@@ -67,7 +72,8 @@ const mapDispatchToProps = dispatch => {
 	return {
 		updateFilter: prop => ((value, prev) => {
 			return prev !== value && dispatch(updateFilter({ [prop]: value }));
-		})
+		}),
+		addRule: rule => ( e => dispatch(editRule(rule)) )
 	};
 }
 
