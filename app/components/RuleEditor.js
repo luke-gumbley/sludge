@@ -9,6 +9,7 @@ class RuleEditor extends Component {
 
 	handleSubmit = (evt) => {
 		const inputs = evt.target.elements;
+		const editing = this.props.defaultRule && Number.isInteger(this.props.defaultRule.id);
 
 		let rule = {
 			account: inputs['account'].value,
@@ -16,17 +17,17 @@ class RuleEditor extends Component {
 			bucketName: inputs['bucket'].value
 		};
 
-		if(this.props.ruleId !== null)
-			rule.id = this.props.ruleId;
+		if(editing)
+			rule.id = this.props.defaultRule.id;
 
 		this.props.onRequestClose();
-		this.props.onSubmit(rule, this.props.ruleId !== null ? updateRule : createRule);
+		this.props.onSubmit(rule, editing ? updateRule : createRule);
 
 		evt.preventDefault();
 	}
 
 	render() {
-		return (<Modal onRequestClose={this.props.onRequestClose} isOpen={this.props.ruleId !== undefined}>
+		return (<Modal onRequestClose={this.props.onRequestClose} isOpen={!!this.props.defaultRule}>
 			<form id='ruleForm' className='grid' onSubmit={this.handleSubmit}>
 				<label htmlFor='ruleSearch'>Search:</label>
 				<input id='ruleSearch' autoFocus name='search' defaultValue={this.props.rule.search} />
@@ -46,14 +47,16 @@ class RuleEditor extends Component {
 
 function mapStateToProps(state, props) {
 	return {
-		rule: state.rules.items[props.ruleId] || { account: undefined, search: undefined }
+		rule: props.defaultRule && props.defaultRule.id
+			? state.rules.items[props.defaultRule.id]
+			: Object.assign({ account: undefined, search: undefined }, props.defaultRule)
 	};
 }
 
 function mapDispatchToProps(dispatch) {
 	return {
 		onSubmit: (rule, method) => dispatch(method(rule)),
-		onRequestClose: () => dispatch(editRule(undefined))
+		onRequestClose: () => dispatch(editRule())
 	};
 }
 

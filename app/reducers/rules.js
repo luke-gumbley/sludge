@@ -11,7 +11,7 @@ function rules(
 	state = {
 		isFetching: false,
 		items: {},
-		editRuleId: undefined
+		editRule: undefined
 	},
 	action
 ) {
@@ -33,7 +33,7 @@ function rules(
 			return Object.assign({}, state, { items: items });
 		case EDIT_RULE:
 			return Object.assign({}, state, {
-				editRuleId: action.id
+				editRule: action.rule
 			});
 		default:
 			return state;

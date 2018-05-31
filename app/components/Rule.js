@@ -19,7 +19,7 @@ class Rule extends Component {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onEdit: id => dispatch(editRule(id))
+		onEdit: id => dispatch(editRule({id}))
 	};
 }
 

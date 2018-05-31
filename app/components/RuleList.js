@@ -25,7 +25,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-	onAdd: rule => dispatch(editRule(null))
+	onAdd: rule => dispatch(editRule({}))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RuleList);

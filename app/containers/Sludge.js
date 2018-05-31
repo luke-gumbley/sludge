@@ -39,7 +39,7 @@ class Sludge extends Component {
 					</TabPanel>
 				</Tabs>
 				<BucketDataList />
-				<RuleEditor ruleId={this.props.rules.editRuleId}/>
+				<RuleEditor defaultRule={this.props.rules.editRule}/>
 				<BucketEditor bucketId={this.props.buckets.editBucketId}/>
 			</div>
 		);

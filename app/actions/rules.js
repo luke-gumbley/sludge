@@ -32,10 +32,10 @@ export function getRules() {
 	};
 }
 
-export function editRule(id) {
+export function editRule(rule) {
 	return {
 		type: EDIT_RULE,
-		id
+		rule
 	};
 }
 
