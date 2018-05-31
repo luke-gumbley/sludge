@@ -47,8 +47,8 @@ class Sludge extends Component {
 
 	componentDidMount() {
 		const { dispatch } = this.props;
-		dispatch(getRules());
 		dispatch(getBuckets());
+		dispatch(getRules());
 	}
 
 }
