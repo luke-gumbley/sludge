@@ -1,4 +1,5 @@
 import { getBucket } from './buckets.js'
+import { updateFilter } from './transactions.js'
 
 export const GET_RULES_REQUEST = 'GET_RULES_REQUEST';
 export const GET_RULES_RESPONSE = 'GET_RULES_RESPONSE';
@@ -9,6 +10,8 @@ export const PATCH_RULE_REQUEST = 'PATCH_RULE_REQUEST';
 export const PATCH_RULE_RESPONSE = 'PATCH_RULE_RESPONSE';
 export const IMPORT_RULES_REQUEST = 'IMPORT_RULES_REQUEST';
 export const IMPORT_RULES_RESPONSE = 'IMPORT_RULES_RESPONSE';
+export const APPLY_RULES_REQUEST = 'APPLY_RULES_REQUEST';
+export const APPLY_RULES_RESPONSE = 'APPLY_RULES_RESPONSE';
 
 function getRulesRequest() {
 	return {
@@ -81,6 +84,7 @@ export function createRule(rule) {
 			.then(response => response.json())
 			.then(rule => {
 				dispatch(createRuleResponse(rule));
+				dispatch(applyRules(rule.id));
 				return rule;
 			});
 	};
@@ -107,7 +111,11 @@ function patchRule(dispatch, id, patch) {
 			headers: { "Content-Type": "application/json-patch+json" },
 			body: JSON.stringify(patch),
 		}).then(response => response.json())
-			.then(rule => dispatch(patchRuleResponse(rule)))
+			.then(rule => {
+				const dispatched = dispatch(patchRuleResponse(rule));
+				dispatch(applyRules(rule.id));
+				return dispatched;
+			})
 			.catch(ex => {console.log('whoops!'); console.log(ex); });
 }
 
@@ -145,8 +153,46 @@ export function importRules(data) {
 				headers: { "Content-Type": "text/csv" },
 				body: data
 			}).then(res => res.json())
-			.then(rules => dispatch(importRulesResponse(rules)))
+			.then(rules => {
+				const dispatched = dispatch(importRulesResponse(rules));
+				dispatch(applyRules());
+				return dispatched;
+			})
 			.catch(ex => {console.log('whoops!'); console.log(ex); });
 
+	};
+}
+
+export function applyRulesRequest(ruleId) {
+	return {
+		type: APPLY_RULES_REQUEST,
+		ruleId
+	};
+}
+
+export function applyRulesResponse(results) {
+	return {
+		type: APPLY_RULES_RESPONSE,
+		results
+	};
+}
+
+export function applyRules(ruleId) {
+	return dispatch => {
+		dispatch(applyRulesRequest());
+		return fetch(ruleId ? `/api/rules/${ruleId}/apply` : '/api/rules/apply', {
+				method: 'POST'
+			}).then(res => res.json())
+			.then(res => {
+				const results = ruleId ? [] : res;
+				if(ruleId) results[res.ruleId] = res.transactions;
+				const dispatched = dispatch(applyRulesResponse(results));
+
+				const transactions = results.reduce((n, t) => n + t);
+				if(transactions) dispatch(updateFilter({}));
+
+				return dispatched;
+			})
+			.catch(ex => {console.log('whoops!'); console.log(ex); });
 	};
 }

@@ -5,6 +5,8 @@ import {
 	CREATE_RULE_RESPONSE,
 	PATCH_RULE_RESPONSE,
 	EDIT_RULE,
+	APPLY_RULES_REQUEST,
+	APPLY_RULES_RESPONSE
 } from '../actions/rules';
 
 function rules(
