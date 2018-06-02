@@ -116,7 +116,9 @@ export function postStatement(filename, data) {
 				headers: { "Content-Type": "text/csv" },
 				body: data
 			}).then(() => {
-				return dispatch(postStatementResponse());
+				const dispatched = dispatch(postStatementResponse());
+				dispatch(updateFilter({}));
+				return dispatched;
 			}).catch(ex => {console.log('whoops!'); console.log(ex); });
 
 	};
