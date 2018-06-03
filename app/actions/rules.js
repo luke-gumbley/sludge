@@ -12,6 +12,8 @@ export const IMPORT_RULES_REQUEST = 'IMPORT_RULES_REQUEST';
 export const IMPORT_RULES_RESPONSE = 'IMPORT_RULES_RESPONSE';
 export const APPLY_RULES_REQUEST = 'APPLY_RULES_REQUEST';
 export const APPLY_RULES_RESPONSE = 'APPLY_RULES_RESPONSE';
+export const DELETE_RULE_REQUEST = 'DELETE_RULE_REQUEST';
+export const DELETE_RULE_RESPONSE = 'DELETE_RULE_RESPONSE';
 
 function getRulesRequest() {
 	return {
@@ -193,6 +195,29 @@ export function applyRules(ruleId) {
 
 				return dispatched;
 			})
+			.catch(ex => {console.log('whoops!'); console.log(ex); });
+	};
+}
+
+export function deleteRuleRequest(id) {
+	return {
+		type: DELETE_RULE_REQUEST,
+		id
+	};
+}
+
+export function deleteRuleResponse(id) {
+	return {
+		type: DELETE_RULE_RESPONSE,
+		id
+	};
+}
+
+export function deleteRule(id) {
+	return dispatch => {
+		dispatch(deleteRuleRequest(id));
+		return fetch(`/api/rules/${id}`, { method: 'DELETE' })
+			.then(() => dispatch(deleteRuleResponse(id)))
 			.catch(ex => {console.log('whoops!'); console.log(ex); });
 	};
 }

@@ -5,8 +5,7 @@ import {
 	CREATE_RULE_RESPONSE,
 	PATCH_RULE_RESPONSE,
 	EDIT_RULE,
-	APPLY_RULES_REQUEST,
-	APPLY_RULES_RESPONSE
+	DELETE_RULE_RESPONSE
 } from '../actions/rules';
 
 function rules(
@@ -17,6 +16,7 @@ function rules(
 	},
 	action
 ) {
+	let items;
 	switch (action.type) {
 		case GET_RULES_REQUEST:
 			return Object.assign({}, state, {
@@ -30,13 +30,17 @@ function rules(
 			});
 		case CREATE_RULE_RESPONSE:
 		case PATCH_RULE_RESPONSE:
-			var items = Object.assign({}, state.items);
+			items = Object.assign({}, state.items);
 			items[action.rule.id] = action.rule;
-			return Object.assign({}, state, { items: items });
+			return Object.assign({}, state, { items });
 		case EDIT_RULE:
 			return Object.assign({}, state, {
 				editRule: action.rule
 			});
+		case DELETE_RULE_RESPONSE:
+			items = Object.assign({}, state.items);
+			delete items[action.id];
+			return Object.assign({}, state, { items });
 		default:
 			return state;
 	}

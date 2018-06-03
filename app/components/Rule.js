@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import GlyphButton from './GlyphButton';
-import { editRule } from '../actions/rules.js';
+import { editRule, deleteRule } from '../actions/rules.js';
 
 class Rule extends Component {
+
+	handleEdit = () => this.props.dispatch(editRule(this.props.rule.id));
+
+	handleDelete = () => this.props.dispatch(deleteRule(this.props.rule.id));
 
 	render() {
 		return (
@@ -11,16 +15,14 @@ class Rule extends Component {
 				<div>{this.props.rule.account}</div>
 				<div>{this.props.rule.search}</div>
 				<div>{this.props.bucket.name}</div>
-				<div><GlyphButton glyph="pencil" onClick={() => this.props.onEdit(this.props.rule.id)} /></div>
+				<div>
+					<GlyphButton glyph="pencil" onClick={this.handleEdit} />
+					{'\u00A0'}
+					<GlyphButton glyph="trash" onClick={this.handleDelete} />
+				</div>
 			</div>
 		);
 	}
-}
-
-function mapDispatchToProps(dispatch) {
-	return {
-		onEdit: id => dispatch(editRule({id}))
-	};
 }
 
 function mapStateToProps(state, props) {
@@ -29,4 +31,4 @@ function mapStateToProps(state, props) {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Rule);
+export default connect(mapStateToProps)(Rule);

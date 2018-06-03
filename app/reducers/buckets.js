@@ -16,6 +16,7 @@ function buckets(
 	},
 	action
 ) {
+	let items;
 	switch (action.type) {
 		case GET_BUCKETS_REQUEST:
 			return Object.assign({}, state, {
@@ -29,7 +30,7 @@ function buckets(
 			});
 		case CREATE_BUCKET_RESPONSE:
 		case PATCH_BUCKET_RESPONSE:
-			var items = Object.assign({}, state.items);
+			items = Object.assign({}, state.items);
 			items[action.bucket.id] = action.bucket;
 			return Object.assign({}, state, { items });
 		case EDIT_BUCKET:
@@ -37,7 +38,7 @@ function buckets(
 				editBucketId: action.id
 			});
 		case DELETE_BUCKET_RESPONSE:
-			var items = Object.assign({}, state.items);
+			items = Object.assign({}, state.items);
 			delete items[action.id];
 			return Object.assign({}, state, { items });
 		default:
