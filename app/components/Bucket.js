@@ -2,34 +2,29 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import GlyphButton from './GlyphButton';
-import { editBucket } from '../actions/buckets.js';
+import { editBucket, deleteBucket } from '../actions/buckets.js';
 
 class Bucket extends Component {
 
+	handleEdit = () => {
+		this.props.dispatch(editBucket(this.props.bucket.id));
+	};
+
+	handleDelete = () => {
+		this.props.dispatch(deleteBucket(this.props.bucket.id));
+	};
+
 	render() {
-		const renderAmount = bucket => {
-			// naive, but Intl.NumberFormat was weird
-			return '$' + bucket.amount.toFixed(2);
-		};
-
-		const renderPeriod = bucket => {
-			return bucket.period + ' ' + bucket.periodUnit;
-		};
-
-		const prev = bucket => {
-			return moment(bucket.nextDate).subtract(bucket.period,bucket.periodUnit)
-		}
-
-		const days = bucket => {
-			return bucket.nextDate.diff(prev(bucket),'days', true);
-		}
-
-		const renderRate = bucket => {
-			return '$' + (bucket.amount / days(bucket)).toFixed(2);
-		};
+		// naive, but Intl.NumberFormat was weird
+		const renderAmount = bucket => '$' + bucket.amount.toFixed(2);
+		const renderPeriod = bucket => bucket.period + ' ' + bucket.periodUnit;
+		const prev = bucket => moment(bucket.nextDate).subtract(bucket.period,bucket.periodUnit);
+		const days = bucket => bucket.nextDate.diff(prev(bucket),'days', true);
+		const renderRate = bucket => '$' + (bucket.amount / days(bucket)).toFixed(2);
 
 		const renderBalance = bucket => {
-			return '$' + bucket.balance.plus(bucket.amount.mul(moment().diff(bucket.zeroDate, 'days', true) / days(bucket))).toFixed(2);
+			const age = moment().diff(bucket.zeroDate, 'days', true);
+			return '$' + bucket.balance.plus(bucket.amount.mul(age / days(bucket))).toFixed(2);
 		};
 
 		return (
@@ -43,16 +38,14 @@ class Bucket extends Component {
 
 				<div>{renderBalance(this.props.bucket)}</div>
 				<div>vis</div>
-				<div><GlyphButton glyph="pencil" onClick={() => this.props.onEdit(this.props.bucket.id)} /></div>
+				<div>
+					<GlyphButton glyph="pencil" onClick={this.handleEdit} />
+					{'\u00A0'}
+					<GlyphButton glyph="trash" onClick={this.handleDelete} />
+				</div>
 			</div>
 		);
 	}
 }
 
-function mapDispatchToProps(dispatch) {
-	return {
-		onEdit: id => dispatch(editBucket(id))
-	};
-}
-
-export default connect(null, mapDispatchToProps)(Bucket);
+export default connect()(Bucket);

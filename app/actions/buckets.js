@@ -10,6 +10,8 @@ export const PATCH_BUCKET_RESPONSE = 'PATCH_BUCKET_RESPONSE';
 export const EDIT_BUCKET = 'EDIT_BUCKET';
 export const IMPORT_BUCKETS_REQUEST = 'IMPORT_BUCKETS_REQUEST';
 export const IMPORT_BUCKETS_RESPONSE = 'IMPORT_BUCKETS_RESPONSE';
+export const DELETE_BUCKET_REQUEST = 'DELETE_BUCKET_REQUEST';
+export const DELETE_BUCKET_RESPONSE = 'DELETE_BUCKET_RESPONSE';
 
 function getBucketsRequest() {
 	return {
@@ -153,5 +155,28 @@ export function importBuckets(data) {
 			.then(buckets => dispatch(importBucketsResponse(buckets)))
 			.catch(ex => {console.log('whoops!'); console.log(ex); });
 
+	};
+}
+
+export function deleteBucketRequest(id) {
+	return {
+		type: DELETE_BUCKET_REQUEST,
+		id
+	};
+}
+
+export function deleteBucketResponse(id) {
+	return {
+		type: DELETE_BUCKET_RESPONSE,
+		id
+	};
+}
+
+export function deleteBucket(id) {
+	return dispatch => {
+		dispatch(deleteBucketRequest(id));
+		return fetch(`/api/buckets/${id}`, { method: 'DELETE' })
+			.then(() => dispatch(deleteBucketResponse(id)))
+			.catch(ex => {console.log('whoops!'); console.log(ex); });
 	};
 }

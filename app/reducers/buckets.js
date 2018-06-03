@@ -4,7 +4,8 @@ import {
 	IMPORT_BUCKETS_RESPONSE,
 	CREATE_BUCKET_RESPONSE,
 	PATCH_BUCKET_RESPONSE,
-	EDIT_BUCKET
+	EDIT_BUCKET,
+	DELETE_BUCKET_RESPONSE
 } from '../actions/buckets';
 
 function buckets(
@@ -30,11 +31,15 @@ function buckets(
 		case PATCH_BUCKET_RESPONSE:
 			var items = Object.assign({}, state.items);
 			items[action.bucket.id] = action.bucket;
-			return Object.assign({}, state, { items: items });
+			return Object.assign({}, state, { items });
 		case EDIT_BUCKET:
 			return Object.assign({}, state, {
 				editBucketId: action.id
 			});
+		case DELETE_BUCKET_RESPONSE:
+			var items = Object.assign({}, state.items);
+			delete items[action.id];
+			return Object.assign({}, state, { items });
 		default:
 			return state;
 	}
