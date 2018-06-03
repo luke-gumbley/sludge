@@ -7,6 +7,10 @@ class BucketPicker extends Component {
 		this.state = { value: props.bucket.name, isDirty: false };
 	}
 
+	handleFocus = (event) => {
+		event.currentTarget.select();
+	}
+
 	handleChange = (event) => {
 		const value = event.target.value;
 		this.setState({ value, isDirty: value !== this.props.bucket.name });
@@ -32,6 +36,7 @@ class BucketPicker extends Component {
 			type="text"
 			list="buckets"
 			name="bucket"
+			onFocus={this.handleFocus}
 			onBlur={this.handleBlur}
 			onChange={this.handleChange}
 			onKeyPress={this.handleKeyPress}
