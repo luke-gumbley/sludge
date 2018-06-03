@@ -8,7 +8,13 @@ fetch = function(input, init) {
 		init,
 		{ headers: Object.assign({ 'X-XSRF-TOKEN': Cookies.get('xsrf-token') }, (init || {}).headers) }
 	);
-	return nativeFetch.call(this, input, init);
+	return nativeFetch.call(this, input, init)
+		.then(response => {
+			if (!response.ok) {
+				throw Error(response.statusText);
+			}
+			return response;
+		});
 }
 
 import React from 'react';

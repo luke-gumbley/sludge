@@ -177,6 +177,6 @@ export function deleteBucket(id) {
 		dispatch(deleteBucketRequest(id));
 		return fetch(`/api/buckets/${id}`, { method: 'DELETE' })
 			.then(() => dispatch(deleteBucketResponse(id)))
-			.catch(ex => {console.log('whoops!'); console.log(ex); });
+			.catch(console.log);
 	};
 }
