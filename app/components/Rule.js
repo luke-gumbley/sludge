@@ -5,7 +5,7 @@ import { editRule, deleteRule } from '../actions/rules.js';
 
 class Rule extends Component {
 
-	handleEdit = () => this.props.dispatch(editRule(this.props.rule.id));
+	handleEdit = () => this.props.dispatch(editRule(this.props.rule));
 
 	handleDelete = () => this.props.dispatch(deleteRule(this.props.rule.id));
 
