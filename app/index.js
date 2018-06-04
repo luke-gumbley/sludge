@@ -17,6 +17,9 @@ fetch = function(input, init) {
 		});
 }
 
+import moment from 'moment';
+moment.locale('en-NZ');
+
 import React from 'react';
 import { render } from 'react-dom';
 import Modal from 'react-modal';
