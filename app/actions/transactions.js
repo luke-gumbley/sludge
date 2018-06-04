@@ -27,13 +27,14 @@ function getTransactionsResponse(transactions, offset, total) {
 	};
 }
 
-function augment(transactions) {
+function augment(transactions, offset) {
 	if(!Array.isArray(transactions))
 		return augment([transactions])[0];
 
-	transactions.forEach(transaction => {
+	transactions.forEach((transaction, i) => {
 		transaction.date = moment(transaction.date);
 		transaction.amount = new Big(transaction.amount);
+		transaction.index = offset + i;
 	});
 
 	return transactions;
@@ -57,7 +58,7 @@ export function getTransactions(offset, limit, filter) {
 
 		return fetch(`/api/transactions?offset=${offset || 0}&limit=${limit || 10}${accountFilter}${bucketFilter}${searchFilter}`)
 			.then(response => response.json())
-			.then(result => dispatch(getTransactionsResponse(augment(result.transactions), result.offset, result.total)));
+			.then(result => dispatch(getTransactionsResponse(augment(result.transactions, result.offset), result.offset, result.total)));
 	};
 }
 

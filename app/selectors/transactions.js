@@ -6,10 +6,9 @@ export const getSortedTransactions = createSelector(
 	[getTransactions],
 	transactions => {
 		const comparator = (a,b) =>
-			a.date > b.date ? -1
-			: a.date < b.date ? 1
-			: a.ordinal > b.ordinal ? -1
-			: 1;
+			a.index < b.index ? -1
+			: a.index > b.index ? 1
+			: 0;
 
 		return Object.values(transactions).sort(comparator);
 	}
