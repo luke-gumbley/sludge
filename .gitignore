@@ -1,6 +1,6 @@
 # Compiled outputs
 dist/
-sludge.zip
+*.zip
 
 # Dependency directory
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
@@ -11,6 +11,7 @@ data/
 
 # Various secrets
 lib/secrets.js
+syncprod.sh
 
 # IntelliJ files
 .idea
