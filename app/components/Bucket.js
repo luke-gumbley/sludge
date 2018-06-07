@@ -39,7 +39,7 @@ class Bucket extends Component {
 				<div>{renderBalance(this.props.bucket)}</div>
 				<div>vis</div>
 				<div>
-					<GlyphButton glyph="pencil" onClick={this.handleEdit} />
+					<GlyphButton glyph="pencil-alt" onClick={this.handleEdit} />
 					{'\u00A0'}
 					<GlyphButton glyph="trash" onClick={this.handleDelete} />
 				</div>

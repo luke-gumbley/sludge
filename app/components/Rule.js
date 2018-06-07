@@ -16,7 +16,7 @@ class Rule extends Component {
 				<div>{this.props.rule.search}</div>
 				<div>{this.props.bucket.name}</div>
 				<div>
-					<GlyphButton glyph="pencil" onClick={this.handleEdit} />
+					<GlyphButton glyph="pencil-alt" onClick={this.handleEdit} />
 					{'\u00A0'}
 					<GlyphButton glyph="trash" onClick={this.handleDelete} />
 				</div>
