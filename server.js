@@ -29,6 +29,11 @@ options.files = process.argv.slice(2).filter(arg => {
 });
 
 database.connect({ sync: options.sync }).then(() => {
+	if(options.sync) {
+		process.exit();
+		return;
+	}
+
 	options.files.map(filename => parser.parse(filename))
 		.reduce((acc, val) => acc.concat(val), [])
 		.filter(format => format.parsable() !== false)
