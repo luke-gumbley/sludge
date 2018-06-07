@@ -18,8 +18,8 @@ TODO LIST FOR SLUDGE (rough roadmap)
 
 --- USABLE WITH SOME ASSISTANCE
 
-  9.  Create table holding ordered rules for classifying transaction (regex text match?)
-  10. Automate classification to bucket where a matching rule is found
+✓ 9.  Create table holding ordered rules for classifying transaction (regex text match?)
+✓ 10. Automate classification to bucket where a matching rule is found
 ✓ 11. Create basic UI for adding and editing buckets
 ✓ 11a. Create bucket import/export endpoints and UI for editing buckets externally
 
@@ -30,3 +30,9 @@ TODO LIST FOR SLUDGE (rough roadmap)
   13. Investigate Yodlee feeds
   14. Mobile-enable classifier
 ✓ 15. Integrate Google authentication
+
+--- BUGS / FEATURES
+
+Can't rename accounts
+Bucket balance does not auto-update on rule execution
+✓ Categorising one bucket when filtering <None> does not update correctly (still dirty?)

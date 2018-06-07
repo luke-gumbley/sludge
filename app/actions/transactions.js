@@ -34,7 +34,7 @@ function augment(transactions, offset) {
 	transactions.forEach((transaction, i) => {
 		transaction.date = moment(transaction.date);
 		transaction.amount = new Big(transaction.amount);
-		transaction.index = offset + i;
+		if(offset !== undefined) transaction.index = offset + i;
 	});
 
 	return transactions;

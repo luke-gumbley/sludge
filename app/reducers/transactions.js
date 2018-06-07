@@ -30,7 +30,7 @@ function transactions(
 			});
 		case PATCH_TRANSACTION_RESPONSE:
 			var items = Object.assign({}, state.items);
-			items[action.transaction.id] = action.transaction;
+			items[action.transaction.id] = Object.assign({}, items[action.transaction.id], action.transaction);
 			return Object.assign({}, state, { items: items });
 		case UPDATE_FILTER:
 			const filter = Object.assign({}, state.filter, action.filter);

@@ -21,14 +21,14 @@ class BucketPicker extends Component {
 	};
 
 	handleBlur = (event) => {
-		if(this.props.onChange && this.state.value !== this.props.bucket.name)
+		if(this.props.onChange && this.state.value !== this.props.bucket.name) {
 			this.props.onChange(this.state.value);
+			this.setState({ isDirty: false });
+		}
 	};
 
 	static getDerivedStateFromProps(props, state) {
-		return state.isDirty
-			? null
-			: { value: props.bucket.name, isDirty: false };
+		return state.isDirty ? null : { value: props.bucket.name };
 	}
 
 	render() {
