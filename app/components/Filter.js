@@ -19,6 +19,12 @@ export default class Filter extends Component {
 		values: []
 	};
 
+	storeInputReference = autosuggest => {
+		if (autosuggest !== null) {
+			this.input = autosuggest.input;
+		}
+	}
+
 	getSuggestions = value => {
 		const val = value.trim().toLowerCase();
 		const valueFilter = v => !v.default && (!val.length
@@ -43,7 +49,11 @@ export default class Filter extends Component {
 	};
 
 	onChange = (event, { newValue, method }) => {
-		this.setState({ value: newValue });
+		const me = this;
+		this.setState({ value: newValue }, method === 'click' ? () => {
+			me.input.blur();
+			me.handleBlur();
+		} : undefined);
 	};
 
 	onSuggestionsClearRequested = () => {
@@ -64,6 +74,7 @@ export default class Filter extends Component {
 				getSuggestionValue={this.getSuggestionValue}
 				shouldRenderSuggestions={() => true}
 				renderSuggestion={this.renderSuggestion}
+				ref={this.storeInputReference}
 				inputProps={{
 					placeholder: this.props.placeholder,
 					value: this.state.value,
