@@ -12,6 +12,8 @@ html, body, #root, .main {
 	font-size: 12px;
 }
 
+div:focus {outline:0;}
+
 form input {
     padding: 10px;
     font-family: Helvetica, sans-serif;
@@ -75,6 +77,10 @@ label {
 
 #bucketForm {
 	grid-template-rows: repeat(4, 1fr) auto;
+}
+
+.fa {
+	color: darkgreen
 }
 
 .button {

@@ -33,18 +33,20 @@ TODO LIST FOR SLUDGE (rough roadmap)
 
 --- BUGS / FEATURES
 
-Can't rename accounts
-Add account balance, for reconciliation (zero with transaction)
-Bucket balance does not auto-update on rule execution or categorisation
-No UI for zeroing buckets to a transaction
+  Can't rename accounts
+  Add account balance, for reconciliation (zero with transaction)
+  Bucket balance does not auto-update on rule execution or categorisation
+  No UI for zeroing buckets to a transaction
 ✓ Categorising one bucket when filtering <None> does not update correctly (still dirty?)
-Display global transaction / uncategorised count (defrag?)
-Display filtered transaction / uncategorised count
-Display slush total (total of all bucket balances)
-Move upload/download buttons to hamburger
-Notes field on transaction
-Remove need to press Enter after selecting an item
-Filter transactions by amount
-See when others are using it (incl. how long ago their last request was)
-Convert bucket list to react-virtualized Table, permit sorting
-Buckets with zero amount should not show other fields (as they are not budget buckets)
+  Display global transaction / uncategorised count (defrag?)
+  Display filtered transaction / uncategorised count
+  Display slush total (total of all bucket balances)
+  Move upload/download buttons to hamburger
+  Notes field on transaction
+✓ Remove need to press Enter after selecting an item
+  Filter transactions by amount
+  See when others are using it (incl. how long ago their last request was)
+✓ Convert bucket list to react-virtualized Table
+  Permit sorting bucket list
+✓ Buckets with zero period or invalid date should not show other fields (as they are not budget buckets)
+  Line highlighting / click-to-select on rows
