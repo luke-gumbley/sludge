@@ -16,7 +16,7 @@ class BucketEditor extends Component {
 			amount: new Big(inputs['amount'].value),
 			period: inputs['period'].value,
 			periodUnit: inputs['periodUnit'].value,
-			nextDate: moment(new Date(inputs['nextDate'].value))
+			date: moment(inputs['date'].value, 'l'),
 		};
 
 		if(this.props.bucketId !== null)
@@ -46,8 +46,8 @@ class BucketEditor extends Component {
 				</select>
 				</div>
 
-				<label htmlFor='bucketNextDate'>Next:</label>
-				<input id='bucketNextDate' name='nextDate' defaultValue={this.props.bucket.nextDate.format('l')} />
+				<label htmlFor='bucketDate'>Date:</label>
+				<input id='bucketDate' name='date' defaultValue={this.props.bucket.date.format('l')} />
 
 				<span className='button' onClick={this.props.onRequestClose}>Cancel</span>
 				<button className='button' type='submit'>Save</button>
@@ -58,7 +58,7 @@ class BucketEditor extends Component {
 
 function mapStateToProps(state, props) {
 	return {
-		bucket: state.buckets.items[props.bucketId] || { amount: new Big(0), nextDate: moment() }
+		bucket: state.buckets.items[props.bucketId] || { amount: new Big(0), date: moment() }
 	};
 }
 

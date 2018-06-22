@@ -45,7 +45,7 @@ function augment(buckets) {
 		return augment([buckets])[0];
 
 	buckets.forEach(bucket => {
-		bucket.nextDate = moment(bucket.nextDate);
+		bucket.date = moment(bucket.date);
 		bucket.zeroDate = moment(bucket.zeroDate);
 		bucket.amount = new Big(bucket.amount);
 		bucket.balance = new Big(bucket.balance);

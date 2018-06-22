@@ -9,23 +9,29 @@ import { editBucket, deleteBucket } from '../actions/buckets.js';
 import { getBuckets } from '../selectors/buckets.js';
 
 class BucketList extends Component {
-
 	rowGetter = ({ index }) => {
-		const bucket = this.props.buckets[index];
+		let bucket = this.props.buckets[index];
 
-		const isPeriodic = bucket.nextDate.isValid() && bucket.period > 0;
+		const isPeriodic = bucket.date.isValid() && bucket.period > 0;
 
-		const prev = moment(bucket.nextDate).subtract(bucket.period,bucket.periodUnit);
-		const days = bucket.nextDate.diff(prev,'days', true);
+		const nextDate = moment(bucket.date);
+		if(moment().isAfter(nextDate)) {
+			const diff = moment().diff(nextDate, bucket.periodUnit, true);
+			const periods = Math.ceil(diff / bucket.period);
+			nextDate.add(bucket.period * periods, bucket.periodUnit);
+		}
+
+		const prev = moment(bucket.date).subtract(bucket.period,bucket.periodUnit);
+		const days = bucket.date.diff(prev,'days', true);
 		const age = moment().diff(bucket.zeroDate, 'days', true);
 
-		return (bucket && Object.assign({}, bucket, {
+		return Object.assign({}, bucket, {
 			amount: isPeriodic ? '$' + bucket.amount.toFixed(2) : '',
 			period: isPeriodic ? bucket.period + ' ' + bucket.periodUnit : '',
-			nextDate: isPeriodic ? bucket.nextDate.format('l') : '',
+			nextDate: isPeriodic ? nextDate.format('l') : '',
 			rate: isPeriodic ? '$' + (bucket.amount / days).toFixed(2) : '',
 			balance: '$' + bucket.balance.plus(isPeriodic ? bucket.amount.mul(age / days) : 0).toFixed(2)
-		})) || {};
+		});
 	};
 
 	renderAdd = options => {
