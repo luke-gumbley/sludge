@@ -83,7 +83,7 @@ export function createBucket(bucket) {
 export function getBucket(name) {
 	return (dispatch, getState) => {
 		var bucket = Object.values(getState().buckets.items).find(b => b.name == name);
-		return bucket ? Promise.resolve(bucket) : dispatch(createBucket({ name }));
+		return bucket ? Promise.resolve(bucket) : dispatch(createBucket({ name, period: 0, budget: 'Extra' }));
 	}
 }
 

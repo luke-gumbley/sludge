@@ -17,6 +17,7 @@ class BucketEditor extends Component {
 			period: inputs['period'].value,
 			periodUnit: inputs['periodUnit'].value,
 			date: moment(inputs['date'].value, 'l'),
+			budget: inputs['budget'].value || null,
 		};
 
 		if(this.props.bucketId !== null)
@@ -49,6 +50,9 @@ class BucketEditor extends Component {
 				<label htmlFor='bucketDate'>Date:</label>
 				<input id='bucketDate' name='date' defaultValue={this.props.bucket.date.format('l')} />
 
+				<label htmlFor='bucketBudget'>Budget:</label>
+				<input id='bucketBudget' name='budget' defaultValue={this.props.bucket.budget} />
+
 				<span className='button' onClick={this.props.onRequestClose}>Cancel</span>
 				<button className='button' type='submit'>Save</button>
 			</form>
@@ -58,7 +62,7 @@ class BucketEditor extends Component {
 
 function mapStateToProps(state, props) {
 	return {
-		bucket: state.buckets.items[props.bucketId] || { amount: new Big(0), date: moment() }
+		bucket: state.buckets.items[props.bucketId] || { amount: new Big(0), period: 0, date: moment(), budget: 'Slush' }
 	};
 }
 

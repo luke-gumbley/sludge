@@ -74,6 +74,7 @@ class BucketList extends Component {
 					<Column label='Next Date' dataKey='nextDate' width={80} flexGrow={1} />
 					<Column label='Daily' dataKey='rate' width={80} flexGrow={1} />
 					<Column label='Balance' dataKey='balance' width={80} flexGrow={1} />
+					<Column label='Budget' dataKey='budget' width={80} flexGrow={1} />
 					<Column
 						dataKey='id'
 						headerRenderer={this.renderAdd}
