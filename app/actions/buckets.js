@@ -49,6 +49,16 @@ function augment(buckets) {
 		bucket.zeroDate = moment(bucket.zeroDate);
 		bucket.amount = new Big(bucket.amount);
 		bucket.balance = new Big(bucket.balance);
+
+		bucket.isPeriodic = bucket.date.isValid() && bucket.period > 0;
+
+		const prev = moment(bucket.date).subtract(bucket.period,bucket.periodUnit);
+		bucket.periodDays = bucket.date.diff(prev, 'days', true);
+
+		bucket.calcBalance = function calcBalance() {
+			const age = moment().diff(this.zeroDate, 'days', true);
+			return this.balance.plus(this.isPeriodic ? this.amount.mul(age / this.periodDays) : 0);
+		};
 	});
 
 	return buckets;

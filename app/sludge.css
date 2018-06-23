@@ -170,3 +170,14 @@ label {
 .react-autosuggest__suggestion--highlighted {
   background-color: #ddd;
 }
+
+.budgets {
+	display: flex;
+}
+
+.budget {
+	flex: auto;
+	text-align: center;
+	font-size: 1.5em;
+	padding: 10px;
+}

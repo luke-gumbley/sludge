@@ -12,8 +12,6 @@ class BucketList extends Component {
 	rowGetter = ({ index }) => {
 		let bucket = this.props.buckets[index];
 
-		const isPeriodic = bucket.date.isValid() && bucket.period > 0;
-
 		const nextDate = moment(bucket.date);
 		if(moment().isAfter(nextDate)) {
 			const diff = moment().diff(nextDate, bucket.periodUnit, true);
@@ -21,16 +19,12 @@ class BucketList extends Component {
 			nextDate.add(bucket.period * periods, bucket.periodUnit);
 		}
 
-		const prev = moment(bucket.date).subtract(bucket.period,bucket.periodUnit);
-		const days = bucket.date.diff(prev,'days', true);
-		const age = moment().diff(bucket.zeroDate, 'days', true);
-
 		return Object.assign({}, bucket, {
-			amount: isPeriodic ? '$' + bucket.amount.toFixed(2) : '',
-			period: isPeriodic ? bucket.period + ' ' + bucket.periodUnit : '',
-			nextDate: isPeriodic ? nextDate.format('l') : '',
-			rate: isPeriodic ? '$' + (bucket.amount / days).toFixed(2) : '',
-			balance: '$' + bucket.balance.plus(isPeriodic ? bucket.amount.mul(age / days) : 0).toFixed(2)
+			amount: bucket.isPeriodic ? '$' + bucket.amount.toFixed(2) : '',
+			period: bucket.isPeriodic ? bucket.period + ' ' + bucket.periodUnit : '',
+			nextDate: bucket.isPeriodic ? nextDate.format('l') : '',
+			rate: bucket.isPeriodic ? '$' + (bucket.amount / bucket.periodDays).toFixed(2) : '',
+			balance: '$' + bucket.calcBalance().toFixed(2)
 		});
 	};
 

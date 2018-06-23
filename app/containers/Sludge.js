@@ -10,6 +10,7 @@ import RuleEditor from '../components/RuleEditor';
 import BucketList from '../components/BucketList';
 import BucketDataList from '../components/BucketDataList';
 import BucketEditor from '../components/BucketEditor';
+import Budgets from '../components/Budgets';
 import Header from './Header';
 
 import { getTransactions } from '../actions/transactions';
@@ -21,6 +22,7 @@ class Sludge extends Component {
 		return (
 			<div className='main'>
 				<Header />
+				<Budgets />
 				<Tabs>
 					<TabList>
 						<Tab>Transactions</Tab>
