@@ -9,6 +9,14 @@ import { editBucket, deleteBucket } from '../actions/buckets.js';
 import { getBuckets } from '../selectors/buckets.js';
 
 class BucketList extends Component {
+	rowClassName = ({ index }) => {
+		if(index == -1) return undefined;
+		let bucket = this.props.buckets[index];
+		return bucket.isPeriodic && bucket.calcBalance() < 0
+			? 'redRow'
+			: (index % 2) ? 'altRow' : undefined;
+	};
+
 	rowGetter = ({ index }) => {
 		let bucket = this.props.buckets[index];
 
@@ -61,6 +69,7 @@ class BucketList extends Component {
 						headerHeight={20}
 						rowHeight={30}
 						rowCount={(this.props.buckets || []).length}
+						rowClassName={this.rowClassName}
 						rowGetter={this.rowGetter} >
 					<Column label='Name' dataKey='name' width={80} flexGrow={1} />
 					<Column label='Amount' dataKey='amount' width={80} flexGrow={1} />

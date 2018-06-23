@@ -80,7 +80,7 @@ label {
 }
 
 .fa {
-	color: green
+	color: green;
 }
 
 .button {
@@ -180,4 +180,13 @@ label {
 	text-align: center;
 	font-size: 1.5em;
 	padding: 10px;
+}
+
+.altRow {
+	background: #f0f0f0;
+}
+
+.redRow {
+	color: darkred;
+	background: #fff4f4;
 }
