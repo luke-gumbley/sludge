@@ -1,3 +1,4 @@
+import Big from 'big.js';
 import { createSelector } from 'reselect'
 
 const getStateBuckets = state => state.buckets.items;
@@ -15,6 +16,9 @@ export const getBudgets = createSelector(
 			name: budget,
 			balance: buckets
 				.filter(b => b.budget === budget)
-				.reduce((balance, bucket) => { return bucket.calcBalance().add(balance); }, 0)
+				.reduce((balance, bucket) => {
+					const bal = bucket.calcBalance();
+					return balance.add(bal.gt(0) || !bucket.isPeriodic ? bal : 0);
+				}, Big(0))
 		}))
 );
