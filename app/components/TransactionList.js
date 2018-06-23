@@ -24,6 +24,10 @@ class TransactionList extends Component {
 		return this.state.loaded > index || !!this.props.transactions[index];
 	};
 
+	rowClassName = ({ index }) => {
+		return ((index + 1) % 2) ? 'altRow' : undefined;
+	};
+
 	rowGetter = ({ index }) => {
 		const transaction = this.props.transactions[index];
 		return (transaction && Object.assign({}, transaction, {
@@ -74,6 +78,7 @@ class TransactionList extends Component {
 								headerHeight={20}
 								rowHeight={30}
 								rowCount={this.props.total || 0}
+								rowClassName={this.rowClassName}
 								rowGetter={this.rowGetter}
 								onRowsRendered={onRowsRendered}
 								ref={registerChild} >
