@@ -12,6 +12,7 @@ data/
 # Various secrets
 lib/secrets.js
 syncprod.sh
+database.sql
 
 # IntelliJ files
 .idea
