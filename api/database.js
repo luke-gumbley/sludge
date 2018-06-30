@@ -1,8 +1,7 @@
 const Sequelize = require('sequelize');
 const stream = require('stream');
 const moment = require('moment');
-
-const parser = require('./parser')
+const Big = require('big.js');
 const { stableSort } = require('./utils');
 
 var sequelize = null;
@@ -341,5 +340,55 @@ module.exports = {
 		});
 
 		return { importer, promise };
+	},
+
+	getBuckets: function(barrelId, id) {
+		const db = module.exports;
+		const {or, eq, gt} = Sequelize.Op;
+
+		let query = {
+			where: id !== undefined ? { id, barrelId } : { barrelId },
+			attributes: { exclude: ['barrelId'] },
+			include: [{
+				model: db.transaction,
+				as: 'zeroTransaction',
+				attributes: ['date', 'ordinal']
+			}, {
+				model: db.transaction,
+				as: 'transactions',
+				attributes: ['amount'],
+				required: false,
+				where: { [or] : [
+					{ '$bucket.zeroTransactionId$': { [eq]: null } },
+					{ date: { [gt]: Sequelize.col('zeroTransaction.date') } },
+					{ date: { [eq]: Sequelize.col('zeroTransaction.date') }, ordinal: { [gt]: Sequelize.col('zeroTransaction.ordinal') } }
+				]}
+			}]
+		};
+
+		query['where'] = id !== undefined ? { id } : undefined;
+
+		return db.bucket.findAll(query)
+			.then(dbBuckets => dbBuckets.map(dbBucket => {
+				const { zeroTransaction, transactions, ...bucket } = dbBucket.toJSON();
+				const balance = transactions.reduce((balance, transaction) => balance.plus(transaction.amount), new Big(0)).toFixed(2);
+
+				const zeroDate = zeroTransaction
+					? zeroTransaction.date
+					: moment(bucket.date).subtract(bucket.period,bucket.periodUnit);
+				return Object.assign(bucket, { balance, zeroDate });
+			}));
+	},
+
+	getRules: function(barrelId, id) {
+		const db = module.exports;
+
+		const query = {
+			where: id !== undefined ? { barrelId, id } : { barrelId },
+			attributes: { exclude: ['barrelId'] }
+		};
+
+		return db.rule.findAll(query)
+			.then(dbRules => dbRules.map(dbRule => dbRule.toJSON()))
 	}
 };
