@@ -10,7 +10,7 @@ node_modules/
 data/
 
 # Various secrets
-lib/secrets.js
+api/secrets.js
 syncprod.sh
 database.sql
 
