@@ -6,8 +6,18 @@ const database = require('../database.js');
 
 const app = module.exports = express();
 
+function getRules(barrelId, id) {
+	const query = {
+		where: id !== undefined ? { barrelId, id } : { barrelId },
+		attributes: { exclude: ['barrelId'] }
+	};
+
+	return database.rule.findAll(query)
+		.then(dbRules => dbRules.map(dbRule => dbRule.toJSON()))
+}
+
 app.get('/', function (req, res) {
-	return database.getRules(req.decoded.barrelId)
+	return getRules(req.decoded.barrelId)
 		.then(rules => res.json(rules))
 		.catch(e => console.log(e));
 });
@@ -35,7 +45,7 @@ app.post('/apply', function (req, res) {
 });
 
 app.get('/:id', function (req, res) {
-	return database.getRules(req.decoded.barrelId, req.params.id)
+	return getRules(req.decoded.barrelId, req.params.id)
 		.then(rules => res.json(rules[0]))
 		.catch(e => console.log(e));
 });
@@ -50,7 +60,7 @@ app.post('/', function (req, res) {
 			account: null,
 			search: null
 		}, req.body, { barrelId: req.decoded.barrelId }))
-		.then(rule => database.getRules(req.decoded.barrelId, rule.id))
+		.then(rule => getRules(req.decoded.barrelId, rule.id))
 		.then(rules => res.json(rules[0]))
 		.catch(e => console.log(e));
 });
@@ -65,7 +75,7 @@ app.patch('/:id', function (req, res) {
 		delete newRule.barrelId;
 		delete newRule.id;
 		return database.rule.update(newRule, query);
-	}).then(() => database.getRules(req.params.id))
+	}).then(() => getRules(req.params.id))
 		.then(rules => res.json(rules[0]))
 		.catch(e => console.log(e));
 });
@@ -85,7 +95,7 @@ app.post('/import', function (req, res) {
 
 		database.rule.destroy({ where: { barrelId: req.decoded.barrelId } })
 			.then(() => database.rule.bulkCreate(imported))
-			.then(() => err ? Promise.resolve() : database.getRules())
+			.then(() => err ? Promise.resolve() : getRules())
 			.then(rules => {
 				console.log('import rules', 'i' + imported.length);
 				return res.status(err ? 400 : 200).json(err || rules)

@@ -1,4 +1,5 @@
 const express = require('express');
+const { importTransactions } = require('./import.js');
 const parser = require('../parser.js');
 const database = require('../database.js');
 
@@ -66,7 +67,7 @@ app.post('/import/:filename', function (req, res) {
 	})
 
 	Promise.all(formats.map(format => {
-		const { importer, promise } = database.importTransactions(req.decoded.barrelId);
+		const { importer, promise } = importTransactions(req.decoded.barrelId);
 		format.pipe(importer);
 		return promise;
 	}))
