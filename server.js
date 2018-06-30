@@ -4,7 +4,7 @@ var csv = require('csv');
 
 const parser = require('./api/parser');
 const database = require('./api/database');
-const api = require('./api/api');
+const api = require('./api');
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at:', p, 'reason:', reason);

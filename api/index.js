@@ -42,7 +42,7 @@ app.use(function(req, res, next) {
 	var start = Date.now();
 	res.on('finish', function() {
 		var duration = Date.now() - start;
-		console.log(req.url, duration);
+		console.log(req.originalUrl, duration);
 	});
 	next();
 });
