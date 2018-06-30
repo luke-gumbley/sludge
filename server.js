@@ -2,9 +2,9 @@ require('dotenv').config();
 var fs = require('fs');
 var csv = require('csv');
 
-const parser = require('./lib/parser');
-const database = require('./lib/database');
-const api = require('./lib/api');
+const parser = require('./api/parser');
+const database = require('./api/database');
+const api = require('./api/api');
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at:', p, 'reason:', reason);
