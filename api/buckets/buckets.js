@@ -2,6 +2,7 @@ const express = require('express');
 const Sequelize = require('sequelize');
 const moment = require('moment');
 const csv = require('csv');
+const Big = require('big.js');
 
 const database = require('../database.js');
 

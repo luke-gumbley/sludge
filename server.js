@@ -28,12 +28,16 @@ options.files = process.argv.slice(2).filter(arg => {
 	return true;
 });
 
-database.connect({ sync: options.sync }).then(() => {
-	if(options.sync) {
-		process.exit();
-		return;
-	}
+const dbOptions = {
+	database: process.env.DB_NAME,
+	username: process.env.DB_USERNAME,
+	password: process.env.DB_PASSWORD,
+	host: process.env.DB_HOSTNAME,
+	port: process.env.DB_PORT,
+	sync: options.sync
+}
 
+database.connect(dbOptions).then(() => {
 	options.files.map(filename => parser.parse(filename))
 		.reduce((acc, val) => acc.concat(val), [])
 		.filter(format => format.parsable() !== false)
@@ -43,6 +47,8 @@ database.connect({ sync: options.sync }).then(() => {
 		let csvParser = csv.parse({ columns: true }, (err, buckets) => { database.bucket.bulkCreate(buckets); } );
 		fs.createReadStream(options.bucketFile).pipe(csvParser);
 	}
+
+	if(options.sync) return database.close();
 }).catch(function(err) { console.log(err); });
 
-api.start();
+if(!options.sync) api.start();

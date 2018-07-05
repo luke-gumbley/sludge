@@ -126,17 +126,12 @@ module.exports = {
 
 	models,
 
-	connect: function({ sync }) {
-		sequelize = new Sequelize({
+	connect: function({ sync, ...options }) {
+		sequelize = new Sequelize(Object.assign({
 			dialect: 'postgres',
-			database: process.env.DB_NAME,
-			username: process.env.DB_USERNAME,
-			password: process.env.DB_PASSWORD,
-			host: process.env.DB_HOSTNAME,
-			port: process.env.DB_PORT,
 			operatorsAliases: false,
 			logging: false
-		});
+		}, options));
 
 		models.forEach(model =>
 			module.exports[model.name] = sequelize.define(model.name, model.definition, { freezeTableName: true })
@@ -149,6 +144,10 @@ module.exports = {
 				? Object.keys(sequelize.models).reduce((promise, model) => promise.then(() => sequelize.models[model].sync({ force: true })), Promise.resolve())
 				: Promise.resolve()
 			);
+	},
+
+	close: function() {
+		return sequelize.close();
 	},
 
 	query: function(sql, options) {
