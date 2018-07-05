@@ -38,22 +38,30 @@ if (process.env['https_proxy']) {
 
 passport.use(strategy);
 
-app.use(function(req, res, next) {
-	var start = Date.now();
-	res.on('finish', function() {
-		var duration = Date.now() - start;
-		console.log(req.originalUrl, duration);
+if(process.env.NODE_ENV!='test') {
+	app.use(function(req, res, next) {
+		var start = Date.now();
+		res.on('finish', function() {
+			var duration = Date.now() - start;
+			console.log(req.originalUrl, duration);
+		});
+		next();
 	});
-	next();
-});
+}
 
 app.use(passport.initialize());
 app.use(bodyParser.json({ type: ['application/json', 'application/json-patch+json'] }));
 app.use(cookieParser());
 
-app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.email'], session: false }), (req, res, next) => {
+function createTokens(email, barrelId) {
 	const xsrfToken = crypto.randomBytes(33).toString('base64');
+	const payload = { email, barrelId, xsrfToken };
+	const token = jwt.sign(payload, secrets.jwtSecret, { expiresIn: '24h' });
 
+	return { xsrfToken, token };
+}
+
+app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.email'], session: false }), (req, res, next) => {
 	const email = req.user.profile.emails.filter(e => e.type === 'account')[0].value
 
 	database.user.findOne({ where: { email }})
@@ -64,8 +72,7 @@ app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.g
 					.sendFile(require.resolve('../app/401.html'));
 			}
 
-			const payload = { email, barrelId: user.barrelId, xsrfToken };
-			const token = jwt.sign(payload, secrets.jwtSecret, { expiresIn: '24h' });
+			const { xsrfToken, token } = createTokens(email, user.barrelId);
 
 			res.cookie('xsrf-token', xsrfToken, {
 				secure: process.env.COOKIE_SECURE === 'true',
@@ -86,7 +93,7 @@ app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.g
 
 const authenticator = failure => {
 	return express.Router().use((req, res, next) => {
-		const token = (req.headers['Authorization'] || '').substring('Bearer '.length) || req.cookies['access-token'];
+		const token = (req.headers['authorization'] || '').substring('Bearer '.length) || req.cookies['access-token'];
 
 		jwt.verify(token, secrets.jwtSecret, (err, decoded) => {
 			req.decoded = decoded;
@@ -115,9 +122,13 @@ app.use('/api/rules', rules);
 app.use(authenticator(res => res.redirect('/auth/google')));
 app.use(express.static('dist/'));
 
-(process.env.HTTPS === 'true'
-	? https.createServer({
-			key: fs.readFileSync('./certs/server.key'),
-			cert: fs.readFileSync('./certs/server.crt')
-		}, app)
-	: app).listen(process.env.PORT || 8080)
+function start() {
+	(process.env.HTTPS === 'true'
+		? https.createServer({
+				key: fs.readFileSync('./certs/server.key'),
+				cert: fs.readFileSync('./certs/server.crt')
+			}, app)
+		: app).listen(process.env.PORT || 8080)
+}
+
+module.exports = { createTokens, app, start };

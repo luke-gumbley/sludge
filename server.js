@@ -44,3 +44,5 @@ database.connect({ sync: options.sync }).then(() => {
 		fs.createReadStream(options.bucketFile).pipe(csvParser);
 	}
 }).catch(function(err) { console.log(err); });
+
+api.start();

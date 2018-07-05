@@ -30,7 +30,8 @@
     "redux": "^3.7.2",
     "reselect": "^3.0.1",
     "rfc6902": "2.2.2",
-    "sequelize": "^4.37.6"
+    "sequelize": "^4.37.6",
+    "superagent-defaults": "^0.1.14"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -40,14 +41,17 @@
     "css-loader": "^0.28.11",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.4.0",
+    "mocha": "^5.2.0",
     "redux-devtools": "^3.4.1",
     "redux-thunk": "^2.2.0",
     "style-loader": "^0.20.3",
+    "supertest": "^3.1.0",
     "webpack": "^4.5.0",
     "webpack-cli": "^3.0.3"
   },
   "scripts": {
     "build": "webpack; zip -r sludge.zip app dist lib server.js package.json",
+    "test": "NODE_TLS_REJECT_UNAUTHORIZED=0 NODE_ENV=test ./node_modules/.bin/mocha --recursive \"api/**/*.test.js\"",
     "watch": "webpack --progress --colors --watch"
   },
   "repository": {

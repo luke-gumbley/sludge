@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Note: this is functional, but garbage. Refer to the below if you care, which I don't
+# https://stackoverflow.com/questions/21297139/how-do-you-sign-a-certificate-signing-request-with-your-certification-authority/21340898#21340898
+
 #https://alexanderzeitler.com/articles/Fixing-Chrome-missing_subjectAltName-selfsigned-cert-openssl/
 
 node -e "console.log(crypto.randomBytes(33).toString('base64'));" > passphrase
