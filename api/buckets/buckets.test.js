@@ -1,4 +1,4 @@
-const assert = require('assert');
+const assert = require('assert').strict;
 const { api } = require('../setup.test.js');
 
 describe('Buckets', function () {
@@ -7,8 +7,8 @@ describe('Buckets', function () {
 		api.get('/api/buckets')
 			.expect(200)
 			.expect(res => {
-				assert(res.body.length, 1);
-				assert(res.body[0].name, 'tesqlitey');
+				assert.equal(res.body.length, 1);
+				assert.equal(res.body[0].name, 'tesqlitey');
 			})
 			.end(done);
 	});
