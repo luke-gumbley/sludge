@@ -51,4 +51,4 @@ database.connect(dbOptions).then(() => {
 	if(options.sync) return database.close();
 }).catch(function(err) { console.log(err); });
 
-if(!options.sync) api.start();
+if(!options.sync) api.start(process.env.HTTPS === 'true', process.env.PORT);

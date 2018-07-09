@@ -31,8 +31,6 @@ function getBuckets(barrelId, id) {
 		}]
 	};
 
-	query['where'] = id !== undefined ? { id } : undefined;
-
 	return database.bucket.findAll(query)
 		.then(dbBuckets => dbBuckets.map(dbBucket => {
 			const { zeroTransaction, transactions, ...bucket } = dbBucket.toJSON();

@@ -131,13 +131,13 @@ app.use('/blank', (req, res, next) => res.sendStatus(200));
 app.use(authenticator(res => res.redirect('/auth/google')));
 app.use(express.static('dist/'));
 
-function start() {
-	(process.env.HTTPS === 'true'
+function start(secure, port) {
+	(secure
 		? https.createServer({
 				key: fs.readFileSync('./certs/server.key'),
 				cert: fs.readFileSync('./certs/server.crt')
 			}, app)
-		: app).listen(process.env.PORT || 8080)
+		: app).listen(port || 8080)
 }
 
 module.exports = { createTokens, verifyToken, app, start };

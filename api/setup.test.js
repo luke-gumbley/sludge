@@ -15,14 +15,9 @@ const api = defaults(supertest(app))
 	.set('accept', 'application/json');
 
 before(function(done){
-	database.connect({
-		dialect: 'sqlite',
-		sync: true
-	}).then(() => {
-		return database.barrel.create({});
-	}).then(() => {
-		return database.bucket.create({	barrelId: 1, name: 'tesqlitey', amount: 0, period: 0, periodUnit: 'months', date: new Date() });
-	}).then(() => done());
+	database
+		.connectTest()
+		.then(done);
 });
 
 after(function(done){

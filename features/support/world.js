@@ -1,10 +1,15 @@
 const { setWorldConstructor } = require('cucumber');
 const webdriver = require('selenium-webdriver');
 
-const { createTokens, verifyToken } = require('../../api');
+const database = require('../../api/database');
+const api = require('../../api');
 
 class CustomWorld {
 	constructor() {
+		database.connectTest();
+
+		api.start(true, 8443);
+
 		this.driver = new webdriver.Builder()
 		    .forBrowser('chrome')
 		    .build();
@@ -19,19 +24,19 @@ class CustomWorld {
 
 		const accessCookie = options.getCookie('access-token');
 		if(accessCookie) {
-			const { err, decoded } = await verifyToken(accessCookie.value);
+			const { err, decoded } = await api.verifyToken(accessCookie.value);
 			if(!err && decoded && decoded.email && decoded.email.startsWith(name))
 				return;
 		}
 
 		const barrels = {
-			jane: 1,
-			frank: 1,
-			mary: 2,
-			jim: 3
+			Alex: 1,
+			Sam: 1,
+			Morgan: 2,
+			Charlie: 3
 		};
 
-		const { xsrfToken, token } = createTokens(name + '@email.com', barrels[name]);
+		const { xsrfToken, token } = api.createTokens(name.toLowerCase() + '@email.com', barrels[name]);
 
 		options.addCookie({
 			name: 'xsrf-token',

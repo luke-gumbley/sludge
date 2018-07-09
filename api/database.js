@@ -16,6 +16,11 @@ const models = [{
 	name: 'user',
 
 	definition: {
+		barrelId: {
+			type: Sequelize.INTEGER,
+			allowNull: false
+		},
+
 		id: {
 			type: Sequelize.INTEGER,
 			primaryKey: true,
@@ -35,6 +40,11 @@ const models = [{
 	name: 'bucket',
 
 	definition: {
+		barrelId: {
+			type: Sequelize.INTEGER,
+			allowNull: false
+		},
+
 		id: {
 			type: Sequelize.INTEGER,
 			primaryKey: true,
@@ -49,8 +59,9 @@ const models = [{
 		periodUnit: Sequelize.STRING,
 
 		date: Sequelize.DATE,
+		zeroTransactionId: Sequelize.INTEGER,
 
-		budget: Sequelize.STRING,
+		budget: Sequelize.STRING
 	},
 
 	setup: function(db) {
@@ -63,6 +74,11 @@ const models = [{
 	name: 'transaction',
 
 	definition: {
+		barrelId: {
+			type: Sequelize.INTEGER,
+			allowNull: false
+		},
+
 		id: {
 			type: Sequelize.INTEGER,
 			primaryKey: true,
@@ -93,7 +109,9 @@ const models = [{
 		batch: Sequelize.STRING,
 		bank: Sequelize.STRING,
 
-		processed: Sequelize.DATE
+		processed: Sequelize.DATE,
+
+		bucketId: Sequelize.INTEGER
 	},
 
 	setup: function(db) {
@@ -104,7 +122,10 @@ const models = [{
 	name: 'rule',
 
 	definition: {
-		barrelId: Sequelize.INTEGER,
+		barrelId: {
+			type: Sequelize.INTEGER,
+			allowNull: false
+		},
 
 		id: {
 			type: Sequelize.INTEGER,
@@ -113,7 +134,9 @@ const models = [{
 		},
 
 		account: Sequelize.STRING,
-		search: Sequelize.STRING
+		search: Sequelize.STRING,
+
+		bucketId: Sequelize.INTEGER
 	},
 
 	setup: function(db) {
@@ -194,4 +217,21 @@ module.exports = {
 				return transactions;
 			});
 	},
+
+	connectTest: async function() {
+		const db = module.exports;
+		const data = require('./test_data.js');
+
+		await db.connect({
+			dialect: 'sqlite',
+			sync: true
+		});
+
+
+		await data.barrel.reduce((promise, b) => promise.then(db.barrel.create(b)), Promise.resolve());
+		await data.user.reduce((promise, u) => promise.then(db.user.create(u)), Promise.resolve());
+		await data.bucket.reduce((promise, b) => promise.then(db.bucket.create(b)), Promise.resolve());
+		await data.transaction.reduce((promise, t) => promise.then(db.transaction.create(t)), Promise.resolve());
+		await data.rule.reduce((promise, r) => promise.then(db.rule.create(r)), Promise.resolve());
+	}
 };

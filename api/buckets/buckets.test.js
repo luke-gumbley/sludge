@@ -7,8 +7,8 @@ describe('Buckets', function () {
 		api.get('/api/buckets')
 			.expect(200)
 			.expect(res => {
-				assert.equal(res.body.length, 1);
-				assert.equal(res.body[0].name, 'tesqlitey');
+				assert.equal(res.body.length, 5);
+				assert.equal(res.body[0].name, 'mortgage');
 			})
 			.end(done);
 	});
