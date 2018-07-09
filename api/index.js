@@ -91,11 +91,19 @@ app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.g
 		});
 });
 
+function verifyToken(token) {
+	return new Promise(resolve => {
+		jwt.verify(token, secrets.jwtSecret, (err, decoded) => {
+			resolve({ err, decoded });
+		});
+	})
+}
+
 const authenticator = failure => {
 	return express.Router().use((req, res, next) => {
 		const token = (req.headers['authorization'] || '').substring('Bearer '.length) || req.cookies['access-token'];
 
-		jwt.verify(token, secrets.jwtSecret, (err, decoded) => {
+		verifyToken(token).then(({ err, decoded }) => {
 			req.decoded = decoded;
 			return err
 				? failure(res)
@@ -119,6 +127,7 @@ app.use('/api/transactions', transactions);
 app.use('/api/buckets', buckets);
 app.use('/api/rules', rules);
 
+app.use('/blank', (req, res, next) => res.sendStatus(200));
 app.use(authenticator(res => res.redirect('/auth/google')));
 app.use(express.static('dist/'));
 
@@ -131,4 +140,4 @@ function start() {
 		: app).listen(process.env.PORT || 8080)
 }
 
-module.exports = { createTokens, app, start };
+module.exports = { createTokens, verifyToken, app, start };
