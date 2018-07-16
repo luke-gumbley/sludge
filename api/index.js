@@ -1,3 +1,4 @@
+const http = require('http');
 const https = require('https');
 const fs = require('fs');
 const express = require('express');
@@ -131,13 +132,29 @@ app.use('/blank', (req, res, next) => res.sendStatus(200));
 app.use(authenticator(res => res.redirect('/auth/google')));
 app.use(express.static('dist/'));
 
+let server;
+
 function start(secure, port) {
-	(secure
+	server = secure
 		? https.createServer({
 				key: fs.readFileSync('./certs/server.key'),
 				cert: fs.readFileSync('./certs/server.crt')
 			}, app)
-		: app).listen(port || 8080)
+		: http.createServer(app);
+
+	return new Promise(resolve => {
+		server.listen(port || 8080, function() {
+			resolve(server);
+		});
+	});
 }
 
-module.exports = { createTokens, verifyToken, app, start };
+function stop() {
+	return new Promise(resolve => {
+		server.close(() => {
+			resolve();
+		});
+	});
+}
+
+module.exports = { createTokens, verifyToken, app, start, stop };

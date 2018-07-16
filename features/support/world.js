@@ -1,18 +1,25 @@
-const { setWorldConstructor } = require('cucumber');
+const { setWorldConstructor, BeforeAll, AfterAll } = require('cucumber');
 const webdriver = require('selenium-webdriver');
 
 const database = require('../../api/database');
 const api = require('../../api');
+let driver;
+
+BeforeAll(async function() {
+	driver = new webdriver.Builder().forBrowser('chrome').build();
+	await database.connectTest();
+	await api.start(true, 8443);
+});
+
+AfterAll(async function() {
+	driver.close();
+	await api.stop();
+	await database.close();
+});
 
 class CustomWorld {
 	constructor() {
-		database.connectTest();
-
-		api.start(true, 8443);
-
-		this.driver = new webdriver.Builder()
-		    .forBrowser('chrome')
-		    .build();
+		this.driver = driver;
 	}
 
 	async authenticate(name) {
@@ -22,10 +29,10 @@ class CustomWorld {
 
 		const options = this.driver.manage();
 
-		const accessCookie = options.getCookie('access-token');
+		const accessCookie = await options.getCookie('access-token');
 		if(accessCookie) {
 			const { err, decoded } = await api.verifyToken(accessCookie.value);
-			if(!err && decoded && decoded.email && decoded.email.startsWith(name))
+			if(!err && decoded && decoded.email && decoded.email.startsWith(name.toLowerCase()))
 				return;
 		}
 

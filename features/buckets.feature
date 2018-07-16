@@ -3,8 +3,14 @@ Feature: Bucket list
 	In order to review my buckets
 	I want to view them in a list
 
-	Scenario: view buckets
-		Given I am logged in as "Alex"
+	Background:
+		Given I am logged in as Alex
 			And I have loaded Sludge
-		When I open the "Buckets" tab
+			And I have opened the Buckets tab
+
+	Scenario: view buckets
 		Then I should see more than 1 bucket
+
+	Scenario: add bucket
+		When I click the plus glyph
+		Then a blank modal should open

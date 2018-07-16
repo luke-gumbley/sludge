@@ -55,7 +55,7 @@
   "scripts": {
     "build": "webpack; zip -r sludge.zip app dist lib server.js package.json",
     "test": "NODE_TLS_REJECT_UNAUTHORIZED=0 NODE_ENV=test ./node_modules/.bin/mocha --recursive \"api/**/*.test.js\"",
-    "e2e": "./node_modules/.bin/cucumber-js",
+    "e2e": "NODE_ENV=test ./node_modules/.bin/cucumber-js",
     "watch": "webpack --progress --colors --watch"
   },
   "repository": {
