@@ -3,12 +3,13 @@ const webdriver = require('selenium-webdriver');
 
 const database = require('../../api/database');
 const api = require('../../api');
-let driver;
+let driver, baseUrl;
 
 BeforeAll(async function() {
 	driver = new webdriver.Builder().forBrowser('chrome').build();
 	await database.connectTest();
-	await api.start(true, 8443);
+	const server = await api.start(true, 0);
+	baseUrl = `https://localhost:${server.address().port}`;
 });
 
 AfterAll(async function() {
@@ -24,8 +25,8 @@ class CustomWorld {
 
 	async authenticate(name) {
 		const url = await this.driver.getCurrentUrl();
-		if(!url.startsWith('https://localhost:8443'))
-			this.navigate('https://localhost:8443/blank');
+		if(!url.startsWith(baseUrl))
+			this.navigate(baseUrl + '/blank');
 
 		const options = this.driver.manage();
 
@@ -60,7 +61,7 @@ class CustomWorld {
 			expiry: new Date(Date.now() + 24 * 60 * 60 * 1000)
 		});
 
-		return this.navigate('https://localhost:8443/blank');
+		return this.navigate(baseUrl + '/blank');
 	}
 
 	async navigate(url, conditional) {
@@ -69,6 +70,10 @@ class CustomWorld {
 			if(currentUrl === url) return;
 		}
 		return this.driver.navigate().to(url);
+	}
+
+	async sludge() {
+		return this.navigate(baseUrl, true);
 	}
 }
 

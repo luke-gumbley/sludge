@@ -143,7 +143,7 @@ function start(secure, port) {
 		: http.createServer(app);
 
 	return new Promise(resolve => {
-		server.listen(port || 8080, function() {
+		server.listen(port, function() {
 			resolve(server);
 		});
 	});

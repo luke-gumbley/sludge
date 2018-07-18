@@ -6,7 +6,7 @@ Given('I am logged in as {word}', function (name) {
 });
 
 Given('I have loaded Sludge', function () {
-	return this.navigate('https://localhost:8443/', true);
+	return this.sludge();
 });
 
 Given(/I (?:open|have opened) the (\w+) tab/, function (tab) {
