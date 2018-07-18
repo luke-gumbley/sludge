@@ -1,12 +1,13 @@
 const { setWorldConstructor, BeforeAll, AfterAll } = require('cucumber');
-const webdriver = require('selenium-webdriver');
+const { Builder, until } = require('selenium-webdriver');
+const { checkedLocator } = require('selenium-webdriver/lib/by');
 
 const database = require('../../api/database');
 const api = require('../../api');
 let driver, baseUrl;
 
 BeforeAll(async function() {
-	driver = new webdriver.Builder().forBrowser('chrome').build();
+	driver = new Builder().forBrowser('chrome').build();
 	await database.connectTest();
 	const server = await api.start(true, 0);
 	baseUrl = `https://localhost:${server.address().port}`;
@@ -62,6 +63,10 @@ class CustomWorld {
 		});
 
 		return this.navigate(baseUrl + '/blank');
+	}
+
+	async waitElement(options) {
+		return this.driver.wait(until.elementLocated(checkedLocator(options)), 1000);
 	}
 
 	async navigate(url, conditional) {

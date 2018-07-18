@@ -11,6 +11,8 @@ Feature: Bucket list
 	Scenario: view buckets
 		Then I should see more than 1 bucket
 
-	Scenario: add bucket
+	Scenario: create bucket
 		When I click the plus glyph
-		Then a blank modal should open
+			And I enter "bucky" in the name field
+			And I click the "Save" button
+		Then I should see a bucket called "bucky"
