@@ -1,4 +1,4 @@
-const { setWorldConstructor, BeforeAll, AfterAll } = require('cucumber');
+const { setWorldConstructor, BeforeAll, Before, After, AfterAll } = require('cucumber');
 const { Builder, until } = require('selenium-webdriver');
 const { checkedLocator } = require('selenium-webdriver/lib/by');
 
@@ -13,10 +13,23 @@ BeforeAll(async function() {
 	baseUrl = `https://localhost:${server.address().port}`;
 });
 
+let failures = false;
+
+Before(function({pickle}) {
+	process.stdout.write('\n' + pickle.name);
+	return failures ? 'skipped' : undefined;
+})
+
+After(function({result}) {
+	failures |= result.status === 'failed';
+});
+
 AfterAll(async function() {
-	driver.close();
-	await api.stop();
-	await database.close();
+	if(!failures) {
+		driver.close();
+		await api.stop();
+		await database.close();
+	}
 });
 
 class CustomWorld {
@@ -47,14 +60,14 @@ class CustomWorld {
 
 		const { xsrfToken, token } = api.createTokens(name.toLowerCase() + '@email.com', barrels[name]);
 
-		options.addCookie({
+		await options.addCookie({
 			name: 'xsrf-token',
 			value: xsrfToken,
 			expiry: new Date(Date.now() + 24 * 60 * 60 * 1000),
 			secure: true
 		});
 
-		options.addCookie({
+		await options.addCookie({
 			name: 'access-token',
 			value: token,
 			httpOnly: true,
