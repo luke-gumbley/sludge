@@ -2,6 +2,8 @@ const { Given, When, Then } = require('cucumber');
 const { By } = require('selenium-webdriver');
 const assert = require('assert').strict;
 
+const matchClass = cls => `[contains(concat(' ',normalize-space(@class),' '),' ${cls} ')]`;
+
 Given('I am logged in as {word}', function (name) {
 	return this.authenticate(name);
 });
@@ -23,11 +25,11 @@ When('I enter {string} in the {word} field', async function (value, field) {
 });
 
 When('I click the {string} button', async function (text) {
-	return this.driver.findElement({ xpath:`//button[text()='${text}']`}).click();
+	return this.driver.findElement({ xpath:`//*${matchClass('button')}[text()='${text}']`}).click();
 });
 
 Then('I should see more than {int} bucket(s)', async function (count) {
-	const rows = await this.driver.findElements({ xpath: "//div[@role='row'][contains(@class,'ReactVirtualized__Table__row')]" });
+	const rows = await this.driver.findElements({ xpath: `//div[@role='row']${matchClass('ReactVirtualized__Table__row')}` });
 	assert(rows.length > count, `Expected more than ${count} buckets, found ${rows.length}`);
 });
 
