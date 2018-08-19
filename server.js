@@ -11,7 +11,8 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 const options = {
-	sync: false
+	sync: false,
+	test: false
 };
 
 options.files = process.argv.slice(2).filter(arg => {
@@ -25,6 +26,11 @@ options.files = process.argv.slice(2).filter(arg => {
 		return false;
 	}
 
+	if(arg === 'test') {
+		options.test = true;
+		return false;
+	}
+
 	return true;
 });
 
@@ -35,9 +41,12 @@ const dbOptions = {
 	host: process.env.DB_HOSTNAME,
 	port: process.env.DB_PORT,
 	sync: options.sync
-}
+};
 
-database.connect(dbOptions).then(() => {
+(options.test
+	? database.connectTest()
+	: database.connect(dbOptions))
+	.then(() => {
 	options.files.map(filename => parser.parse(filename))
 		.reduce((acc, val) => acc.concat(val), [])
 		.filter(format => format.parsable() !== false)
