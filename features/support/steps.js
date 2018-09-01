@@ -32,9 +32,9 @@ When('I click the {string} button', async function (text) {
 	return this.driver.findElement({ xpath:`//*${matchClass('button')}[text()='${text}']`}).click();
 });
 
-Then('I should see {int} bucket(s)', async function (count) {
+Then(/I should see (\d+) ((?:row|transaction|rule|bucket)[s]?)/, async function (count, noun) {
 	const rows = await this.driver.findElements({ xpath: `//div[@role='row']${matchClass('ReactVirtualized__Table__row')}` });
-	assert(rows.length === count, `Expected ${count} buckets, found ${rows.length}`);
+	assert(rows.length === count, `Expected ${count} ${noun}, found ${rows.length}`);
 });
 
 Then('I should see a bucket called {string}', async function (name) {
