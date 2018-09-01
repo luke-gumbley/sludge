@@ -17,8 +17,8 @@ Given(/I (?:open|have opened) the (\w+) tab/, function (tab) {
 });
 
 Given(/I (?:click|have clicked) the(?: (\w+))? ([A-Za-z0-9_-]+) glyph/, async function(index, glyph) {
-	index = {undefined: 0, first: 0, second: 1, third: 2, fourth: 3, fifth: 4}[index];
 	const glyphs = await this.driver.findElements({ css:`i.fa-${glyph}`});
+	index = {undefined: 0, first: 0, second: 1, third: 2, fourth: 3, fifth: 4, last: glyphs.length - 1}[index];
 	return glyphs[index].click();
 });
 
