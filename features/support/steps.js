@@ -16,8 +16,10 @@ Given(/I (?:open|have opened) the (\w+) tab/, function (tab) {
 	return this.driver.findElement({ xpath:`//li[@role='tab'][text()='${tab}']`}).click();
 });
 
-Given(/I (?:click|have clicked) the (\w+) glyph/, function(glyph) {
-	return this.driver.findElement({ css:`i.fa-${glyph}`}).click();
+Given(/I (?:click|have clicked) the(?: (\w+))? (\w+) glyph/, async function(index, glyph) {
+	index = {undefined: 0, first: 0, second: 1, third: 2, fourth: 3, fifth: 4}[index];
+	const glyphs = await this.driver.findElements({ css:`i.fa-${glyph}`});
+	return glyphs[index].click();
 });
 
 When('I enter {string} in the {word} field', async function (value, field) {

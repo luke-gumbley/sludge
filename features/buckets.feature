@@ -11,6 +11,10 @@ Feature: Bucket list
 	Scenario: view buckets
 		Then I should see 5 buckets
 
+	Scenario: delete bucket
+		When I click the second trash glyph
+		Then I should see 4 buckets
+
 	Scenario: create bucket defaults
 		When I click the plus glyph
 		Then a modal should open
