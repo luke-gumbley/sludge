@@ -2,7 +2,6 @@ const http = require('http');
 const https = require('https');
 const fs = require('fs');
 const express = require('express');
-const rfc6902 = require('rfc6902');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');

@@ -3,6 +3,7 @@ const Sequelize = require('sequelize');
 const moment = require('moment');
 const csv = require('csv');
 const Big = require('big.js');
+const rfc6902 = require('rfc6902');
 
 const database = require('../database.js');
 
