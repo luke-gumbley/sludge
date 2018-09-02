@@ -37,7 +37,6 @@ class BucketList extends Component {
 	};
 
 	renderAdd = options => {
-		const bucket = options.rowData;
 		return (<GlyphButton glyph="plus" onClick={this.handleAdd} />);
 	};
 
