@@ -53,7 +53,7 @@ class BucketEditor extends Component {
 				<label htmlFor='bucketBudget'>Budget:</label>
 				<input id='bucketBudget' name='budget' defaultValue={this.props.bucket.budget} />
 
-				<button className='button' onClick={this.props.onRequestClose}>Cancel</button>
+				<button className='button' type='button' onClick={this.props.onRequestClose}>Cancel</button>
 				<button className='button' type='submit'>Save</button>
 			</form>
 		</Modal>);

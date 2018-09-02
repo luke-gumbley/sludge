@@ -38,7 +38,7 @@ class RuleEditor extends Component {
 				<label htmlFor='ruleBucket'>Bucket:</label>
 				<BucketPicker bucketId={this.props.rule.bucketId} />
 
-				<button className='button' onClick={this.props.onRequestClose}>Cancel</button>
+				<button className='button' type='button' onClick={this.props.onRequestClose}>Cancel</button>
 				<button className='button' type='submit'>Save</button>
 			</form>
 		</Modal>);
