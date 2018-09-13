@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const { execSync } = require('child_process');
 
 var sequelize = null;
 
@@ -222,8 +223,12 @@ module.exports = {
 		const db = module.exports;
 		const data = require('./test_data.js');
 
+		const uri = execSync('pg_tmp', { encoding: 'utf8' });
+		console.log(uri);
+
 		await db.connect({
-			dialect: 'sqlite',
+			database: 'test',
+			host: '/tmp/ephemeralpg.'.concat(uri.slice(-6)),
 			sync: true
 		});
 
