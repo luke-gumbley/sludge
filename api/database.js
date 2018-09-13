@@ -227,11 +227,10 @@ module.exports = {
 			sync: true
 		});
 
-
-		await data.barrel.reduce((promise, b) => promise.then(db.barrel.create(b)), Promise.resolve());
-		await data.user.reduce((promise, u) => promise.then(db.user.create(u)), Promise.resolve());
-		await data.bucket.reduce((promise, b) => promise.then(db.bucket.create(b)), Promise.resolve());
-		await data.transaction.reduce((promise, t) => promise.then(db.transaction.create(t)), Promise.resolve());
-		await data.rule.reduce((promise, r) => promise.then(db.rule.create(r)), Promise.resolve());
+		await data.barrel.reduce((promise, b) => promise.then(() => db.barrel.create(b)), Promise.resolve());
+		await data.user.reduce((promise, u) => promise.then(() => db.user.create(u)), Promise.resolve());
+		await data.bucket.reduce((promise, b) => promise.then(() => db.bucket.create(b)), Promise.resolve());
+		await data.transaction.reduce((promise, t) => promise.then(() => db.transaction.create(t)), Promise.resolve());
+		await data.rule.reduce((promise, r) => promise.then(() => db.rule.create(r)), Promise.resolve());
 	}
 };
