@@ -77,7 +77,7 @@ app.patch('/:id', function (req, res) {
 		delete newRule.barrelId;
 		delete newRule.id;
 		return database.rule.update(newRule, query);
-	}).then(() => getRules(req.params.id))
+	}).then(() => getRules(req.decoded.barrelId, req.params.id))
 		.then(rules => res.json(rules[0]))
 		.catch(e => console.log(e));
 });
