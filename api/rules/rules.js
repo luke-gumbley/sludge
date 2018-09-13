@@ -10,7 +10,8 @@ const app = module.exports = express();
 function getRules(barrelId, id) {
 	const query = {
 		where: id !== undefined ? { barrelId, id } : { barrelId },
-		attributes: { exclude: ['barrelId'] }
+		attributes: { exclude: ['barrelId'] },
+		order: ['id']
 	};
 
 	return database.rule.findAll(query)
