@@ -214,7 +214,8 @@ module.exports = {
 			.then(results => {
 				const transactions = [];
 				results.forEach(result => transactions[result.ruleId] = result.transactions);
-				console.log('applyRules ', transactions);
+				if(process.env.NODE_ENV!='test')
+					console.log('applyRules ', transactions);
 				return transactions;
 			});
 	},
