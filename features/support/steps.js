@@ -37,8 +37,9 @@ Then(/I should see (\d+) ((?:row|transaction|rule|bucket)[s]?)/, async function 
 	assert(rows.length === count, `Expected ${count} ${noun}, found ${rows.length}`);
 });
 
-Then('I should see a bucket called {string}', async function (name) {
-	await this.waitElement({ xpath: `//div[@role='row']/div[1][text()='${name}']` });
+Then(/I should see a (?:bucket|rule) (called|searching) "([^"]*)"/, async function (verb, content) {
+	const column = { called: 1, searching: 2 }[verb];
+	await this.waitElement({ xpath: `//div[@role='row']/div[${column}][text()='${content}']` });
 });
 
 Then(/a modal should (open|close)/, async function(state) {
