@@ -76,6 +76,7 @@ export default class Filter extends Component {
 				renderSuggestion={this.renderSuggestion}
 				ref={this.storeInputReference}
 				inputProps={{
+					name: this.props.name,
 					placeholder: this.props.placeholder,
 					value: this.state.value,
 					onKeyPress: this.handleKeyPress,

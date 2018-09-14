@@ -25,6 +25,7 @@ export default class Search extends Component {
 	render() {
 		return (<input
 			type="text"
+			name="search"
 			className="react-autosuggest__input"
 			placeholder={this.props.placeholder}
 			style={{ zIndex: 1 }}

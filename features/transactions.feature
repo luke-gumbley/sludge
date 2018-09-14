@@ -10,3 +10,7 @@ Feature: Transactions list
 
 	Scenario: view transactions
 		Then I should see 8 transactions
+
+	Scenario: filter by account
+		When I enter "Cheque" in the account field and press enter
+		Then I should see 3 transactions

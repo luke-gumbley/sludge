@@ -1,5 +1,5 @@
 const { Given, When, Then } = require('cucumber');
-const { By } = require('selenium-webdriver');
+const { By, Key } = require('selenium-webdriver');
 const assert = require('assert').strict;
 
 const matchClass = cls => `[contains(concat(' ',normalize-space(@class),' '),' ${cls} ')]`;
@@ -22,10 +22,10 @@ Given(/I (?:click|have clicked) the(?: (\w+))? ([A-Za-z0-9_-]+) glyph/, async fu
 	return glyphs[index].click();
 });
 
-When('I enter {string} in the {word} field', async function (value, field) {
+When(/I enter "([^"]*)" in the (\w+) field( and press enter)?/, async function (value, field, enter) {
 	const input = this.driver.findElement({ name: field });
 	input.clear();
-	return input.sendKeys(value);
+	return enter ? input.sendKeys(value, Key.ENTER) : input.sendKeys(value);
 });
 
 When('I click the {string} button', async function (text) {
