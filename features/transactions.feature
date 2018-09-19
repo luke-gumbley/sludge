@@ -27,6 +27,12 @@ Feature: Transactions list
 		When I enter "<None>" in the bucketFilter field and press enter
 		Then I should see 4 transactions
 
+	Scenario: categorise
+		When I enter "petrol" in the txnBucket field and press enter
+			And I enter "petrol" in the bucketFilter field and press enter
+		Then I should see 1 transaction
+			And the txnBucket field should contain "petrol"
+
 	Scenario: auto-create rule defaults
 		When I enter "Cheque" in the accountFilter field
 			And I enter "wellington" in the searchFilter field
@@ -38,10 +44,10 @@ Feature: Transactions list
 			And the bucket field should contain "food"
 
 	Scenario: auto-create rule and save
-		When I enter "immobil" in the searchFilter field
+		When I enter "buy eat" in the searchFilter field
 			And I click the magic glyph
-			And I enter "petrol" in the bucket field
+			And I enter "food" in the bucket field
 			And I click the "Save" button
 		Then a modal should close
 			And I should see 1 transaction
-			And the txnBucket field should contain "petrol"
+			And the txnBucket field should contain "food"
