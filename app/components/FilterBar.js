@@ -41,7 +41,7 @@ class FilterBar extends Component {
 				<div style={{flexBasis: '150px'}}>
 					<Filter
 						defaultKey={this.props.filter.account}
-						name='account'
+						name='accountFilter'
 						values={accountFilters}
 						onBlur={this.props.updateFilter('account')}
 						placeholder='Filter account...' />
@@ -60,7 +60,7 @@ class FilterBar extends Component {
 				<div style={{flexBasis: '150px'}}>
 					<Filter
 						defaultKey={this.props.filter.bucketId}
-						name='bucket'
+						name='bucketFilter'
 						values={bucketFilters}
 						onBlur={this.props.updateFilter('bucketId')}
 						placeholder='Filter buckets...' />

@@ -12,17 +12,17 @@ Feature: Transactions list
 		Then I should see 8 transactions
 
 	Scenario: filter by account
-		When I enter "Cheque" in the account field and press enter
+		When I enter "Cheque" in the accountFilter field and press enter
 		Then I should see 3 transactions
 
 	Scenario: search
-		When I enter "wellington" in the search field and press enter
+		When I enter "wellington" in the searchFilter field and press enter
 		Then I should see 3 transactions
 
 	Scenario: filter by bucket
-		When I enter "food" in the bucket field and press enter
+		When I enter "food" in the bucketFilter field and press enter
 		Then I should see 3 transactions
 
 	Scenario: filter uncategorised
-		When I enter "<None>" in the bucket field and press enter
+		When I enter "<None>" in the bucketFilter field and press enter
 		Then I should see 4 transactions
