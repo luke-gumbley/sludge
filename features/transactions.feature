@@ -18,3 +18,11 @@ Feature: Transactions list
 	Scenario: search
 		When I enter "wellington" in the search field and press enter
 		Then I should see 3 transactions
+
+	Scenario: filter by bucket
+		When I enter "food" in the bucket field and press enter
+		Then I should see 3 transactions
+
+	Scenario: filter uncategorised
+		When I enter "<None>" in the bucket field and press enter
+		Then I should see 4 transactions
