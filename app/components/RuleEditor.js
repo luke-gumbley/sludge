@@ -36,7 +36,7 @@ class RuleEditor extends Component {
 				<input id='ruleAccount' name='account' defaultValue={this.props.rule.account} />
 
 				<label htmlFor='ruleBucket'>Bucket:</label>
-				<BucketPicker bucketId={this.props.rule.bucketId} />
+				<BucketPicker name="bucket" bucketId={this.props.rule.bucketId} />
 
 				<button className='button' type='button' onClick={this.props.onRequestClose}>Cancel</button>
 				<button className='button' type='submit'>Save</button>

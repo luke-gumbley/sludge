@@ -35,7 +35,7 @@ class BucketPicker extends Component {
 		return (<input
 			type="text"
 			list="buckets"
-			name="bucket"
+			name={this.props.name}
 			onFocus={this.handleFocus}
 			onBlur={this.handleBlur}
 			onChange={this.handleChange}

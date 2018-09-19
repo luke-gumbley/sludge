@@ -38,7 +38,12 @@ class TransactionList extends Component {
 
 	renderPicker = options => {
 		const transaction = options.rowData;
-		return transaction ? <BucketPicker bucketId={transaction.bucketId} onChange={bucket => this.props.onChange(transaction.id, bucket)} /> : <div />
+		return transaction
+			? <BucketPicker
+				name="txnBucket"
+				bucketId={transaction.bucketId}
+				onChange={bucket => this.props.onChange(transaction.id, bucket)} />
+			: <div />
 	};
 
 	loadMoreRows = ({ startIndex, stopIndex }) => {
