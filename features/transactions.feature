@@ -14,3 +14,7 @@ Feature: Transactions list
 	Scenario: filter by account
 		When I enter "Cheque" in the account field and press enter
 		Then I should see 3 transactions
+
+	Scenario: search
+		When I enter "wellington" in the search field and press enter
+		Then I should see 3 transactions
