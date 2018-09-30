@@ -26,7 +26,7 @@ export default class Upload extends Component {
 		return (
 			<div className='upload button'>
 				{this.props.text}
-				<input type='file' multiple onChange={this.handleChange}></input>
+				<input type='file' name={this.props.name} multiple onChange={this.handleChange}></input>
 			</div>
 		)
 	}

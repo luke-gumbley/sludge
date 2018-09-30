@@ -131,7 +131,8 @@ module.exports = {
 
 					actions.insert.forEach(t => t.barrelId = barrelId);
 
-					console.log('import', account, 'd' + actions.delete.length, 'i' + actions.insert.length, 'u' + actions.update.length);
+					if(process.env.NODE_ENV!='test')
+						console.log('import', account, 'd' + actions.delete.length, 'i' + actions.insert.length, 'u' + actions.update.length);
 
 					// delete existing transactions with no match in the import
 					return (actions.delete.length

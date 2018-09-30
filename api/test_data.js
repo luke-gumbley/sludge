@@ -11,7 +11,7 @@ module.exports = {
 	user: [
 		{ barrelId: 1, name: 'Alex', email: 'alex@email.com'},
 		{ barrelId: 1, name: 'Sam', email: 'sam@email.com'},
-		{ barrelId: 1, name: 'Luke', email: 'luke.gumbley@gmail.com'},
+		{ barrelId: 2, name: 'Luke', email: 'luke.gumbley@gmail.com'},
 		{ barrelId: 2, name: 'Morgan', email: 'morgan@email.com'},
 		{ barrelId: 3, name: 'Charlie', email: 'charlie@email.com'},
 	],

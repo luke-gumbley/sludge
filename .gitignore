@@ -7,7 +7,7 @@ dist/
 node_modules/
 
 # Test data
-data/
+/data/
 
 # Various secrets
 api/secrets.js

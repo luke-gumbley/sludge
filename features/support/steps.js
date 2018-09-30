@@ -1,6 +1,7 @@
 const { Given, When, Then } = require('cucumber');
 const { By, Key } = require('selenium-webdriver');
 const assert = require('assert').strict;
+const path = require('path');
 
 const matchClass = cls => `[contains(concat(' ',normalize-space(@class),' '),' ${cls} ')]`;
 
@@ -30,6 +31,11 @@ When(/I enter "([^"]*)" in the (\w+) field( and press enter)?/, async function (
 
 When('I click the {string} button', async function (text) {
 	return this.driver.findElement({ xpath:`//*${matchClass('button')}[text()='${text}']`}).click();
+});
+
+When('I upload {word} {string}', async function (type, filename) {
+	const field = await this.driver.findElement({ name: `${type}Upload` });
+	field.sendKeys(path.resolve(__dirname,'../uploads',filename));
 });
 
 Then(/I should see (\d+) ((?:row|transaction|rule|bucket)[s]?)/, async function (count, noun) {

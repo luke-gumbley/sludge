@@ -12,11 +12,11 @@ class Header extends Component {
 	render() {
 		return (
 			<div>
-				<Upload text='Upload statement' onFile={ this.props.handleStatement }/>
+				<Upload text='Upload statement' name='statementUpload' onFile={ this.props.handleStatement }/>
 				<Download text='Download buckets' filename='buckets.csv' url='/api/buckets/export' />
-				<Upload text='Upload buckets' onFile={ this.props.handleBuckets }/>
+				<Upload text='Upload buckets' name='bucketsUpload' onFile={ this.props.handleBuckets }/>
 				<Download text='Download rules' filename='rules.csv' url='/api/rules/export' />
-				<Upload text='Upload rules' onFile={ this.props.handleRules }/>
+				<Upload text='Upload rules' name='rulesUpload' onFile={ this.props.handleRules }/>
 			</div>
 		);
 	}
