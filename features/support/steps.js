@@ -46,9 +46,7 @@ Then(/a modal should (open|close)/, async function(state) {
 	const locator = { css:'div.ReactModal__Content'};
 	const open = state === 'open';
 
-	const modals = open
-		? [await this.waitElement(locator)].filter(e => e)
-		: await this.driver.findElements(locator); // TODO: hinky. If it took a while to close this check would fail.
+	const modals = await this.waitElements(locator, open ? 1 : 0);
 
 	assert(modals.length === (open ? 1 : 0), `Modal did not ${state}`);
 });

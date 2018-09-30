@@ -1,5 +1,5 @@
 const { setWorldConstructor, BeforeAll, Before, After, AfterAll } = require('cucumber');
-const { Builder, until } = require('selenium-webdriver');
+const { Builder, until, Condition } = require('selenium-webdriver');
 const { checkedLocator } = require('selenium-webdriver/lib/by');
 
 const database = require('../../api/database');
@@ -78,8 +78,21 @@ class CustomWorld {
 		return this.navigate(baseUrl + '/blank');
 	}
 
-	async waitElement(options) {
-		return this.driver.wait(until.elementLocated(checkedLocator(options)), 1000);
+	async waitElement(locator) {
+		return this.driver.wait(until.elementLocated(checkedLocator(locator)), 1000);
+	}
+
+	async waitElements(locator, count) {
+		locator = checkedLocator(locator);
+		const locatorStr = typeof locator === 'function' ? 'by function()' : locator + '';
+		const condition = new Condition(
+			`for ${count} element${count!=1?'s':''} to be located ${locatorStr}`,
+			async function(driver) {
+				const elements = await driver.findElements(locator);
+				return elements.length === count ? elements : null;
+			}
+		);
+		return this.driver.wait(condition, 1000);
 	}
 
 	async navigate(url, conditional) {
