@@ -38,13 +38,14 @@ When('I upload {word} {string}', async function (type, filename) {
 	field.sendKeys(path.resolve(__dirname,'../uploads',filename));
 });
 
-Then(/I should see (\d+) ((?:row|transaction|rule|bucket)[s]?)/, async function (count, noun) {
+Then(/I should see (\d+) ((?:row|transaction|rule|bucket)[s]?)$/, async function (count, noun) {
 	return this.waitElements({ xpath: `//div[@role='row']${matchClass('ReactVirtualized__Table__row')}` }, count);
 });
 
-Then(/I should see a (?:bucket|rule) (called|searching) "([^"]*)"/, async function (verb, content) {
-	const column = { called: 1, searching: 2 }[verb];
-	return this.waitElement({ xpath: `//div[@role='row']/div[${column}][text()='${content}']` });
+Then(/I should see (a|(?:\d+)) (?:bucket|rule|transaction)s? (called|searching|dated) "([^"]*)"$/, async function (count, verb, content) {
+	count = count === 'a' ? 1 : parseInt(count);
+	const column = { called: 1, dated: 1, searching: 2 }[verb];
+	return this.waitElements({ xpath: `//div[@role='row']/div[${column}][text()='${content}']` }, count);
 });
 
 Then(/a modal should (open|close)/, async function(state) {

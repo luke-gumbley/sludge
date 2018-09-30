@@ -1,0 +1,5 @@
+Date,Amount,Payee,Particulars,Code,Reference,Tran Type,This Party Account,Other Party Account,Serial,Transaction Code,Batch Number,Originating Bank/Branch,Processed Date
+18/09/18,-37.50,SHED 5 RESTAURANT &,50703914328,WELLINGTON,455046181308,POS,02-1300-1234567-00,---,,"00",2482,"02-1399",20/09/18
+19/09/18,-47.99,GOOGLE *Nexercise,50703914328,g.co/helppay,431326201124,POS,02-1300-1234567-00,---,,"00",6453,"02-1300",21/09/18
+20/09/18,120.00,SMITH M,Allowance,from slush,,AP,02-1300-1234567-00,02-1300-1234567-01,,"50",0000,"02-1300",20/09/18
+20/09/18,-2.00,Lucy Envoy,Choc,Fundraiser,,BP,02-1300-1234567-00,02-1300-2345671-03,,"00",0000,"02-1300",20/09/18
