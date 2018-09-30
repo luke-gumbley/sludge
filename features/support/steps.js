@@ -33,22 +33,19 @@ When('I click the {string} button', async function (text) {
 });
 
 Then(/I should see (\d+) ((?:row|transaction|rule|bucket)[s]?)/, async function (count, noun) {
-	const rows = await this.driver.findElements({ xpath: `//div[@role='row']${matchClass('ReactVirtualized__Table__row')}` });
-	assert(rows.length === count, `Expected ${count} ${noun}, found ${rows.length}`);
+	return this.waitElements({ xpath: `//div[@role='row']${matchClass('ReactVirtualized__Table__row')}` }, count);
 });
 
 Then(/I should see a (?:bucket|rule) (called|searching) "([^"]*)"/, async function (verb, content) {
 	const column = { called: 1, searching: 2 }[verb];
-	await this.waitElement({ xpath: `//div[@role='row']/div[${column}][text()='${content}']` });
+	return this.waitElement({ xpath: `//div[@role='row']/div[${column}][text()='${content}']` });
 });
 
 Then(/a modal should (open|close)/, async function(state) {
 	const locator = { css:'div.ReactModal__Content'};
 	const open = state === 'open';
 
-	const modals = await this.waitElements(locator, open ? 1 : 0);
-
-	assert(modals.length === (open ? 1 : 0), `Modal did not ${state}`);
+	return this.waitElements(locator, open ? 1 : 0);
 });
 
 Then('the {word} field should contain {string}', async function (name, expected) {
