@@ -67,8 +67,8 @@ const models = [{
 
 	setup: function(db) {
 		this.belongsTo(db.barrel, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
-		this.belongsTo(db.transaction, { as: 'zeroTransaction' });
-		this.hasMany(db.transaction);
+		this.belongsTo(db.transaction, { as: 'zeroTransaction', foreignKey: { allowNull: true }, onDelete: 'SET NULL'});
+		this.hasMany(db.transaction, { foreignKey: { allowNull: true }, onDelete: 'SET NULL' });
 	}
 
 }, {
@@ -165,7 +165,7 @@ module.exports = {
 		return (sync ? sequelize.drop().then(() => sequelize.sync()) : Promise.resolve())
 			.then(() => models.forEach(model => { (model.setup || (() => {})).call(module.exports[model.name], module.exports) }) )
 			.then(() => sync
-				? Object.keys(sequelize.models).reduce((promise, model) => promise.then(() => sequelize.models[model].sync({ force: true })), Promise.resolve())
+				? Object.keys(sequelize.models).reduce((promise, model) => promise.then(() => sequelize.models[model].sync({ alter: true })), Promise.resolve())
 				: Promise.resolve()
 			);
 	},
