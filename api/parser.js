@@ -15,7 +15,7 @@ class Format extends stream.Transform {
 		this._data = (options.regex && options.data && this.parsable()) ? options.data(options.regex.exec(this._filename)) : {};
 		this._columns = options.columns;
 		this._map = options.map;
-		this._header = options.header;
+		this._header = options.header || [];
 	}
 
 	parsable(parsable) {
@@ -24,42 +24,55 @@ class Format extends stream.Transform {
 		return this._parsable !== false;
 	}
 
-	_row(row, index) {
-		// optionally overridden in subclasses; returns object with data gathered from the row
-		return this._header && index === 0 ? undefined : row;
-	}
-
 	_transform(row, encoding, callback) {
 		let index = this._index++;
 
-		if(this._columns) {
+		if(this._columns && index >= this._header.length) {
 			// check parsed row against column definition (not parsable if mismatched)
-			this.parsable((row.length === this._columns.length) && (index !== 0 || !this._header || row.join(',') === this._columns.join(',')));
-
+			this.parsable(row.length === this._columns.length);
 		}
 
-		if(this.parsable() && (index !==0 || !this._header)) {
-
-			// convert row array to object with named properties
-			if(this._columns) {
-				const obj = {};
-				this._columns.forEach((c, i) => obj[c] = row[i]);
-				row = obj;
-			}
-
-			// convert (non-header) row elements based on provided maps (if any)
-			if(this._map)
-				row = this._map(row);
-
-			// add default properties
-			row = Object.assign({}, this._data, row);
-
-			this.push(row);
+		if(this.parsable()) {
+			index >= this._header.length
+				? this.parseRow(row, index)
+				: this.parseHeader(row, index);
 		}
 
 		// abandon errors for flow control in favour of just ending the stream
 		callback(null, this.parsable() ? undefined : null);
     }
+
+	parseRow(row, index) {
+		// convert row array to object with named properties
+		if(this._columns) {
+			const obj = {};
+			this._columns.forEach((c, i) => obj[c] = row[i]);
+			row = obj;
+		}
+
+		// convert (non-header) row elements based on provided maps (if any)
+		if(this._map)
+			row = this._map(row);
+
+		// add default properties
+		row = Object.assign({}, this._data, row);
+		this.push(row);
+	}
+
+	parseHeader(row, index) {
+		let header = this._header[index];
+
+		if(header === 'columns') {
+			this.parsable(row.join(',') === this._columns.join(','));
+		} else if(header instanceof RegExp) {
+			this.parsable(header.test(row[0]))
+		} else if(typeof header === 'object') {
+			let match = header.exp.exec(row[0]);
+
+			if(this.parsable(match !== null))
+				Object.assign(this._data, header.fn(match))
+		}
+	}
 
 	parse() {
 		var me = this;
@@ -73,7 +86,7 @@ var formatDefinitions = [{
 	name: 'bnz_acct',
 	regex: /([^-]+)-(\d{1,2}[A-Z]{3}\d{4})-to-(\d{1,2}[A-Z]{3}\d{4}).csv/,
 	data: match => ({ start: moment(match[2],'DMMMYYYY'), end: moment(match[3],'DMMMYYYY') }),
-	header: true,
+	header: ['columns'],
 	columns: ['Date','Amount','Payee','Particulars','Code','Reference','Tran Type','This Party Account','Other Party Account','Serial','Transaction Code','Batch Number','Originating Bank/Branch','Processed Date'],
 	map: r => ({
 		date: moment(r.Date, 'DD/MM/YYYY'),
@@ -95,7 +108,7 @@ var formatDefinitions = [{
 	name: 'bnz_credit',
 	regex: /([^-]+)-(\d{1,2}[A-Z]{3}\d{4})-to-(\d{1,2}[A-Z]{3}\d{4}).csv/,
 	data: match => ({ account: match[1], start: moment(match[2],'DMMMYYYY'), end: moment(match[3],'DMMMYYYY') }),
-	header: true,
+	header: [ 'columns' ],
 	columns: ['Date','Amount','Payee','Particulars','Code','Reference','Tran Type','Processed Date'],
 	map: r => ({
 		date: moment(r.Date, 'DD/MM/YYYY'),
@@ -110,12 +123,17 @@ var formatDefinitions = [{
 }, {
 	name: 'kb_credit',
 	regex: /(\d{4}-\d{2}-{2}--{4}-\d{4})_(\d{2}[A-Z][a-z]{2}).CSV/,
-	data: match => ({ account: match[1], statement_date: moment(match[2],'DDMMM') }),
-	header: true,
+	data: match => ({ statement_date: moment(match[2],'DDMMM') }),
+	header: [
+		{
+			exp: /^(\d{4}-\d{4}-\d{4}-\d{4})$/,
+			fn: m => ({ account: m[1] })
+		}
+	],
 	map: r => ({
 		date: moment(r[0], 'DD-MM-YYYY'),
 		party: r[1],
-		card: r[2],
+		subsidiary: r[2],
 		amount: r[3]
 	})
 },{
@@ -126,6 +144,37 @@ var formatDefinitions = [{
 	map: r => Object.assign({}, r, {
 		date: moment(r.date, 'DD/MM/YYYY')
 	})
+},{
+	name: 'asb_acct',
+	regex: /Export(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2}).csv/,
+	data: match => ({ statement_date: moment(match.slice(1,7).map(n => parseInt(n))) }),
+	header: [
+		/^Created date \/ time : (\d+) ([A-Za-z]+) (\d{4}) \/ (\d{2}):(\d{2}):(\d{2})$/,
+		{
+			exp: /^Bank (\d{2}); Branch (\d{4}); Account (\d{7})-(\d{2}) \((.+)\)$/,
+			fn: m => ({ account: `${m[1]}-${m[2]}-${m[3]}-${m[4]} (${m[5]})` })
+		}, {
+			exp: /^From date (\d{4})(\d{2})(\d{2})$/,
+			fn: m => ({ start: moment([m[1],m[2],m[3]]) })
+		}, {
+			exp: /^To date (\d{4})(\d{2})(\d{2})$/,
+			fn: m => ({ end: moment([m[1],m[2],m[3]]) })
+		},
+		/^Avail Bal :/,
+		/^Ledger Balance :/,
+		'columns',
+		/^$/,
+	],
+	columns: ['Date','Unique Id','Tran Type','Cheque Number','Payee','Memo','Amount'],
+	map: r => Object.assign({}, r, {
+		date: moment(r.Date, 'YYYY/MM/DD'),
+		txnCode: r['Unique Id'],
+		type: r['Tran Type'],
+		serial: r['Cheque Number'],
+		party: r.Payee,
+		particulars: r.Memo,
+		amount: r.Amount
+	})
 }];
 
 module.exports = {
@@ -134,7 +183,7 @@ module.exports = {
 			.map(def => new Format({ filename: path.basename(filename), ...def }))
 			.filter(format => format.parsable());
 
-		stream = (stream || fs.createReadStream(filename)).pipe(csv.parse());
+		stream = (stream || fs.createReadStream(filename)).pipe(csv.parse({ relax_column_count: true }));
 
 		formats.forEach(format => {
 			format.on('error', () => {});
