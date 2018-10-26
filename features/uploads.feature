@@ -12,6 +12,11 @@ Feature: Statement uploads
 		When I upload statement "Personal-17SEP2018-to-19SEP2018.csv"
 		Then I should see 3 transactions
 
+	Scenario: Upload identical statement
+		When I upload statement "Personal-17SEP2018-to-19SEP2018.csv"
+			And I wait 500ms
+		Then I should see 3 transactions
+
 	Scenario: Upload overlapping statement
 		When I upload statement "Personal-18SEP2018-to-20SEP2018.csv"
 		Then I should see 6 transactions

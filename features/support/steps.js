@@ -38,6 +38,10 @@ When('I upload {word} {string}', async function (type, filename) {
 	field.sendKeys(path.resolve(__dirname,'../uploads',filename));
 });
 
+When(/I wait (\d+)ms/, function (duration) {
+	return this.driver.sleep(duration);
+});
+
 Then(/I should see (\d+) ((?:row|transaction|rule|bucket)[s]?)$/, async function (count, noun) {
 	return this.waitElements({ xpath: `//div[@role='row']${matchClass('ReactVirtualized__Table__row')}` }, count);
 });
