@@ -56,22 +56,27 @@ app.patch('/:id', function (req, res) {
 	});
 });
 
-app.post('/import/:filename', function (req, res) {
+app.post('/import/:filename', async function (req, res) {
 	req.setEncoding('utf8');
 
+	// commence parsing the supplied file
 	let formats = parser.parse(req.params.filename, req);
 
-	let status = 500;
+	// format.parse returns a promise which is satisfied when the format has finished parsing the stream
+	const parsed = Promise.all(formats.map(format => format.parse()));
 
-	Promise.all(formats.map(format => format.parse())).then(results => {
-		status = results.filter(r => r).length === 1 ? 200 : 400
-	})
-
-	Promise.all(formats.map(format => {
-		const { importer, promise } = importTransactions(req.decoded.barrelId);
+	// connect all format parsers to an importer
+	await Promise.all(formats.map(format => {
+		const { importer, promise } = importTransactions(req.decoded.barrelId, format._name);
 		format.pipe(importer);
 		return promise;
-	}))
-		.then(() => database.applyRules(req.decoded.barrelId)) // apply auto-categorisation rules
-		.then(() => res.sendStatus(status));
+	}));
+
+	await database.applyRules(req.decoded.barrelId); // apply auto-categorisation rules
+
+	const results = await parsed;
+
+	res.status(results.filter(r => r.parsable).length === 1 ? 200 : 422);
+
+	return res.send(results.filter(r => r.parsable || r.failure));
 });

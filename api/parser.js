@@ -18,9 +18,12 @@ class Format extends stream.Transform {
 		this._header = options.header || [];
 	}
 
-	parsable(parsable) {
-		if(parsable === true || parsable === false)
+	parsable(parsable, failure) {
+		if(this._parsable !== false && parsable === true || parsable === false) {
+			if(!parsable)
+				this._failure = failure;
 			this._parsable = parsable;
+		}
 		return this._parsable !== false;
 	}
 
@@ -29,7 +32,7 @@ class Format extends stream.Transform {
 
 		if(this._columns && index >= this._header.length) {
 			// check parsed row against column definition (not parsable if mismatched)
-			this.parsable(row.length === this._columns.length);
+			this.parsable(row.length === this._columns.length, `Column count mismatch at row ${index} (${row.length}, expected ${this._columns.length})`);
 		}
 
 		if(this.parsable()) {
@@ -63,21 +66,20 @@ class Format extends stream.Transform {
 		let header = this._header[index];
 
 		if(header === 'columns') {
-			this.parsable(row.join(',') === this._columns.join(','));
+			this.parsable(row.join(',') === this._columns.join(','), `Column definition mismatch`);
 		} else if(header instanceof RegExp) {
-			this.parsable(header.test(row[0]))
+			this.parsable(header.test(row[0]), `Header mismatch at row ${index} [${row[0]}]`);
 		} else if(typeof header === 'object') {
 			let match = header.exp.exec(row[0]);
 
-			if(this.parsable(match !== null))
+			if(this.parsable(match !== null, `Header mismatch at row ${index} [${row[0]}]`))
 				Object.assign(this._data, header.fn(match))
 		}
 	}
 
 	parse() {
-		var me = this;
 		return new Promise((resolve, reject) => {
-			me.on('end', () => resolve(me.parsable()));
+			this.on('end', () => resolve({ name: this._name, parsable: this.parsable(), failure: this._failure }));
 		});
 	}
 }
