@@ -5,9 +5,9 @@ const { stableSort } = require('../utils');
 const database = require('../database');
 
 const transactionEquals = (() => {
-	const definition = database.models.find(m => m.name === 'transaction').definition;
-	const keys = Object.keys(definition)
-		.filter(k => !['id', 'ordinal'].includes(k))
+	const keys = ['date', 'account', 'party', 'particulars', 'code',
+		'reference', 'amount', 'type', 'partyAccount', 'subsidiary', 'serial',
+		'txnCode', 'batch', 'bank', 'processed'];
 
 	return b => (a => {
 		return keys.every(key => {
