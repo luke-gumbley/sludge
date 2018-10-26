@@ -12,7 +12,8 @@ node_modules/
 # Various secrets
 api/secrets.js
 syncprod.sh
-database.sql
+*.sql
+*.pgsql
 
 # IntelliJ files
 .idea
