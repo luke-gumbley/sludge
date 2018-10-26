@@ -175,6 +175,22 @@ var formatDefinitions = [{
 		particulars: r.Memo,
 		amount: r.Amount
 	})
+},{
+	name: 'westpac_credit',
+	regex: /AXXXX_XXXX_XXXX_(\d{4})-(\d{2}[A-Za-z]{3}\d{2}).csv/,
+	data: match => ({ account: `XXXX_${match[1]}`, start: moment(match[2],'DDMMMYY') }),
+	header: ['columns'],
+	columns: ['Process Date','Amount','Other Party','Credit Plan Name','Transaction Date','Foreign Details','City','Country Code'],
+	map: r => Object.assign({}, r, {
+		processed: moment(r['Process Date'], 'DD/MM/YYYY'),
+		amount: r.Amount,
+		party: r['Other Party'],
+		type: r['Credit Plan Name'],
+		date: moment(r['Transaction Date'], 'DD/MM/YYYY'),
+		particulars: r['Foreign Details'],
+		code: r.City,
+		reference: r['Country Code']
+	})
 }];
 
 module.exports = {
