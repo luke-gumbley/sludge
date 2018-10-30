@@ -1,7 +1,7 @@
 var fs = require('fs');
 const path = require('path');
 var csv = require('csv');
-var moment = require('moment');
+var moment = require('moment-timezone');
 const stream = require('stream');
 
 class Format extends stream.Transform {
@@ -87,11 +87,11 @@ class Format extends stream.Transform {
 var formatDefinitions = [{
 	name: 'bnz_acct',
 	regex: /([^-]+)-(\d{1,2}[A-Z]{3}\d{4})-to-(\d{1,2}[A-Z]{3}\d{4}).csv/,
-	data: match => ({ start: moment(match[2],'DMMMYYYY'), end: moment(match[3],'DMMMYYYY') }),
+	data: match => ({ start: moment.tz(match[2],'DMMMYYYY', 'Pacific/Auckland'), end: moment.tz(match[3],'DMMMYYYY', 'Pacific/Auckland') }),
 	header: ['columns'],
 	columns: ['Date','Amount','Payee','Particulars','Code','Reference','Tran Type','This Party Account','Other Party Account','Serial','Transaction Code','Batch Number','Originating Bank/Branch','Processed Date'],
 	map: r => ({
-		date: moment(r.Date, 'DD/MM/YYYY'),
+		date: moment.tz(r.Date, 'DD/MM/YYYY', 'Pacific/Auckland'),
 		amount: r.Amount,
 		party: r.Payee,
 		particulars: r.Particulars,
@@ -104,28 +104,28 @@ var formatDefinitions = [{
 		txnCode: r['Transaction Code'],
 		batch: r['Batch Number'],
 		bank: r['Originating Bank/Branch'],
-		processed: moment(r['Processed Date'], 'DD/MM/YYYY'),
+		processed: moment.tz(r['Processed Date'], 'DD/MM/YYYY', 'Pacific/Auckland'),
 	})
 }, {
 	name: 'bnz_credit',
 	regex: /([^-]+)-(\d{1,2}[A-Z]{3}\d{4})-to-(\d{1,2}[A-Z]{3}\d{4}).csv/,
-	data: match => ({ account: match[1], start: moment(match[2],'DMMMYYYY'), end: moment(match[3],'DMMMYYYY') }),
+	data: match => ({ account: match[1], start: moment.tz(match[2],'DMMMYYYY', 'Pacific/Auckland'), end: moment.tz(match[3],'DMMMYYYY', 'Pacific/Auckland') }),
 	header: [ 'columns' ],
 	columns: ['Date','Amount','Payee','Particulars','Code','Reference','Tran Type','Processed Date'],
 	map: r => ({
-		date: moment(r.Date, 'DD/MM/YYYY'),
+		date: moment.tz(r.Date, 'DD/MM/YYYY', 'Pacific/Auckland'),
 		amount: r.Amount,
 		party: r.Payee,
 		particulars: r.Particulars,
 		code: r.Code,
 		reference: r.Reference,
 		type: r['Tran Type'],
-		processed: moment(r['Processed Date'], 'DD/MM/YYYY'),
+		processed: moment.tz(r['Processed Date'], 'DD/MM/YYYY', 'Pacific/Auckland'),
 	})
 }, {
 	name: 'kb_credit',
 	regex: /(\d{4}-\d{2}-{2}--{4}-\d{4})_(\d{2}[A-Z][a-z]{2}).CSV/,
-	data: match => ({ statement_date: moment(match[2],'DDMMM') }),
+	data: match => ({ statement_date: moment.tz(match[2],'DDMMM', 'Pacific/Auckland') }),
 	header: [
 		{
 			exp: /^(\d{4}-\d{4}-\d{4}-\d{4})$/,
@@ -133,7 +133,7 @@ var formatDefinitions = [{
 		}
 	],
 	map: r => ({
-		date: moment(r[0], 'DD-MM-YYYY'),
+		date: moment.tz(r[0], 'DD-MM-YYYY', 'Pacific/Auckland'),
 		party: r[1],
 		subsidiary: r[2],
 		amount: r[3]
@@ -141,15 +141,15 @@ var formatDefinitions = [{
 },{
 	name: 'anz_acct',
 	regex: /(\d{2}-\d{4}-\d{7}-\d{2})_Transactions_(\d{4}-\d{2}-\d{2})_(\d{4}-\d{2}-\d{2}).csv/,
-	data: match => ({ account: match[1], start: moment(match[2]), end: moment(match[3]) }),
+	data: match => ({ account: match[1], start: moment.tz(match[2], 'Pacific/Auckland'), end: moment.tz(match[3], 'Pacific/Auckland') }),
 	columns: ['type','party','particulars','code','reference','amount','date','unknown'],
 	map: r => Object.assign({}, r, {
-		date: moment(r.date, 'DD/MM/YYYY')
+		date: moment.tz(r.date, 'DD/MM/YYYY', 'Pacific/Auckland')
 	})
 },{
 	name: 'asb_acct',
 	regex: /Export(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2}).csv/,
-	data: match => ({ statement_date: moment(match.slice(1,7).map(n => parseInt(n))) }),
+	data: match => ({ statement_date: moment.tz(match.slice(1,7).map(n => parseInt(n)), 'Pacific/Auckland') }),
 	header: [
 		/^Created date \/ time : (\d+) ([A-Za-z]+) (\d{4}) \/ (\d{2}):(\d{2}):(\d{2})$/,
 		{
@@ -157,10 +157,10 @@ var formatDefinitions = [{
 			fn: m => ({ account: `${m[1]}-${m[2]}-${m[3]}-${m[4]} (${m[5]})` })
 		}, {
 			exp: /^From date (\d{4})(\d{2})(\d{2})$/,
-			fn: m => ({ start: moment([m[1],m[2],m[3]]) })
+			fn: m => ({ start: moment.tz(m.slice(1,4), 'Pacific/Auckland') })
 		}, {
 			exp: /^To date (\d{4})(\d{2})(\d{2})$/,
-			fn: m => ({ end: moment([m[1],m[2],m[3]]) })
+			fn: m => ({ end: moment.tz(m.slice(1,4), 'Pacific/Auckland') })
 		},
 		/^Avail Bal :/,
 		/^Ledger Balance :/,
@@ -169,7 +169,7 @@ var formatDefinitions = [{
 	],
 	columns: ['Date','Unique Id','Tran Type','Cheque Number','Payee','Memo','Amount'],
 	map: r => Object.assign({}, r, {
-		date: moment(r.Date, 'YYYY/MM/DD'),
+		date: moment.tz(r.Date, 'YYYY/MM/DD', 'Pacific/Auckland'),
 		txnCode: r['Unique Id'],
 		type: r['Tran Type'],
 		serial: r['Cheque Number'],
@@ -180,15 +180,15 @@ var formatDefinitions = [{
 },{
 	name: 'westpac_credit',
 	regex: /AXXXX_XXXX_XXXX_(\d{4})-(\d{2}[A-Za-z]{3}\d{2}).csv/,
-	data: match => ({ account: `XXXX_${match[1]}`, start: moment(match[2],'DDMMMYY') }),
+	data: match => ({ account: `XXXX_${match[1]}`, start: moment.tz(match[2],'DDMMMYY', 'Pacific/Auckland') }),
 	header: ['columns'],
 	columns: ['Process Date','Amount','Other Party','Credit Plan Name','Transaction Date','Foreign Details','City','Country Code'],
 	map: r => Object.assign({}, r, {
-		processed: moment(r['Process Date'], 'DD/MM/YYYY'),
+		processed: moment.tz(r['Process Date'], 'DD/MM/YYYY', 'Pacific/Auckland'),
 		amount: r.Amount,
 		party: r['Other Party'],
 		type: r['Credit Plan Name'],
-		date: moment(r['Transaction Date'], 'DD/MM/YYYY'),
+		date: moment.tz(r['Transaction Date'], 'DD/MM/YYYY', 'Pacific/Auckland'),
 		particulars: r['Foreign Details'],
 		code: r.City,
 		reference: r['Country Code']
