@@ -4,6 +4,7 @@ const csv = require('csv');
 const rfc6902 = require('rfc6902');
 
 const database = require('../database.js');
+const utils = require('../utils.js');
 
 const app = module.exports = express();
 
@@ -42,7 +43,7 @@ app.get('/export', function (req, res) {
 });
 
 app.post('/apply', function (req, res) {
-	database.applyRules(req.decoded.barrelId)
+	database.applyRules(req.decoded.email, req.decoded.barrelId)
 		.then(results => res.json(results));
 });
 
@@ -53,7 +54,7 @@ app.get('/:id', function (req, res) {
 });
 
 app.post('/:id/apply', function (req, res) {
-	database.applyRules(req.decoded.barrelId, req.params.id)
+	database.applyRules(req.decoded.email, req.decoded.barrelId, req.params.id)
 		.then(results => res.json({ ruleId: req.params.id, transactions: results.reduce((n, t) => n + t) }));
 });
 
@@ -99,7 +100,10 @@ app.post('/import', function (req, res) {
 			.then(() => database.rule.bulkCreate(imported))
 			.then(() => err ? Promise.resolve() : getRules())
 			.then(rules => {
-				console.log('import rules', 'i' + imported.length);
+				utils.log({
+					user: req.decoded.email,
+					content: `import rules i${imported.length}`
+				});
 				return res.status(err ? 400 : 200).json(err || rules)
 			});
 	});

@@ -14,6 +14,7 @@ const HttpsProxyAgent = require('https-proxy-agent');
 const buckets = require('./buckets/buckets.js');
 const transactions = require('./transactions/transactions.js');
 const rules = require('./rules/rules.js');
+const utils = require('./utils.js');
 
 const database = require('./database');
 const secrets = require('./secrets');
@@ -38,16 +39,18 @@ if (process.env['https_proxy']) {
 
 passport.use(strategy);
 
-if(process.env.NODE_ENV!='test') {
-	app.use(function(req, res, next) {
-		var start = Date.now();
-		res.on('finish', function() {
-			var duration = Date.now() - start;
-			console.log(req.originalUrl, duration);
+app.use(function(req, res, next) {
+	const start = Date.now();
+	res.on('finish', function() {
+		utils.log({
+			time: new Date(start),
+			user: (req.decoded || {}).email,
+			duration: Date.now() - start,
+			content: req.originalUrl
 		});
-		next();
 	});
-}
+	next();
+});
 
 app.use(passport.initialize());
 app.use(bodyParser.json({ type: ['application/json', 'application/json-patch+json'] }));

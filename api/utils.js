@@ -13,5 +13,14 @@ module.exports = {
 		array.forEach((e, i) => array[i] = e.e);
 
 		return wasSorted;
+	},
+
+	log: function({ time, user, duration, content }) {
+		if(process.env.NODE_ENV!='test') {
+			console.log([(time || new Date()).toISOString(),
+				(user || '').padStart(35),
+				(duration || 0).toString().padStart(5),
+				content].join('\t'));
+		}
 	}
 };

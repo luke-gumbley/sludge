@@ -67,12 +67,12 @@ app.post('/import/:filename', async function (req, res) {
 
 	// connect all format parsers to an importer
 	await Promise.all(formats.map(format => {
-		const { importer, promise } = importTransactions(req.decoded.barrelId, format._name);
+		const { importer, promise } = importTransactions(req.decoded.email, req.decoded.barrelId, format._name);
 		format.pipe(importer);
 		return promise;
 	}));
 
-	await database.applyRules(req.decoded.barrelId); // apply auto-categorisation rules
+	await database.applyRules(req.decoded.email, req.decoded.barrelId); // apply auto-categorisation rules
 
 	const results = await parsed;
 

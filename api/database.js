@@ -1,6 +1,8 @@
 const Sequelize = require('sequelize');
 const { execSync } = require('child_process');
 
+const utils = require('./utils.js');
+
 var sequelize = null;
 
 const models = [{
@@ -203,7 +205,7 @@ module.exports = {
 		return where;
 	},
 
-	applyRules: function(barrelId, id) {
+	applyRules: function(user, barrelId, id) {
 		const db = module.exports;
 		return db.rule.findAll({ where: id !== undefined ? { barrelId, id } : { barrelId } })
 			.then(rules => Promise.all(rules.map(rule => {
@@ -214,8 +216,18 @@ module.exports = {
 			.then(results => {
 				const transactions = [];
 				results.forEach(result => transactions[result.ruleId] = result.transactions);
-				if(process.env.NODE_ENV!='test')
-					console.log('applyRules ', transactions);
+
+				const summary = results.filter(r => r.transactions)
+					.sort((a,b) => b.transactions - a.transactions);
+
+				const total = summary.reduce((t,r) => t + r.transactions, 0);
+				const output = summary.map(r => `${r.ruleId}:${r.transactions}`).join(' ');
+
+				utils.log({
+					user,
+					content: `applyRules ${total} ${output}`
+				});
+
 				return transactions;
 			});
 	},

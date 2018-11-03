@@ -6,6 +6,7 @@ const Big = require('big.js');
 const rfc6902 = require('rfc6902');
 
 const database = require('../database.js');
+const utils = require('../utils.js');
 
 const app = module.exports = express();
 
@@ -128,7 +129,10 @@ app.post('/import', function (req, res) {
 				.then(() => err ? Promise.resolve() : getBuckets(req.decoded.barrelId))
 				.then(buckets => {
 					const updated = imported.filter(i => i.existing).length;
-					console.log('import buckets', 'i' + (imported.length - updated), 'u' + updated);
+					utils.log({
+						user: req.decoded.email,
+						content: `import buckets i${imported.length - updated} u${updated}`
+					});
 					return res.status(err ? 400 : 200).json(err || buckets)
 				});
 		})

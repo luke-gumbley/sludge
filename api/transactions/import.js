@@ -3,6 +3,7 @@ const stream = require('stream');
 const moment = require('moment');
 const { stableSort } = require('../utils');
 const database = require('../database');
+const utils = require('../utils');
 
 const transactionEquals = (() => {
 	const keys = ['date', 'account', 'party', 'particulars', 'code',
@@ -90,7 +91,7 @@ class TransactionImporter extends stream.Writable {
 }
 
 module.exports = {
-	importTransactions: function(barrelId, format) {
+	importTransactions: function(user, barrelId, format) {
 		const importer = new TransactionImporter();
 
 		const promise = importer.import().then(transactions => {
@@ -99,7 +100,10 @@ module.exports = {
 				return;
 
 			if(!stableSort(transactions, t => t.date))
-				console.log('Imported transactions were not in ascending date order!');
+				utils.log({
+					user,
+					content: 'Imported transactions were not in ascending date order!'
+				});
 
 			const min = transactions[0].date;
 			const max = transactions.slice(-1)[0].date;
@@ -131,8 +135,10 @@ module.exports = {
 
 					actions.insert.forEach(t => t.barrelId = barrelId);
 
-					if(process.env.NODE_ENV!='test')
-						console.log('import', format, account, 'd' + actions.delete.length, 'i' + actions.insert.length, 'u' + actions.update.length);
+					utils.log({
+						user,
+						content: `import ${format} ${account} d${actions.delete.length} i${actions.insert.length} u${actions.update.length}`
+					})
 
 					// delete existing transactions with no match in the import
 					return (actions.delete.length
