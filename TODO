@@ -50,3 +50,8 @@ TODO LIST FOR SLUDGE (rough roadmap)
   Permit sorting bucket list
 ✓ Buckets with zero period or invalid date should not show other fields (as they are not budget buckets)
   Line highlighting / click-to-select on rows
+  Re-sizable / re-orderable columns in all tables
+  Nested buckets
+  Display budget/bucket balance for the current period only
+  Flickering columns in Chrome / Windows / 4k
+  Tidy up budgeting for income
