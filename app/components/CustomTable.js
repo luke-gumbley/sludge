@@ -9,31 +9,55 @@ export default class CustomTable extends Component {
 	constructor(props) {
 		super(props);
 
-		let totalWidth = 0;
-		const widths = React.Children.map(this.props.children, child => {
-			totalWidth += child.props.width;
-			return {
-				width: child.props.width,
-				dataKey: child.props.dataKey
-			};
-		});
+		const originalChildren = React.Children.toArray(props.children);
 
-		widths.forEach(w => w.width /= totalWidth);
-		this.state = { widths };
+		const columns = props.columnLayout.map(column => {
+			const child = originalChildren.find(child => child.props.label === column.label);
+			return Object.assign({}, column, { child });
+		}).filter(column => column.child);
+
+		this.state = {
+			columns,
+			deltas: {}
+		};
+	}
+
+	static calculateWidths({width, columns, deltas}) {
+		const layout = {
+			count: columns.filter(c => c.width).length,
+			width: columns.reduce((w,c) => w + c.width || 0, 0)
+		};
+
+		// allow for columns in the layout that have not been given width
+		const sized = layout.count / columns.length;
+		const unsized = (columns.length - layout.count) / columns.length;
+
+		layout.width *= columns.length / layout.count;
+
+		let allocated = 0, modifier = 1;
+		return columns.map(column => {
+			const delta = deltas[column.label] || 0;
+			const ratio = column.width
+				? (column.width / layout.width) * sized
+				: (unsized / (columns.length - layout.count))
+
+			const columnWidth = width * ratio * modifier + delta;
+
+			allocated += columnWidth;
+			modifier *= (width - allocated) / (width - allocated + delta);
+
+			return columnWidth;
+		});
 	}
 
 	render() {
-		const { widths } = this.state;
-		const width = this.props.width;
-		const columns = React.Children.count(this.props.children);
+		const { columns } = this.state;
+		const widths = CustomTable.calculateWidths({ width: this.props.width, ...this.state });
 
-		const children = React.Children.map(this.props.children, (child, i) => {
-			//console.log(width * widths[i]);
-			return React.cloneElement(child, {
-				width: width * widths[i].width,
-				headerRenderer: i === columns - 1 ? undefined : this.headerRenderer
-			});
-		});
+		const children = columns.map((column, i) => React.cloneElement(column.child, {
+			width: widths[i],
+			headerRenderer: i === columns.length - 1 ? undefined : this.headerRenderer
+		}));
 
 		return (<Table {...this.props}>
 			{children}
@@ -48,7 +72,7 @@ export default class CustomTable extends Component {
 		sortBy,
 		sortDirection
 	}) => {
-		return (<React.Fragment key={dataKey}>
+		return (<React.Fragment key={label}>
 			<div className="ReactVirtualized__Table__headerTruncatedText">
 				{label}
 			</div>
@@ -56,7 +80,8 @@ export default class CustomTable extends Component {
 				axis="x"
 				defaultClassName="DragHandle"
 				defaultClassNameDragging="DragHandleActive"
-				onDrag={(event, { deltaX }) => this.resizeRow({ dataKey, deltaX }) }
+				onStop={() => this.rationaliseDeltas() }
+				onDrag={(event, { deltaX }) => this.resizeRow({ label, deltaX }) }
 				position={{ x: 0 }}
 				zIndex={999}
 				>
@@ -65,22 +90,21 @@ export default class CustomTable extends Component {
 		</React.Fragment>);
 	}
 
-	resizeRow = ({ dataKey, deltaX }) => {
-		return this.setState(prevState => {
-			const prevWidths = prevState.widths;
-			const percentDelta = deltaX / this.props.width;
-
-			let increment = 0;
-			const widths = prevWidths.map((w, i) => {
-				w = Object.assign({}, w, { width: w.width + increment });
-				if(w.dataKey === dataKey && !increment) {
-					w.width += percentDelta;
-					increment = -percentDelta/(prevWidths.length - i - 1);
-				}
-				return w;
+	rationaliseDeltas = () => {
+		return this.setState((prevState, props) => {
+			const widths = CustomTable.calculateWidths({ width: props.width, ...prevState });
+			const columns = prevState.columns.map((column, i) => {
+				return Object.assign({}, column, { width: widths[i] });
 			});
+			return { columns, deltas: {} };
+		});
+	};
 
-			return { widths };
+	resizeRow = ({ label, deltaX }) => {
+		return this.setState(prevState => {
+			const deltas = Object.assign({}, prevState.deltas);
+			deltas[label] = (deltas[label] || 0) + deltaX;
+			return { columns: prevState.columns, deltas };
     	});
 	};
 }

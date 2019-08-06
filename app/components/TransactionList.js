@@ -87,7 +87,8 @@ class TransactionList extends Component {
 								rowClassName={this.rowClassName}
 								rowGetter={this.rowGetter}
 								onRowsRendered={onRowsRendered}
-								ref={registerChild} >
+								ref={registerChild}
+								columnLayout={this.props.layout}>
 							<Column label='Date' dataKey='date' width={80} />
 							<Column label='Account' dataKey='account' width={150} />
 							<Column label='Type' dataKey='type' width={50} />
@@ -108,7 +109,8 @@ class TransactionList extends Component {
 const mapStateToProps = state => ({
 	transactions: getSortedTransactions(state),
 	total: state.transactions.total,
-	filter: state.transactions.filter
+	filter: state.transactions.filter,
+	layout: state.transactions.layout
 });
 
 const mapDispatchToProps = dispatch => ({

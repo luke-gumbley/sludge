@@ -10,7 +10,16 @@ function transactions(
 		isFetching: false,
 		filter: { bucketId: undefined, account: undefined, search: undefined },
 		items: {},
-		total: undefined
+		total: undefined,
+		layout:[{label:'Date', width:1},
+			{label:'Account', width:1},
+			{label:'Type', width:1},
+			{label:'Party', width:1},
+			{label:'Particulars', width:1},
+			{label:'Code', width:1},
+			{label:'Reference', width:1},
+			{label:'Amount', width:1},
+			{label:'Bucket', width:1}]
 	},
 	action
 ) {
@@ -19,7 +28,7 @@ function transactions(
 			return Object.assign({}, state, {
 				isFetching: true
 			});
-		case GET_TRANSACTIONS_RESPONSE:
+		case GET_TRANSACTIONS_RESPONSE: {
 			const items = Object.assign({}, state.items)
 			action.transactions.forEach(t => items[t.id] = t);
 
@@ -28,13 +37,16 @@ function transactions(
 				items,
 				total: action.total
 			});
-		case PATCH_TRANSACTION_RESPONSE:
-			var items = Object.assign({}, state.items);
+		}
+		case PATCH_TRANSACTION_RESPONSE: {
+			const items = Object.assign({}, state.items);
 			items[action.transaction.id] = Object.assign({}, items[action.transaction.id], action.transaction);
-			return Object.assign({}, state, { items: items });
-		case UPDATE_FILTER:
+			return Object.assign({}, state, { items });
+		}
+		case UPDATE_FILTER: {
 			const filter = Object.assign({}, state.filter, action.filter);
 			return { isFetching: false, filter, items: {}, total: undefined };
+		}
 		default:
 			return state;
 	}
