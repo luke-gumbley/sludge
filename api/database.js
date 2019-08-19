@@ -155,7 +155,6 @@ module.exports = {
 	connect: function({ sync, ...options }) {
 		sequelize = new Sequelize(Object.assign({
 			dialect: 'postgres',
-			operatorsAliases: false,
 			logging: false
 		}, options));
 
