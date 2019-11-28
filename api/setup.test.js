@@ -7,12 +7,19 @@ const { createTokens, app } = require('../api');
 
 const database = require('./database.js');
 
-const tokens = createTokens('jane.doe@email.com', 1);
+function createApi(tokens) {
+	let newApi = defaults(supertest(app)).set('accept', 'application/json');
+	if(tokens) {
+		newApi.set('authorization', 'Bearer ' + tokens.token);
+		newApi.set('x-xsrf-token', tokens.xsrfToken);
+	}
+	return newApi;
+}
 
-const api = defaults(supertest(app))
-	.set('authorization', 'Bearer ' + tokens.token)
-	.set('x-xsrf-token', tokens.xsrfToken)
-	.set('accept', 'application/json');
+const api = createApi(createTokens('alex@email.com', 1));
+api.noTokens = createApi();
+api.noBarrel = createApi(createTokens('alex@email.com'));
+api.badUser = createApi(createTokens('jane@doe.com', 1));
 
 before(function(done){
 	database
@@ -26,7 +33,17 @@ after(function(done){
 
 describe('Authentication', function () {
 
-	it('should return a 404 response', function (done) {
+	it('should return a 403 response from /api/ with no tokens', function(done) {
+		api.noTokens.get('/api/')
+			.expect(403, done);
+	});
+
+	it('should return a 404 response from /api/ with valid tokens', function (done) {
+		api.get('/api/')
+			.expect(404, done);
+	});
+
+	it('should return a 200 response from /blank with valid tokens', function (done) {
 		api.get('/api/')
 			.expect(404, done);
 	});

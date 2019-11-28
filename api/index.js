@@ -11,6 +11,7 @@ const crypto = require('crypto');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const HttpsProxyAgent = require('https-proxy-agent');
 
+const barrels = require('./barrels/barrels.js');
 const buckets = require('./buckets/buckets.js');
 const transactions = require('./transactions/transactions.js');
 const rules = require('./rules/rules.js');
@@ -75,13 +76,13 @@ app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.g
 					.sendFile(require.resolve('../app/401.html'));
 			}
 
-			const { xsrfToken, token } = createTokens(email, user.barrelId);
+			const { xsrfToken, token } = createTokens(email);
 
 			res.cookie('xsrf-token', xsrfToken, {
 				secure: process.env.COOKIE_SECURE === 'true',
 				maxAge: 24 * 60 * 60 * 1000,
 				expires: new Date(Date.now() + 24 * 60 * 60 * 1000)
-			})
+			});
 
 			res.cookie('access-token',token, {
 				httpOnly: true,
@@ -123,12 +124,21 @@ const xsrfCheck = failure => {
 	})
 }
 
+const barrelCheck = failure => {
+	return express.Router().use((req, res, next) => {
+		return !req.decoded.barrelId
+			? failure(res)
+			: next();
+	})
+}
+
 const authFail = res => res.status(403).send({ success: false, message: 'Token not provided or invalid.' });
 app.use('/api', authenticator(authFail), xsrfCheck(authFail));
 
-app.use('/api/transactions', transactions);
-app.use('/api/buckets', buckets);
-app.use('/api/rules', rules);
+app.use('/api/barrels', barrels);
+app.use('/api/transactions', barrelCheck(authFail), transactions);
+app.use('/api/buckets', barrelCheck(authFail), buckets);
+app.use('/api/rules', barrelCheck(authFail), rules);
 
 app.use('/blank', (req, res, next) => res.sendStatus(200));
 app.use(authenticator(res => res.redirect('/auth/google')));
