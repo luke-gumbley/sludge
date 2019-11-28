@@ -65,7 +65,7 @@ function createTokens(email, barrelId) {
 }
 
 app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.email'], session: false }), (req, res, next) => {
-	const email = req.user.profile.emails.filter(e => e.type === 'account')[0].value
+	const email = req.user.profile.emails.filter(e => e.type === 'ACCOUNT')[0].value
 
 	database.user.findOne({ where: { email }})
 		.then(user => {
