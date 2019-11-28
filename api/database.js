@@ -15,15 +15,14 @@ const models = [{
 		},
 	},
 
+	setup: function(db) {
+		this.belongsToMany(db.user, { through: 'barrelUser' });
+	},
+
 }, {
 	name: 'user',
 
 	definition: {
-		barrelId: {
-			type: Sequelize.INTEGER,
-			allowNull: false
-		},
-
 		id: {
 			type: Sequelize.INTEGER,
 			primaryKey: true,
@@ -36,7 +35,7 @@ const models = [{
 	},
 
 	setup: function(db) {
-		this.belongsTo(db.barrel, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+		this.belongsToMany(db.barrel, { through: 'barrelUser' });
 	},
 
 }, {
@@ -244,10 +243,16 @@ module.exports = {
 			sync: true
 		});
 
-		await data.barrel.reduce((promise, b) => promise.then(() => db.barrel.create(b)), Promise.resolve());
-		await data.user.reduce((promise, u) => promise.then(() => db.user.create(u)), Promise.resolve());
-		await data.bucket.reduce((promise, b) => promise.then(() => db.bucket.create(b)), Promise.resolve());
-		await data.transaction.reduce((promise, t) => promise.then(() => db.transaction.create(t)), Promise.resolve());
-		await data.rule.reduce((promise, r) => promise.then(() => db.rule.create(r)), Promise.resolve());
+		let createData = (data,model) => data.reduce((promise, d) => promise.then(a => model.create(d).then(m => a.concat([m]))), Promise.resolve([]));
+
+		let models = {
+			barrel: await createData(data.barrel, db.barrel),
+			user: await createData(data.user, db.user),
+			bucket: await createData(data.bucket, db.bucket),
+			transaction: await createData(data.transaction, db.transaction),
+			rule: await createData(data.rule, db.rule)
+		};
+
+		await data.setup(models);
 	}
 };

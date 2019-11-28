@@ -9,11 +9,11 @@ const offset = days => moment(lastWeek).add(days, 'days');
 module.exports = {
 	barrel: [{}, {}, {}],
 	user: [
-		{ barrelId: 1, name: 'Alex', email: 'alex@email.com'},
-		{ barrelId: 1, name: 'Sam', email: 'sam@email.com'},
-		{ barrelId: 2, name: 'Luke', email: 'luke.gumbley@gmail.com'},
-		{ barrelId: 2, name: 'Morgan', email: 'morgan@email.com'},
-		{ barrelId: 3, name: 'Charlie', email: 'charlie@email.com'},
+		{ name: 'Alex', email: 'alex@email.com'},
+		{ name: 'Sam', email: 'sam@email.com'},
+		{ name: 'Luke', email: 'luke.gumbley@gmail.com'},
+		{ name: 'Morgan', email: 'morgan@email.com'},
+		{ name: 'Charlie', email: 'charlie@email.com'},
 	],
 	bucket: [
 		{ barrelId: 1, name: 'mortgage', amount: 1234.56, period: 1, periodUnit: 'month', date: month, budget: 'Slush' },
@@ -36,5 +36,11 @@ module.exports = {
 		{ barrelId: 1, account: '', search: 'Pipes Christchurch', bucketId: 3 },
 		{ barrelId: 1, account: '', search: 'BigBank', bucketId: 1 },
 		{ barrelId: 1, account: '', search: 'Octane', bucketId: 4 },
-	]
+	],
+
+	setup: async function(models) {
+		await models.barrel[0].addUsers([1,2]);
+		await models.barrel[1].addUsers([1,3,4]);
+		await models.barrel[2].addUser([5]);
+	},
 };
