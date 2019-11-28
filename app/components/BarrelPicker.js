@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { setBarrel } from '../actions/barrels';
 import { getBarrels } from '../selectors/barrels';
 
 class BarrelPicker extends Component {
@@ -9,7 +10,7 @@ class BarrelPicker extends Component {
 	});
 
 	render() {
-		let barrels = this.props.barrels.map(barrel => (<div key={barrel.id} className='BarrelOption' onClick={this.handleClick(barrel.id)}>{barrel.id}</div>));
+		let barrels = this.props.barrels.map(barrel => (<div key={barrel.id} className='BarrelOption' onClick={() => this.props.onSelect(barrel.id)}>{barrel.id}</div>));
 
 		return (<div className='BarrelPicker'>
 			{barrels}
@@ -21,4 +22,10 @@ const mapStateToProps = state => ({
 	barrels: getBarrels(state)
 });
 
-export default connect(mapStateToProps)(BarrelPicker);
+function mapDispatchToProps(dispatch) {
+	return {
+		onSelect: barrelId => dispatch(setBarrel(barrelId)),
+	};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BarrelPicker);

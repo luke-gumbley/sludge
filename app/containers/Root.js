@@ -6,7 +6,7 @@ import { getBarrels } from '../actions/barrels';
 
 class Root extends Component {
 	render() {
-		return this.props.barrelId !== undefined
+		return this.props.barrels.barrelId !== undefined
 			? <Sludge />
 			: <div className="DefaultBarrel"><BarrelPicker /></div>;
 	}
