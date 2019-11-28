@@ -162,7 +162,7 @@ module.exports = {
 		);
 
 		// horrible shit to permit cyclic dependencies.
-		return (sync ? sequelize.drop().then(() => sequelize.sync()) : Promise.resolve())
+		return (sync ? sequelize.drop({ cascade: true }).then(() => sequelize.sync()) : Promise.resolve())
 			.then(() => models.forEach(model => { (model.setup || (() => {})).call(module.exports[model.name], module.exports) }) )
 			.then(() => sync
 				? Object.keys(sequelize.models).reduce((promise, model) => promise.then(() => sequelize.models[model].sync({ alter: true })), Promise.resolve())
@@ -230,9 +230,8 @@ module.exports = {
 			});
 	},
 
-	connectTest: async function() {
+	connectTemp: async function() {
 		const db = module.exports;
-		const data = require('./test_data.js');
 
 		const uri = execSync('pg_tmp', { encoding: 'utf8' });
 		console.log(uri);
@@ -242,6 +241,11 @@ module.exports = {
 			host: '/tmp/ephemeralpg.'.concat(uri.slice(-6)),
 			sync: true
 		});
+	},
+
+	testData: async function() {
+		const db = module.exports;
+		const data = require('./test_data.js');
 
 		let createData = (data,model) => data.reduce((promise, d) => promise.then(a => model.create(d).then(m => a.concat([m]))), Promise.resolve([]));
 

@@ -16,18 +16,26 @@ const options = {
 };
 
 options.files = process.argv.slice(2).filter(arg => {
+	// connect to ephemeral DB
+	if(arg == 'temp') {
+		options.temp = true;
+		return false;
+	}
+
+	// synchronise schema (always done for 'temp')
 	if(arg === 'sync') {
 		options.sync = true;
 		return false;
 	}
 
-	if(arg.includes('bucket')) {
-		options.bucketFile = arg;
+	// create test data
+	if(arg === 'test') {
+		options.test = true;
 		return false;
 	}
 
-	if(arg === 'test') {
-		options.test = true;
+	if(arg.includes('bucket')) {
+		options.bucketFile = arg;
 		return false;
 	}
 
@@ -43,9 +51,8 @@ const dbOptions = {
 	sync: options.sync
 };
 
-(options.test
-	? database.connectTest()
-	: database.connect(dbOptions))
+(options.temp ? database.connectTemp() : database.connect(dbOptions))
+	.then(() => (options.test ? database.testData() : Promise.resolve()))
 	.then(() => {
 	options.files.map(filename => parser.parse(filename))
 		.reduce((acc, val) => acc.concat(val), [])

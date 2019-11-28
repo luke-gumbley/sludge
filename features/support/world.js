@@ -8,7 +8,8 @@ let driver, baseUrl;
 
 BeforeAll(async function() {
 	driver = new Builder().forBrowser('chrome').build();
-	await database.connectTest();
+	await database.connectTemp();
+	await database.testData();
 	const server = await api.start(true, 0);
 	baseUrl = `https://localhost:${server.address().port}`;
 });

@@ -22,8 +22,8 @@ api.noBarrel = createApi(createTokens('alex@email.com'));
 api.badUser = createApi(createTokens('jane@doe.com', 1));
 
 before(function(done){
-	database
-		.connectTest()
+	database.connectTemp()
+		.then(() => database.testData())
 		.then(done);
 });
 
