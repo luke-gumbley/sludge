@@ -8,7 +8,7 @@ class Root extends Component {
 	render() {
 		return this.props.barrelId !== undefined
 			? <Sludge />
-			: <BarrelPicker />;
+			: <div className="DefaultBarrel"><BarrelPicker /></div>;
 	}
 
 	componentDidMount() {

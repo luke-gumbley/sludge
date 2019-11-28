@@ -3,12 +3,17 @@ import { connect } from 'react-redux';
 import { getBarrels } from '../selectors/barrels';
 
 class BarrelPicker extends Component {
-	render() {
-		let barrels = this.props.barrels.map(barrel => (<option key={barrel.id}>{barrel.id}</option>));
 
-		return (<select id='barrelPicker'>
+	handleClick = (barrelId => (event) => {
+		console.log('CLICK', barrelId);
+	});
+
+	render() {
+		let barrels = this.props.barrels.map(barrel => (<div key={barrel.id} className='BarrelOption' onClick={this.handleClick(barrel.id)}>{barrel.id}</div>));
+
+		return (<div className='BarrelPicker'>
 			{barrels}
-		</select>);
+		</div>);
 	}
 }
 
