@@ -16,7 +16,7 @@ describe('Barrels', function () {
 			.expect(200)
 			.expect(res => {
 				assert.equal(res.body.length, 2);
-				assert.equal(res.body[0], 1);
+				assert.equal(res.body[0].id, 1);
 			})
 			.end(done);
 	});
