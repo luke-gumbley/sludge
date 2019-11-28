@@ -19,6 +19,6 @@ app.get('/', function (req, res) {
 					.set({ 'WWW-Authenticate': 'Bearer realm="Sludge tool"' })
 					.sendFile(require.resolve('../../app/401.html'));
 			}
-			res.json(user.barrels.map(barrel => barrel.id));
+			res.json(user.barrels.map(barrel => ({ id: barrel.id })));
 		});
 });

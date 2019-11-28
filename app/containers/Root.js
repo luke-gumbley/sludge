@@ -1,16 +1,25 @@
 import React, { Component } from 'react';
-import { Provider } from 'react-redux';
-import configureStore from '../configureStore';
+import { connect } from 'react-redux';
 import Sludge from './Sludge';
+import BarrelPicker from '../components/BarrelPicker';
+import { getBarrels } from '../actions/barrels';
 
-const store = configureStore();
-
-export default class Root extends Component {
+class Root extends Component {
 	render() {
-		return (
-			<Provider store={store}>
-				<Sludge />
-			</Provider>
-		);
+		return this.props.barrelId !== undefined
+			? <Sludge />
+			: <BarrelPicker />;
 	}
+
+	componentDidMount() {
+		const { dispatch } = this.props;
+		dispatch(getBarrels());
+	}
+
 }
+
+const mapStateToProps = state => ({
+	barrels: state.barrels
+});
+
+export default connect(mapStateToProps)(Root);

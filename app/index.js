@@ -1,4 +1,6 @@
+import { Provider } from 'react-redux';
 import Cookies from 'js-cookie';
+import configureStore from './configureStore'
 
 // naive convenience function for supplying tokens and xsrf header
 const nativeFetch = fetch;
@@ -28,8 +30,12 @@ import styles from './sludge.css';
 
 history.replaceState(history.state, '', '/');
 
+const store = configureStore();
+
 render(
-	<Root />,
+	<Provider store={store}>
+		<Root />
+	</Provider>,
 	document.getElementById('root')
 );
 

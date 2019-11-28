@@ -1,9 +1,11 @@
 import { combineReducers } from 'redux';
+import barrels from './barrels';
 import transactions from './transactions';
 import rules from './rules';
 import buckets from './buckets';
 
 const rootReducer = combineReducers({
+	barrels,
 	transactions,
 	rules,
 	buckets

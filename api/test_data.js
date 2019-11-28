@@ -39,7 +39,7 @@ module.exports = {
 	],
 
 	setup: async function(models) {
-		await models.barrel[0].addUsers([1,2]);
+		await models.barrel[0].addUsers([1,2,3]);
 		await models.barrel[1].addUsers([1,3,4]);
 		await models.barrel[2].addUser([5]);
 	},
