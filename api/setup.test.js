@@ -43,9 +43,40 @@ describe('Authentication', function () {
 			.expect(404, done);
 	});
 
+	it('should return a 403 response from /auth/barrel/7 with valid tokens', function(done) {
+		api.get('/auth/barrel/7')
+			.expect(403, done);
+	});
+
+	it('should return a 403 response from /auth/barrel/1 with a bad user', function(done) {
+		api.badUser.get('/auth/barrel/1')
+			.expect(403, done);
+	});
+
+	it('should return a 403 response from /auth/barrel/1 with no tokens', function(done) {
+		api.noTokens.get('/auth/barrel/1')
+			.expect(403, done);
+	});
+
+	it('should return a 200 response from /auth/barrel/1 with no barrel', function(done) {
+		api.noBarrel.get('/auth/barrel/1')
+			.expect(res => {
+				assert.equal(res.body.id, 1)
+			})
+			.expect(200, done);
+	});
+
+	it('should return a 200 response from /auth/barrel/1 with valid tokens', function(done) {
+		api.get('/auth/barrel/1')
+			.expect(res => {
+				assert.equal(res.body.id, 1)
+			})
+			.expect(200, done);
+	});
+
 	it('should return a 200 response from /blank with valid tokens', function (done) {
-		api.get('/api/')
-			.expect(404, done);
+		api.get('/blank')
+			.expect(200, done);
 	});
 
 });

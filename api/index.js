@@ -65,6 +65,23 @@ function createTokens(email, barrelId) {
 	return { xsrfToken, token };
 }
 
+function setTokens(res, email, barrelId) {
+	const { xsrfToken, token } = createTokens(email, barrelId);
+
+	res.cookie('xsrf-token', xsrfToken, {
+		secure: process.env.COOKIE_SECURE === 'true',
+		maxAge: 24 * 60 * 60 * 1000,
+		expires: new Date(Date.now() + 24 * 60 * 60 * 1000)
+	});
+
+	res.cookie('access-token',token, {
+		httpOnly: true,
+		secure: process.env.COOKIE_SECURE === 'true',
+		maxAge: 24 * 60 * 60 * 1000,
+		expires: new Date(Date.now() + 24 * 60 * 60 * 1000)
+	});
+}
+
 app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.email'], session: false }), (req, res, next) => {
 	const email = req.user.profile.emails.filter(e => e.type === 'ACCOUNT')[0].value
 
@@ -76,20 +93,7 @@ app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.g
 					.sendFile(require.resolve('../app/401.html'));
 			}
 
-			const { xsrfToken, token } = createTokens(email);
-
-			res.cookie('xsrf-token', xsrfToken, {
-				secure: process.env.COOKIE_SECURE === 'true',
-				maxAge: 24 * 60 * 60 * 1000,
-				expires: new Date(Date.now() + 24 * 60 * 60 * 1000)
-			});
-
-			res.cookie('access-token',token, {
-				httpOnly: true,
-				secure: process.env.COOKIE_SECURE === 'true',
-				maxAge: 24 * 60 * 60 * 1000,
-				expires: new Date(Date.now() + 24 * 60 * 60 * 1000)
-			});
+			setTokens(res, email);
 
 			res.redirect('/');
 		});
@@ -133,6 +137,28 @@ const barrelCheck = failure => {
 }
 
 const authFail = res => res.status(403).send({ success: false, message: 'Token not provided or invalid.' });
+
+app.get('/auth/barrel/:id', authenticator(authFail), xsrfCheck(authFail), (req, res) => {
+	database.user.findOne({
+		where: { email: req.decoded.email },
+		include: [{ model: database.barrel, required: false }]
+	})
+	.then(user => {
+		if(!user || user.barrels.findIndex(barrel => barrel.id == req.params.id) === -1) {
+			// user no longer exists in the DB, or requested an invalid barrel, clear cookies and redirect
+			res.clearCookie('token');
+			res.clearCookie('xsrf-token');
+			return res.status(403)
+				.set({ 'WWW-Authenticate': 'Bearer realm="Sludge tool"' })
+				.sendFile(require.resolve('../app/401.html'));
+		}
+
+		setTokens(res, req.decoded.email, req.params.id);
+
+		res.json({ id: req.params.id });
+	});
+});
+
 app.use('/api', authenticator(authFail), xsrfCheck(authFail));
 
 app.use('/api/barrels', barrels);
