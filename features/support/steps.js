@@ -13,6 +13,11 @@ Given('I have loaded Sludge', function () {
 	return this.sludge();
 });
 
+Given(/I (?:select|have selected) barrel (\d+)/, async function (barrel) {
+	this.driver.findElement({ xpath:`//div${matchClass('BarrelOption')}[text()='${barrel}']`}).click();
+	return this.waitElement({ xpath:`//li[@role='tab']`});
+});
+
 Given(/I (?:open|have opened) the (\w+) tab/, function (tab) {
 	return this.driver.findElement({ xpath:`//li[@role='tab'][text()='${tab}']`}).click();
 });

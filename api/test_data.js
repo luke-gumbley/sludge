@@ -7,7 +7,7 @@ const lastWeek = moment().startOf('week').add(-7, 'days');
 const offset = days => moment(lastWeek).add(days, 'days');
 
 module.exports = {
-	barrel: [{}, {}, {}],
+	barrel: [{}, {}, {}, {}],
 	user: [
 		{ name: 'Alex', email: 'alex@email.com'},
 		{ name: 'Sam', email: 'sam@email.com'},
@@ -56,7 +56,8 @@ module.exports = {
 
 	setup: async function(models) {
 		await models.barrel[0].addUsers([1,2,3]);
-		await models.barrel[1].addUsers([1,3,4]);
-		await models.barrel[2].addUser([5]);
+		await models.barrel[1].addUsers([1,3]);
+		await models.barrel[2].addUser([4]);
+		await models.barrel[3].addUser([5]);
 	},
 };

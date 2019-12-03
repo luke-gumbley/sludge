@@ -6,6 +6,7 @@ Feature: Bucket list
 	Background:
 		Given I am logged in as Alex
 			And I have loaded Sludge
+			And I have selected barrel 1
 			And I have opened the Buckets tab
 
 	Scenario: view buckets
