@@ -45,7 +45,7 @@ function transactions(
 		}
 		case UPDATE_FILTER: {
 			const filter = Object.assign({}, state.filter, action.filter);
-			return { isFetching: false, filter, items: {}, total: undefined };
+			return Object.assign({}, state, { isFetching: false, filter, items: {}, total: undefined });
 		}
 		default:
 			return state;
