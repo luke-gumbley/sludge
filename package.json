@@ -1,6 +1,6 @@
 {
   "name": "sludge",
-  "version": "0.29.7",
+  "version": "0.29.8",
   "description": "Personal budget management tool",
   "main": "main.js",
   "dependencies": {
