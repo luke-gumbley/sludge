@@ -5,8 +5,9 @@ import 'react-virtualized/styles.css';
 
 import CustomTable from './CustomTable';
 import BucketPicker from './BucketPicker';
-import { categoriseTransaction } from '../actions/transactions.js';
-import { getTransactions } from '../actions/transactions.js';
+import GlyphButton from './GlyphButton';
+import { updateBucket } from '../actions/buckets.js';
+import { categoriseTransaction, getTransactions } from '../actions/transactions.js';
 import { getSortedTransactions } from '../selectors/transactions.js';
 
 class TransactionList extends Component {
@@ -37,13 +38,28 @@ class TransactionList extends Component {
 		})) || {};
 	};
 
+	handleZero = (bucketId, transactionId) => {
+		return () => this.props.dispatch(updateBucket({id: bucketId, zeroTransactionId: transactionId}));
+	};
+
 	renderPicker = options => {
 		const transaction = options.rowData;
+
+		const zeroGlyph = transaction.bucketId && transaction.bucketId === this.props.filter.bucketId
+			&& this.props.filterBucket && this.props.filterBucket.zeroTransactionId !== transaction.id
+			? <div style={{flex: '0 0 22px'}}>
+				<GlyphButton glyph="stop-circle" onClick={this.handleZero(this.props.filterBucket.id,transaction.id)}/>
+			  </div>
+			: undefined;
+
 		return transaction
-			? <BucketPicker
-				name="txnBucket"
-				bucketId={transaction.bucketId}
-				onChange={bucket => this.props.onChange(transaction.id, bucket)} />
+			? <div style={{display:'flex'}}>
+				<BucketPicker
+					name="txnBucket"
+					bucketId={transaction.bucketId}
+					onChange={bucket => this.props.onChange(transaction.id, bucket)} />
+				{zeroGlyph}
+			  </div>
 			: <div />
 	};
 
@@ -110,6 +126,7 @@ const mapStateToProps = state => ({
 	transactions: getSortedTransactions(state),
 	total: state.transactions.total,
 	filter: state.transactions.filter,
+	filterBucket: state.transactions.filter.bucketId ? state.buckets.items[state.transactions.filter.bucketId] : undefined,
 	layout: state.transactions.layout
 });
 

@@ -259,3 +259,11 @@ label {
 .BarrelOption:hover {
 	background-color: #4CAF50;
 }
+
+.bucketPicker {
+	flex: 1 1 auto;
+}
+
+.fa-stop-circle {
+	margin: auto 5px;
+}

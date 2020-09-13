@@ -33,6 +33,7 @@ class BucketPicker extends Component {
 
 	render() {
 		return (<input
+			className="bucketPicker"
 			type="text"
 			list="buckets"
 			name={this.props.name}
