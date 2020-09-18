@@ -12,7 +12,7 @@ class BucketList extends Component {
 	rowClassName = ({ index }) => {
 		if(index == -1) return undefined;
 		let bucket = this.props.buckets[index];
-		return bucket.isPeriodic && bucket.calcBalance() < 0
+		return bucket.red
 			? 'redRow'
 			: (index % 2) ? 'altRow' : undefined;
 	};
@@ -20,12 +20,17 @@ class BucketList extends Component {
 	rowGetter = ({ index }) => {
 		let bucket = this.props.buckets[index];
 
+		const calc = bucket.isPeriodic ? bucket.calculate() : {};
+		const variance = bucket.isPeriodic ? calc.variance : bucket.balance;
+
 		return Object.assign({}, bucket, {
 			amount: bucket.isPeriodic ? '$' + bucket.amount.toFixed(2) : '',
 			period: bucket.isPeriodic ? bucket.period + ' ' + bucket.periodUnit : '',
-			nextDate: bucket.isPeriodic ? bucket.nextDate.format('l') : '',
+			nextDate: bucket.isPeriodic ? calc.nextEmpty.format('l') : '',
 			rate: bucket.isPeriodic ? '$' + (bucket.amount / bucket.periodDays).toFixed(2) : '',
-			balance: '$' + bucket.calcBalance().toFixed(2)
+			projected: bucket.isPeriodic ? '$' + calc.projected.toFixed(2) : '',
+			variance: '$' + variance.toFixed(2),
+			red: bucket.isPeriodic && variance < 0
 		});
 	};
 
@@ -68,7 +73,8 @@ class BucketList extends Component {
 					<Column label='Period' dataKey='period' width={80} flexGrow={1} />
 					<Column label='Next Date' dataKey='nextDate' width={80} flexGrow={1} />
 					<Column label='Daily' dataKey='rate' width={80} flexGrow={1} />
-					<Column label='Balance' dataKey='balance' width={80} flexGrow={1} />
+					<Column label='Projected' dataKey='projected' width={80} flexGrow={1} />
+					<Column label='Variance' dataKey='variance' width={80} flexGrow={1} />
 					<Column label='Budget' dataKey='budget' width={80} flexGrow={1} />
 					<Column
 						dataKey='id'

@@ -55,18 +55,33 @@ function augment(buckets) {
 		const prev = moment(bucket.date).subtract(bucket.period,bucket.periodUnit);
 		bucket.periodDays = bucket.date.diff(prev, 'days', true);
 
-		const nextDate = moment(bucket.date);
-		if(moment().isAfter(nextDate)) {
-			const diff = moment().diff(nextDate, bucket.periodUnit, true);
-			const periods = Math.ceil(diff / bucket.period);
-			nextDate.add(bucket.period * periods, bucket.periodUnit);
-		}
-		bucket.nextDate = nextDate;
+		bucket.calculate = function calculate() {
+			const nextEmpty = moment(this.date);
+			if(moment().isAfter(nextEmpty)) {
+				const diff = moment().diff(nextEmpty, this.periodUnit, true);
+				const periods = Math.ceil(diff / this.period);
+				nextEmpty.add(this.period * periods, this.periodUnit);
+			}
 
-		bucket.calcBalance = function calcBalance() {
-			const age = moment().diff(this.zeroDate, 'days', true);
-			return this.balance.plus(this.isPeriodic ? this.amount.mul(age / this.periodDays) : 0);
-		};
+			let lastEmpty = nextEmpty.subtract(this.period, this.periodUnit);
+			if(this.zeroDate.isAfter(lastEmpty))
+				lastEmpty = moment(this.zeroDate);
+
+			let increment = lastEmpty.isAfter(moment())
+				? 0
+				: moment().diff(lastEmpty, 'days', true) / this.periodDays;
+
+			const age = this.zeroDate.isAfter(moment())
+				? 0
+				: moment().diff(this.zeroDate, 'days', true) / this.periodDays;
+
+			const projected = this.amount.mul(increment);
+			const actual = this.amount.mul(age);
+			const variance = this.balance.add(actual).sub(projected);
+
+			return { nextEmpty, projected, actual, variance };
+
+		}
 	});
 
 	return buckets;

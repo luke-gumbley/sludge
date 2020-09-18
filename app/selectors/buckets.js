@@ -12,13 +12,12 @@ export const getBudgets = createSelector(
 	[getBuckets],
 	buckets => buckets.map(bucket => bucket.budget)
 		.filter((b,i,a) => b && a.indexOf(b) === i)
-		.map(budget => ({
-			name: budget,
-			balance: buckets
-				.filter(b => b.budget === budget)
-				.reduce((balance, bucket) => {
-					const bal = bucket.calcBalance();
-					return balance.add(bal.gt(0) || !bucket.isPeriodic ? bal : 0);
-				}, Big(0))
-		}))
+		.map(budget => buckets.filter(b => b.isPeriodic && b.budget === budget)
+			.reduce((acc, bucket) => {
+				const calc = bucket.calculate();
+				acc.projected = acc.projected.add(calc.projected);
+				acc.variance = acc.variance.add(calc.variance);
+				return acc;
+			}, { name: budget, projected: Big(0), variance: Big(0) })
+		)
 );
