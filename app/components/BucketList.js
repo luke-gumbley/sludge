@@ -20,17 +20,10 @@ class BucketList extends Component {
 	rowGetter = ({ index }) => {
 		let bucket = this.props.buckets[index];
 
-		const nextDate = moment(bucket.date);
-		if(moment().isAfter(nextDate)) {
-			const diff = moment().diff(nextDate, bucket.periodUnit, true);
-			const periods = Math.ceil(diff / bucket.period);
-			nextDate.add(bucket.period * periods, bucket.periodUnit);
-		}
-
 		return Object.assign({}, bucket, {
 			amount: bucket.isPeriodic ? '$' + bucket.amount.toFixed(2) : '',
 			period: bucket.isPeriodic ? bucket.period + ' ' + bucket.periodUnit : '',
-			nextDate: bucket.isPeriodic ? nextDate.format('l') : '',
+			nextDate: bucket.isPeriodic ? bucket.nextDate.format('l') : '',
 			rate: bucket.isPeriodic ? '$' + (bucket.amount / bucket.periodDays).toFixed(2) : '',
 			balance: '$' + bucket.calcBalance().toFixed(2)
 		});
