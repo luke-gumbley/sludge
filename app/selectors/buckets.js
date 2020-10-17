@@ -15,9 +15,9 @@ export const getBudgets = createSelector(
 		.map(budget => buckets.filter(b => b.isPeriodic && b.budget === budget)
 			.reduce((acc, bucket) => {
 				const calc = bucket.calculate();
-				acc.projected = acc.projected.add(calc.projected);
-				acc.variance = acc.variance.add(calc.variance);
+				if(calc.actual.gt(0))
+					acc.balance = acc.balance.add(calc.actual);
 				return acc;
-			}, { name: budget, projected: Big(0), variance: Big(0) })
+			}, { name: budget, balance: Big(0) })
 		)
 );

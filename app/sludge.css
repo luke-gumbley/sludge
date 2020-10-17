@@ -191,6 +191,11 @@ label {
 	background: #fff4f4;
 }
 
+.greenRow {
+	color: darkgreen;
+	background: #f4fff4;
+}
+
 .ReactVirtualized__Table {
   display: inline-block;
 }

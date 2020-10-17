@@ -10,7 +10,7 @@ Feature: Transactions list
 			And I have opened the Transactions tab
 
 	Scenario: view transactions
-		Then I should see 8 transactions
+		Then I should see 9 transactions
 
 	Scenario: filter by account
 		When I enter "Cheque" in the accountFilter field and press enter
@@ -22,7 +22,7 @@ Feature: Transactions list
 
 	Scenario: filter by bucket
 		When I enter "food" in the bucketFilter field and press enter
-		Then I should see 3 transactions
+		Then I should see 4 transactions
 
 	Scenario: filter uncategorised
 		When I enter "<None>" in the bucketFilter field and press enter

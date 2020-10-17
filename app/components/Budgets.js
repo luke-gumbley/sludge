@@ -5,7 +5,7 @@ import { getBudgets } from '../selectors/buckets.js';
 
 class Budgets extends Component {
 	render() {
-		let budgets = (this.props.budgets || []).map(budget => (<div className='budget' key={budget.name}>{budget.name}: {'$' + Number(budget.projected.toFixed(2)).toLocaleString('en') } { budget.variance.lt(0) ? '-' : '+' } {'$' + Number(budget.variance.toFixed(2)).toLocaleString('en') }</div>));
+		let budgets = (this.props.budgets || []).map(budget => (<div className='budget' key={budget.name}>{budget.name}: {'$' + Number(budget.balance.toFixed(2)).toLocaleString('en') } </div>));
 		return (<div className='budgets'>
 			{budgets}
 		</div>);

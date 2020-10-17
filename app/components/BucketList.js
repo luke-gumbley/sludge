@@ -12,27 +12,10 @@ class BucketList extends Component {
 	rowClassName = ({ index }) => {
 		if(index == -1) return undefined;
 		let bucket = this.props.buckets[index];
-		return bucket.red
-			? 'redRow'
-			: (index % 2) ? 'altRow' : undefined;
+		return bucket.highlight || ((index % 2) && 'altRow') || undefined;
 	};
 
-	rowGetter = ({ index }) => {
-		let bucket = this.props.buckets[index];
-
-		const calc = bucket.isPeriodic ? bucket.calculate() : {};
-		const variance = bucket.isPeriodic ? calc.variance : bucket.balance;
-
-		return Object.assign({}, bucket, {
-			amount: bucket.isPeriodic ? '$' + bucket.amount.toFixed(2) : '',
-			period: bucket.isPeriodic ? bucket.period + ' ' + bucket.periodUnit : '',
-			nextDate: bucket.isPeriodic ? calc.nextEmpty.format('l') : '',
-			rate: bucket.isPeriodic ? '$' + (bucket.amount / bucket.periodDays).toFixed(2) : '',
-			projected: bucket.isPeriodic ? '$' + calc.projected.toFixed(2) : '',
-			variance: '$' + variance.toFixed(2),
-			red: bucket.isPeriodic && variance < 0
-		});
-	};
+	rowGetter = ({ index }) => this.props.buckets[index];
 
 	renderAdd = options => {
 		return (<GlyphButton glyph="plus" onClick={this.handleAdd} />);
@@ -73,7 +56,7 @@ class BucketList extends Component {
 					<Column label='Period' dataKey='period' width={80} flexGrow={1} />
 					<Column label='Next Date' dataKey='nextDate' width={80} flexGrow={1} />
 					<Column label='Daily' dataKey='rate' width={80} flexGrow={1} />
-					<Column label='Projected' dataKey='projected' width={80} flexGrow={1} />
+					<Column label='Balance' dataKey='actual' width={80} flexGrow={1} />
 					<Column label='Variance' dataKey='variance' width={80} flexGrow={1} />
 					<Column label='Budget' dataKey='budget' width={80} flexGrow={1} />
 					<Column
@@ -89,7 +72,26 @@ class BucketList extends Component {
 }
 
 const mapStateToProps = state => ({
-	buckets: getBuckets(state)
+	buckets: getBuckets(state).map(bucket => {
+		const calc = bucket.isPeriodic ? bucket.calculate() : {};
+		const variance = bucket.isPeriodic
+			? calc.actual.gt(bucket.amount)
+				? calc.actual.sub(bucket.amount)
+				: calc.projected.lt(0)
+					? calc.projected
+					: 0
+			: 0;
+
+		return Object.assign({}, bucket, {
+			amount: bucket.isPeriodic ? '$' + bucket.amount.toFixed(2) : '',
+			period: bucket.isPeriodic ? bucket.period + ' ' + bucket.periodUnit : '',
+			nextDate: bucket.isPeriodic ? calc.nextEmpty.format('l') : '',
+			rate: bucket.isPeriodic ? '$' + (bucket.amount / calc.periodDays).toFixed(2) : '',
+			actual: bucket.isPeriodic ? '$' + calc.actual.toFixed(2) : '',
+			variance: variance !== 0 ? '$' + variance.toFixed(2) : '',
+			highlight: variance < 0 ? 'redRow' : variance > 0 ? 'greenRow' : undefined
+		});
+	})
 });
 
 export default connect(mapStateToProps)(BucketList);
