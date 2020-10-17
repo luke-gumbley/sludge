@@ -49,8 +49,12 @@ function augment(buckets) {
 		bucket.zeroDate = moment(bucket.zeroDate);
 		bucket.amount = new Big(bucket.amount);
 		bucket.balance = new Big(bucket.balance);
+		bucket.period = parseInt(bucket.period);
 
 		bucket.isPeriodic = bucket.date.isValid() && bucket.period > 0;
+
+		const weeklyTransform = { days: 7/1, months: 12/52 };
+		bucket.weekly = bucket.isPeriodic ? new Big(bucket.amount).mul(weeklyTransform[bucket.periodUnit] / bucket.period) : new Big(0);
 
 		const prev = moment(bucket.date).subtract(bucket.period,bucket.periodUnit);
 
@@ -63,7 +67,6 @@ function augment(buckets) {
 			}
 
 			let lastEmpty = moment(nextEmpty).subtract(this.period, this.periodUnit);
-			let periodDays = nextEmpty.diff(lastEmpty, 'days', true);
 
 			if(this.zeroDate.isAfter(lastEmpty))
 				lastEmpty = moment(this.zeroDate);
@@ -75,7 +78,7 @@ function augment(buckets) {
 			const actual = this.balance.add(this.amount.mul(age));
 			const projected = this.balance.add(this.amount.mul(Math.ceil(age)));
 
-			return { nextEmpty, periodDays, actual, projected };
+			return { nextEmpty, actual, projected };
 		}
 	});
 

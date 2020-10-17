@@ -1,3 +1,4 @@
+import { Big } from 'big.js';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Column, Table, AutoSizer } from 'react-virtualized';
@@ -6,7 +7,7 @@ import moment from 'moment';
 
 import GlyphButton from './GlyphButton';
 import { editBucket, deleteBucket } from '../actions/buckets.js';
-import { getBuckets } from '../selectors/buckets.js';
+import { getBuckets, getBudgets } from '../selectors/buckets.js';
 
 class BucketList extends Component {
 	rowClassName = ({ index }) => {
@@ -23,11 +24,11 @@ class BucketList extends Component {
 
 	renderActions = options => {
 		const bucket = options.rowData;
-		return (<div>
+		return bucket.id ? (<div>
 			<GlyphButton glyph="pencil-alt" onClick={this.handleEdit(bucket.id)} />
 			{'\u00A0'}
 			<GlyphButton glyph="trash" onClick={this.handleDelete(bucket.id)} />
-		</div>);
+		</div>) : (<div />);
 	};
 
 	handleAdd = () => this.props.dispatch(editBucket(null));
@@ -55,7 +56,7 @@ class BucketList extends Component {
 					<Column label='Amount' dataKey='amount' width={80} flexGrow={1} />
 					<Column label='Period' dataKey='period' width={80} flexGrow={1} />
 					<Column label='Next Date' dataKey='nextDate' width={80} flexGrow={1} />
-					<Column label='Daily' dataKey='rate' width={80} flexGrow={1} />
+					<Column label='Weekly' dataKey='rate' width={80} flexGrow={1} />
 					<Column label='Balance' dataKey='actual' width={80} flexGrow={1} />
 					<Column label='Variance' dataKey='variance' width={80} flexGrow={1} />
 					<Column label='Budget' dataKey='budget' width={80} flexGrow={1} />
@@ -71,8 +72,10 @@ class BucketList extends Component {
 	}
 }
 
-const mapStateToProps = state => ({
-	buckets: getBuckets(state).map(bucket => {
+const mapStateToProps = state => {
+	const budgets = getBudgets(state);
+
+	const buckets = getBuckets(state).map(bucket => {
 		const calc = bucket.isPeriodic ? bucket.calculate() : {};
 		const variance = bucket.isPeriodic
 			? calc.actual.gt(bucket.amount)
@@ -86,12 +89,28 @@ const mapStateToProps = state => ({
 			amount: bucket.isPeriodic ? '$' + bucket.amount.toFixed(2) : '',
 			period: bucket.isPeriodic ? bucket.period + ' ' + bucket.periodUnit : '',
 			nextDate: bucket.isPeriodic ? calc.nextEmpty.format('l') : '',
-			rate: bucket.isPeriodic ? '$' + (bucket.amount / calc.periodDays).toFixed(2) : '',
+			rate: bucket.isPeriodic ? '$' + bucket.weekly.toFixed(2) : '',
 			actual: bucket.isPeriodic ? '$' + calc.actual.toFixed(2) : '',
 			variance: variance !== 0 ? '$' + variance.toFixed(2) : '',
 			highlight: variance < 0 ? 'redRow' : variance > 0 ? 'greenRow' : undefined
 		});
-	})
-});
+	}).sort((a,b) => {
+		const name = a.name.toLowerCase() < b.name.toLowerCase() ? -1 : a.name.toLowerCase > b.name.toLowerCase() ? 1 : 0;
+
+		return a.isPeriodic > b.isPeriodic ? -1 : a.isPeriodic < b.isPeriodic ? 1 :
+			!a.isPeriodic ? name :
+			a.weekly.gt(b.weekly) ? -1 : a.weekly.lt(b.weekly) ? 1 : name;
+	});
+
+	return {
+		buckets: budgets.reduce((items,budget) => {
+				const budgetBuckets = buckets.filter(bucket => bucket.budget == budget.name);
+				if(!budgetBuckets.every(bucket => !bucket.isPeriodic)) {
+					budgetBuckets.push({ rate: '$' + budget.rate.toFixed(2), actual: '$' + budget.balance.toFixed(2), budget: budget.name });
+				}
+				return items.concat(budgetBuckets);
+			},[]).concat(buckets.filter(bucket => !bucket.budget))
+	};
+}
 
 export default connect(mapStateToProps)(BucketList);
