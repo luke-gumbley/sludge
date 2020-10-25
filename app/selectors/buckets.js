@@ -22,7 +22,7 @@ export const getBudgets = createSelector(
 				return acc;
 			}, { name: budget, rate: Big(0), balance: Big(0) })
 		).sort((a,b) => {
-			return a.weekly.gt(b.weekly) ? -1 : a.weekly.lt(b.weekly) ? 1 :
+			return a.rate.gt(b.rate) ? -1 : a.rate.lt(b.rate) ? 1 :
 				a.name.toLowerCase() < b.name.toLowerCase() ? -1 : a.name.toLowerCase() > b.name.toLowerCase() ? 1 : 0;
 		})
 );

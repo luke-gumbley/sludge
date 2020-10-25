@@ -196,6 +196,14 @@ label {
 	background: #f4fff4;
 }
 
+.summaryRow {
+	color: inherit;
+	background: none;
+	border-top-style: solid;
+	border-top-width: thin;
+	font-weight: bold;
+}
+
 .ReactVirtualized__Table {
   display: inline-block;
 }

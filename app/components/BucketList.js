@@ -106,7 +106,7 @@ const mapStateToProps = state => {
 		buckets: budgets.reduce((items,budget) => {
 				const budgetBuckets = buckets.filter(bucket => bucket.budget == budget.name);
 				if(!budgetBuckets.every(bucket => !bucket.isPeriodic)) {
-					budgetBuckets.push({ rate: '$' + budget.rate.toFixed(2), actual: '$' + budget.balance.toFixed(2), budget: budget.name });
+					budgetBuckets.push({ highlight: 'summaryRow', rate: '$' + budget.rate.toFixed(2), actual: '$' + budget.balance.toFixed(2), budget: budget.name });
 				}
 				return items.concat(budgetBuckets);
 			},[]).concat(buckets.filter(bucket => !bucket.budget))
