@@ -29,9 +29,9 @@ class Sludge extends Component {
 						<Tab>Rules</Tab>
 						<Tab>Buckets</Tab>
 					</TabList>
-					<TabPanel>
+					<TabPanel style={{display:'flex', 'flex-direction': 'column'}}>
 						<FilterBar filter={this.props.transactions.filter} />
-						<TransactionList />
+						<div style={{flex:1}}><TransactionList /></div>
 					</TabPanel>
 					<TabPanel>
 						<RuleList />
