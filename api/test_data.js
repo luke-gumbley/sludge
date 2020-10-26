@@ -7,7 +7,12 @@ const lastWeek = moment().startOf('week').add(-7, 'days');
 const offset = days => moment().add(days-1, 'days');
 
 module.exports = {
-	barrel: [{}, {}, {}, {}],
+	barrel: [
+		/*  1 */ { name: 'Radford Flat' },
+		/*  2 */ { name: 'Ariki Flat' },
+		/*  3 */ { name: 'Morgan Budget' },
+		/*  4 */ { name: 'Charlie Finances' },
+	],
 	user: [
 		/*  1 */ { name: 'Alex', email: 'alex@email.com'},
 		/*  2 */ { name: 'Sam', email: 'sam@email.com'},

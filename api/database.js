@@ -13,6 +13,8 @@ const models = [{
 			primaryKey: true,
 			autoIncrement: true
 		},
+
+		name: Sequelize.STRING,
 	},
 
 	setup: function(db) {

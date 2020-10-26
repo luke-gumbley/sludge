@@ -6,11 +6,11 @@ Feature: Bucket list
 	Background:
 		Given I am logged in as Alex
 			And I have loaded Sludge
-			And I have selected barrel 1
+			And I have selected barrel "Radford Flat"
 			And I have opened the Buckets tab
 
 	Scenario: view buckets
-		Then I should see 5 buckets
+		Then I should see 6 rows
 
 	Scenario: create bucket defaults
 		When I click the plus glyph
@@ -24,18 +24,18 @@ Feature: Bucket list
 		When I click the plus glyph
 			And I click the "Cancel" button
 		Then a modal should close
-			And I should see 5 buckets
+			And I should see 6 rows
 
 	Scenario: create bucket and save
 		When I click the plus glyph
 			And I enter "bucky" in the name field
 			And I click the "Save" button
 		Then a modal should close
-			And I should see 6 buckets
+			And I should see 7 rows
 			And I should see a bucket called "bucky"
 
 	Scenario: edit bucket
-		When I click the pencil-alt glyph
+		When I click the second pencil-alt glyph
 		Then a modal should open
 			And the name field should contain "mortgage"
 			And the amount field should contain "1234.56"
@@ -43,7 +43,7 @@ Feature: Bucket list
 			And the budget field should contain "Slush"
 
 	Scenario: edit bucket and cancel
-		When I click the pencil-alt glyph
+		When I click the second pencil-alt glyph
 			And I click the "Cancel" button
 		Then a modal should close
 
@@ -56,4 +56,4 @@ Feature: Bucket list
 
 	Scenario: delete bucket
 		When I click the last trash glyph
-		Then I should see 5 buckets
+		Then I should see 6 rows

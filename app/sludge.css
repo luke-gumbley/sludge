@@ -245,11 +245,12 @@ label {
 
 .DefaultBarrel {
 	height: 100%;
-	margin: 0 33%;
+	padding: 0 33%;
 	display: flex;
 	flex-direction: column;
     justify-content: center;
     align-items: center;
+	background-color: #4CAF5020
 }
 
 .BarrelPicker {
@@ -264,9 +265,13 @@ label {
 	display: flex;
     height: 3em;
     width: 100%;
+	margin: 5px;
+	border-style: solid;
+	border-width: thin;
     justify-content: center;
     align-items: center;
 	cursor: pointer;
+	background-color: white;
 }
 
 .BarrelOption:hover {

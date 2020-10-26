@@ -10,7 +10,7 @@ class BarrelPicker extends Component {
 	});
 
 	render() {
-		let barrels = this.props.barrels.map(barrel => (<div key={barrel.id} className='BarrelOption' onClick={() => this.props.onSelect(barrel.id)}>{barrel.id}</div>));
+		let barrels = this.props.barrels.map(barrel => (<div key={barrel.id} className='BarrelOption' onClick={() => this.props.onSelect(barrel.id)}>{barrel.name}</div>));
 
 		return (<div className='BarrelPicker'>
 			{barrels}

@@ -6,7 +6,7 @@ Feature: Rules list
 	Background:
 		Given I am logged in as Alex
 			And I have loaded Sludge
-			And I have selected barrel 1
+			And I have selected barrel "Radford Flat"
 			And I have opened the Rules tab
 
 	Scenario: view rules

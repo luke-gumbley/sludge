@@ -13,7 +13,7 @@ Given('I have loaded Sludge', function () {
 	return this.sludge();
 });
 
-Given(/I (?:select|have selected) barrel (\d+)/, async function (barrel) {
+Given(/I (?:select|have selected) barrel "([^"]+)"/, async function (barrel) {
 	this.driver.findElement({ xpath:`//div${matchClass('BarrelOption')}[text()='${barrel}']`}).click();
 	return this.waitElement({ xpath:`//li[@role='tab']`});
 });

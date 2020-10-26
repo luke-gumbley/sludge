@@ -6,7 +6,7 @@ Feature: Statement uploads
 	Background:
 		Given I am logged in as Morgan
 			And I have loaded Sludge
-			And I have selected barrel 3
+			And I have selected barrel "Morgan Budget"
 			And I have opened the Transactions tab
 
 	Scenario: Upload BNZ transactional statement
