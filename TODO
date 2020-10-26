@@ -40,7 +40,7 @@ TODO LIST FOR SLUDGE (rough roadmap)
 ✓ Categorising one bucket when filtering <None> does not update correctly (still dirty?)
   Display global transaction / uncategorised count (defrag?)
   Display filtered transaction / uncategorised count
-  Display slush total (total of all bucket balances)
+✓ Display slush total (total of all bucket balances)
   Move upload/download buttons to hamburger
   Notes field on transaction (+1)
 ✓ Remove need to press Enter after selecting an item
@@ -53,7 +53,7 @@ TODO LIST FOR SLUDGE (rough roadmap)
   Re-sizable / re-orderable columns in all tables
   Nested buckets
   Display budget/bucket balance for the current period only
-  Flickering columns in Chrome / Windows / 4k
+✓ Flickering columns in Chrome / Windows / 4k
   Tidy up budgeting for income
   Dark theme
 ✓ Multiple barrels per user / switch barrels
