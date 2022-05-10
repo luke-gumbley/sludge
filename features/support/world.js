@@ -1,4 +1,5 @@
-const { setWorldConstructor, BeforeAll, Before, After, AfterAll } = require('cucumber');
+const { setWorldConstructor, BeforeAll, Before, After, AfterAll } = require('@cucumber/cucumber');
+require('chromedriver');
 const { Builder, until, Condition } = require('selenium-webdriver');
 const { checkedLocator } = require('selenium-webdriver/lib/by');
 
@@ -45,7 +46,9 @@ class CustomWorld {
 
 		const options = this.driver.manage();
 
-		const accessCookie = await options.getCookie('access-token');
+		const cookies = await options.getCookies();
+		const accessCookie = cookies.filter(c => c.name == "access-token")[0];
+
 		if(accessCookie) {
 			const { err, decoded } = await api.verifyToken(accessCookie.value);
 			if(!err && decoded && decoded.email && decoded.email.startsWith(name.toLowerCase()))

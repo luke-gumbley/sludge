@@ -1,4 +1,5 @@
-const { Given, When, Then } = require('cucumber');
+const { Given, When, Then } = require('@cucumber/cucumber');
+require('chromedriver');
 const { By, Key } = require('selenium-webdriver');
 const assert = require('assert').strict;
 const path = require('path');
@@ -14,7 +15,8 @@ Given('I have loaded Sludge', function () {
 });
 
 Given(/I (?:select|have selected) barrel "([^"]+)"/, async function (barrel) {
-	this.driver.findElement({ xpath:`//div${matchClass('BarrelOption')}[text()='${barrel}']`}).click();
+	const barrelOption = await this.waitElement({ xpath:`//div${matchClass('BarrelOption')}[text()='${barrel}']`})
+	barrelOption.click();
 	return this.waitElement({ xpath:`//li[@role='tab']`});
 });
 
