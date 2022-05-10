@@ -6,6 +6,6 @@ distinguished_name = dn
 
 [dn]
 C=NZ
-L=Paraparaumu
+L=Kilbirnie
 O=Sludge
-CN = localhost
+CN = Sludge

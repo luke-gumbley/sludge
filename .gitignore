@@ -23,6 +23,8 @@ sludge.iml
 certs/*.csr
 certs/*.crt
 certs/*.key
+certs/*.pem
+certs/*.srl
 certs/passphrase
 
 # Dev environment
