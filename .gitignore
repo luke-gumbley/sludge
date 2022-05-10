@@ -14,6 +14,7 @@ api/secrets.js
 syncprod.sh
 *.sql
 *.pgsql
+!api/ephemeral.sql
 
 # IntelliJ files
 .idea

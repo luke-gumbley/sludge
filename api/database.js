@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const randomWords = require('random-words');
 const { execSync } = require('child_process');
 
 const utils = require('./utils.js');
@@ -235,12 +236,16 @@ module.exports = {
 	connectTemp: async function() {
 		const db = module.exports;
 
-		const uri = execSync('pg_tmp', { encoding: 'utf8' });
-		console.log(uri);
+		const dbname = 'test_' + randomWords();
+
+		execSync(`psql -f ./api/ephemeral.sql -c "create database ${dbname}" postgresql://sludge_test:sludge_test@localhost `, { encoding: 'utf8' });
+		console.log('db: ' + dbname);
 
 		await db.connect({
-			database: 'test',
-			host: '/tmp/ephemeralpg.'.concat(uri.slice(-6)),
+			database: dbname,
+			host: 'localhost',
+			username: 'sludge_test',
+			password: 'sludge_test',
 			sync: true
 		});
 	},
