@@ -33,7 +33,7 @@
     "redux": "^4.2.0",
     "reselect": "^4.1.5",
     "rfc6902": "5.0.1",
-    "sequelize": "^6.19.0",
+    "sequelize": "^6.29.0",
     "superagent-defaults": "^0.1.14"
   },
   "devDependencies": {
