@@ -1,14 +1,20 @@
-const { setWorldConstructor, BeforeAll, Before, After, AfterAll } = require('@cucumber/cucumber');
-require('chromedriver');
-const { Builder, until, Condition } = require('selenium-webdriver');
-const { checkedLocator } = require('selenium-webdriver/lib/by');
+import  { setWorldConstructor, BeforeAll, Before, After, AfterAll } from '@cucumber/cucumber';
+import 'chromedriver';
+import { Builder, until, Condition } from 'selenium-webdriver';
+import chrome from 'selenium-webdriver/chrome.js';
+import { checkedLocator } from 'selenium-webdriver/lib/by.js';
 
-import database from '../../api/database';
-import api from '../../api';
+import database from '../../api/database.js';
+import api from '../../api/index.js';
 let driver, baseUrl;
 
 BeforeAll(async function() {
-	driver = new Builder().forBrowser('chrome').build();
+	// https://cloudbytes.dev/snippets/run-selenium-and-chrome-on-wsl2
+	// https://developer.chrome.com/blog/chrome-for-testing/
+	// https://www.selenium.dev/selenium/docs/api/javascript/module-selenium-webdriver_chrome.html
+
+	let options = new chrome.Options().addArguments('--headless');
+	driver = new Builder().forBrowser('chrome').setChromeOptions(options).build();
 	await database.connectTemp();
 	await database.testData();
 	const server = await api.start(true, 0);

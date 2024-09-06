@@ -197,4 +197,4 @@ function stop() {
 	});
 }
 
-export { createTokens, verifyToken, app, start, stop };
+export default { createTokens, verifyToken, app, start, stop };
