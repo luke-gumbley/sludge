@@ -1,4 +1,4 @@
-const moment = require('moment');
+import moment from 'moment';
 
 const today = moment().startOf('day');
 const month = moment().endOf('month');
@@ -6,7 +6,7 @@ const week = moment().endOf('week');
 const lastWeek = moment().startOf('week').add(-7, 'days');
 const offset = days => moment().add(days-1, 'days');
 
-module.exports = {
+export default {
 	barrel: [
 		/*  1 */ { name: 'Radford Flat' },
 		/*  2 */ { name: 'Ariki Flat' },

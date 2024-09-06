@@ -1,9 +1,10 @@
-const express = require('express');
-const Sequelize = require('sequelize');
+import express from 'express';
+import Sequelize from 'sequelize';
 
-const database = require('../database.js');
+import * as database from '../database.js';
 
-const app = module.exports = express();
+const app = express();
+export default app;
 
 app.get('/', function (req, res) {
 	database.user.findOne({

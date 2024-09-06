@@ -1,14 +1,15 @@
-const express = require('express');
-const Sequelize = require('sequelize');
-const moment = require('moment');
-const csv = require('csv');
-const Big = require('big.js');
-const rfc6902 = require('rfc6902');
+import express from 'express';
+import Sequelize from 'sequelize';
+import moment from 'moment';
+import * as csv from 'csv';
+import Big from 'big.js';
+import rfc6902 from 'rfc6902';
 
-const database = require('../database.js');
-const utils = require('../utils.js');
+import * as database from '../database.js';
+import * as utils from '../utils.js';
 
-const app = module.exports = express();
+const app = express();
+export default app;
 
 function getBuckets(barrelId, id) {
 	const {or, eq, gt} = Sequelize.Op;

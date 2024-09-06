@@ -1,8 +1,9 @@
-const Sequelize = require('sequelize');
-const randomWords = require('random-words');
-const { execSync } = require('child_process');
+import Sequelize from 'sequelize';
+import { generate as randomWords } from 'random-words';
+import { execSync } from 'child_process';
+import testData from './test_data.js';
 
-const utils = require('./utils.js');
+import * as utils from './utils.js';
 
 var sequelize = null;
 
@@ -150,7 +151,7 @@ const models = [{
 	}
 }];
 
-module.exports = {
+const database = {
 
 	models,
 
@@ -161,12 +162,12 @@ module.exports = {
 		}, options));
 
 		models.forEach(model =>
-			module.exports[model.name] = sequelize.define(model.name, model.definition, { freezeTableName: true })
+			database[model.name] = sequelize.define(model.name, model.definition, { freezeTableName: true })
 		);
 
 		// horrible shit to permit cyclic dependencies.
 		return (sync ? sequelize.drop({ cascade: true }).then(() => sequelize.sync()) : Promise.resolve())
-			.then(() => models.forEach(model => { (model.setup || (() => {})).call(module.exports[model.name], module.exports) }) )
+			.then(() => models.forEach(model => { (model.setup || (() => {})).call(database[model.name], database) }) )
 			.then(() => sync
 				? Object.keys(sequelize.models).reduce((promise, model) => promise.then(() => sequelize.models[model].sync({ alter: true })), Promise.resolve())
 				: Promise.resolve()
@@ -207,11 +208,10 @@ module.exports = {
 	},
 
 	applyRules: function(user, barrelId, id) {
-		const db = module.exports;
-		return db.rule.findAll({ where: id !== undefined ? { barrelId, id } : { barrelId } })
+		return database.rule.findAll({ where: id !== undefined ? { barrelId, id } : { barrelId } })
 			.then(rules => Promise.all(rules.map(rule => {
-				const where = db.buildFilter({ barrelId, bucketId: null, account: rule.account, search: rule.search });
-				return db.transaction.update({ bucketId: rule.bucketId }, { where })
+				const where = database.buildFilter({ barrelId, bucketId: null, account: rule.account, search: rule.search });
+				return database.transaction.update({ bucketId: rule.bucketId }, { where })
 					.then(result => ({ ruleId: rule.id, transactions: result[0] }));
 			})))
 			.then(results => {
@@ -234,14 +234,14 @@ module.exports = {
 	},
 
 	connectTemp: async function() {
-		const db = module.exports;
-
 		const dbname = 'test_' + randomWords();
-
-		execSync(`psql -f ./api/ephemeral.sql -c "create database ${dbname}" postgresql://sludge_test:sludge_test@localhost `, { encoding: 'utf8' });
 		console.log('db: ' + dbname);
 
-		await db.connect({
+		// sudo -u postgres psql
+		// create user "sludge_test" with password 'sludge_test' createdb
+		execSync(`psql -f ./api/ephemeral.sql -c "create database ${dbname}" postgresql://sludge_test:sludge_test@localhost/postgres `, { encoding: 'utf8' });
+
+		await database.connect({
 			database: dbname,
 			host: 'localhost',
 			username: 'sludge_test',
@@ -251,19 +251,20 @@ module.exports = {
 	},
 
 	testData: async function() {
-		const db = module.exports;
-		const data = require('./test_data.js');
+		const data = testData;
 
 		let createData = (data,model) => data.reduce((promise, d) => promise.then(a => model.create(d).then(m => a.concat([m]))), Promise.resolve([]));
 
 		let models = {
-			barrel: await createData(data.barrel, db.barrel),
-			user: await createData(data.user, db.user),
-			bucket: await createData(data.bucket, db.bucket),
-			transaction: await createData(data.transaction, db.transaction),
-			rule: await createData(data.rule, db.rule)
+			barrel: await createData(data.barrel, database.barrel),
+			user: await createData(data.user, database.user),
+			bucket: await createData(data.bucket, database.bucket),
+			transaction: await createData(data.transaction, database.transaction),
+			rule: await createData(data.rule, database.rule)
 		};
 
 		await data.setup(models);
 	}
 };
+
+export default database;

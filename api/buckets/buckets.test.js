@@ -1,5 +1,5 @@
-const assert = require('assert').strict;
-const { api } = require('../setup.test.js');
+import { strict as assert } from 'assert';
+import api from '../setup.test.js';
 
 describe('Buckets', function () {
 

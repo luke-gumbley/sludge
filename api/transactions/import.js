@@ -1,9 +1,8 @@
-const Sequelize = require('sequelize');
-const stream = require('stream');
-const moment = require('moment');
-const { stableSort } = require('../utils');
-const database = require('../database');
-const utils = require('../utils');
+import Sequelize from 'sequelize';
+import stream from 'stream';
+import moment from 'moment';
+import database from '../database.js';
+import * as utils from '../utils.js';
 
 const transactionEquals = (() => {
 	const keys = ['date', 'account', 'party', 'particulars', 'code',
@@ -90,68 +89,66 @@ class TransactionImporter extends stream.Writable {
 	}
 }
 
-module.exports = {
-	importTransactions: function(user, barrelId, format) {
-		const importer = new TransactionImporter();
+export function importTransactions(user, barrelId, format) {
+	const importer = new TransactionImporter();
 
-		const promise = importer.import().then(transactions => {
-			// either no valid transactions or the upstream Format was not parsable
-			if(transactions.length === 0)
-				return;
+	const promise = importer.import().then(transactions => {
+		// either no valid transactions or the upstream Format was not parsable
+		if(transactions.length === 0)
+			return;
 
-			if(!stableSort(transactions, t => t.date))
+		if(!utils.stableSort(transactions, t => t.date))
+			utils.log({
+				user,
+				content: 'Imported transactions were not in ascending date order!'
+			});
+
+		const min = transactions[0].date;
+		const max = transactions.slice(-1)[0].date;
+
+		const {and, lte, gte} = Sequelize.Op;
+
+		const accounts = transactions.map(t => t.account).filter((v, i, a) => a.indexOf(v) === i);
+
+		return Promise.all(accounts.map(account => {
+			return database.transaction.findAll({
+				where: {
+					barrelId,
+					account,
+					[and] : [ { date: { [gte]: min } }, { date: { [lte]: max } } ]
+				},
+				order: ['date', 'ordinal']
+			}).then(existing => {
+				const imported = transactions.filter(t => t.account === account);
+
+				matchTransactions(imported, existing, min, max);
+				spliceTransactions(imported, existing);
+				orderTransactions(existing.filter(t => t.action !== 'delete'));
+
+				const actions = {
+					delete: existing.filter(t => t.action === 'delete'),
+					insert: existing.filter(t => t.action === 'insert'),
+					update: existing.filter(t => ['start', 'end', 'match'].includes(t.action))
+				};
+
+				actions.insert.forEach(t => t.barrelId = barrelId);
+
 				utils.log({
 					user,
-					content: 'Imported transactions were not in ascending date order!'
-				});
+					content: `import ${format} ${account} d${actions.delete.length} i${actions.insert.length} u${actions.update.length}`
+				})
 
-			const min = transactions[0].date;
-			const max = transactions.slice(-1)[0].date;
+				// delete existing transactions with no match in the import
+				return (actions.delete.length
+						? database.transaction.destroy({where: { barrelId, id: actions.delete.map(t => t.id) }})
+						: Promise.resolve())
+					// update ordinals in the DB
+					.then(() => Promise.all(actions.update.map(t => t.update({ ordinal: t.ordinal }))))
+					// insert new transactions
+					.then(() => database.transaction.bulkCreate(actions.insert))
+			});
+		}));
+	});
 
-			const {and, lte, gte} = Sequelize.Op;
-
-			const accounts = transactions.map(t => t.account).filter((v, i, a) => a.indexOf(v) === i);
-
-			return Promise.all(accounts.map(account => {
-				return database.transaction.findAll({
-					where: {
-						barrelId,
-						account,
-						[and] : [ { date: { [gte]: min } }, { date: { [lte]: max } } ]
-					},
-					order: ['date', 'ordinal']
-				}).then(existing => {
-					const imported = transactions.filter(t => t.account === account);
-
-					matchTransactions(imported, existing, min, max);
-					spliceTransactions(imported, existing);
-					orderTransactions(existing.filter(t => t.action !== 'delete'));
-
-					const actions = {
-						delete: existing.filter(t => t.action === 'delete'),
-						insert: existing.filter(t => t.action === 'insert'),
-						update: existing.filter(t => ['start', 'end', 'match'].includes(t.action))
-					};
-
-					actions.insert.forEach(t => t.barrelId = barrelId);
-
-					utils.log({
-						user,
-						content: `import ${format} ${account} d${actions.delete.length} i${actions.insert.length} u${actions.update.length}`
-					})
-
-					// delete existing transactions with no match in the import
-					return (actions.delete.length
-							? database.transaction.destroy({where: { barrelId, id: actions.delete.map(t => t.id) }})
-							: Promise.resolve())
-						// update ordinals in the DB
-						.then(() => Promise.all(actions.update.map(t => t.update({ ordinal: t.ordinal }))))
-						// insert new transactions
-						.then(() => database.transaction.bulkCreate(actions.insert))
-				});
-			}));
-		});
-
-		return { importer, promise };
-	},
-}
+	return { importer, promise };
+};

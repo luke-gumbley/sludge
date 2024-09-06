@@ -1,10 +1,11 @@
-const express = require('express');
-const rfc6902 = require('rfc6902');
-const { importTransactions } = require('./import.js');
-const parser = require('../parser.js');
-const database = require('../database.js');
+import express from 'express';
+import rfc6902 from 'rfc6902';
+import { importTransactions } from './import.js';
+import parser from '../parser.js';
+import database from '../database.js';
 
-const app = module.exports = express();
+const app = express();
+export default app;
 
 app.get('/', function (req, res) {
 	const offset = Number.parseInt(req.query.offset || '0');

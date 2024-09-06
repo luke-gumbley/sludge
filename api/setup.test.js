@@ -1,11 +1,11 @@
-const assert = require('assert');
+import assert from 'assert';
 
-const defaults = require('superagent-defaults');
-const supertest = require('supertest');
+import defaults from 'superagent-defaults';
+import supertest from 'supertest';
 
-const { createTokens, app } = require('../api');
+import { createTokens, app } from './index.js';
 
-const database = require('./database.js');
+import database from './database.js';
 
 function createApi(tokens) {
 	let newApi = defaults(supertest(app)).set('accept', 'application/json');
@@ -81,4 +81,4 @@ describe('Authentication', function () {
 
 });
 
-module.exports = { api };
+export default api;

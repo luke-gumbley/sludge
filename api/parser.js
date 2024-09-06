@@ -1,8 +1,8 @@
-var fs = require('fs');
-const path = require('path');
-var csv = require('csv');
-var moment = require('moment-timezone');
-const stream = require('stream');
+import fs from 'fs';
+import path from 'path';
+import * as csv from 'csv';
+import moment from 'moment-timezone';
+import stream from 'stream';
 
 class Format extends stream.Transform {
 	constructor(options) {
@@ -195,7 +195,7 @@ var formatDefinitions = [{
 	})
 }];
 
-module.exports = {
+export default {
 	parse: function(filename, stream) {
 		var formats = formatDefinitions
 			.map(def => new Format({ filename: path.basename(filename), ...def }))

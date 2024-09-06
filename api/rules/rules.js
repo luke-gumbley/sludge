@@ -1,12 +1,13 @@
-const express = require('express');
-const moment = require('moment');
-const csv = require('csv');
-const rfc6902 = require('rfc6902');
+import express from 'express';
+import moment from 'moment';
+import * as csv from 'csv';
+import rfc6902 from 'rfc6902';
 
-const database = require('../database.js');
-const utils = require('../utils.js');
+import * as database from '../database.js';
+import * as utils from '../utils.js';
 
-const app = module.exports = express();
+const app = express();
+export default app;
 
 function getRules(barrelId, id) {
 	const query = {

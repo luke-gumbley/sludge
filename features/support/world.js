@@ -3,8 +3,8 @@ require('chromedriver');
 const { Builder, until, Condition } = require('selenium-webdriver');
 const { checkedLocator } = require('selenium-webdriver/lib/by');
 
-const database = require('../../api/database');
-const api = require('../../api');
+import database from '../../api/database';
+import api from '../../api';
 let driver, baseUrl;
 
 BeforeAll(async function() {

@@ -1,24 +1,26 @@
-const http = require('http');
-const https = require('https');
-const fs = require('fs');
-const express = require('express');
-const bodyParser = require('body-parser');
-const passport = require('passport');
-const cookieParser = require('cookie-parser');
-const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
+import http from 'http';
+import https from 'https';
+import fs from 'fs';
+import express from 'express';
+import bodyParser from 'body-parser';
+import passport from 'passport';
+import cookieParser from 'cookie-parser';
+import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 
-const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-const HttpsProxyAgent = require('https-proxy-agent');
+import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
+import HttpsProxyAgent from 'https-proxy-agent';
 
-const barrels = require('./barrels/barrels.js');
-const buckets = require('./buckets/buckets.js');
-const transactions = require('./transactions/transactions.js');
-const rules = require('./rules/rules.js');
-const utils = require('./utils.js');
+import barrels from './barrels/barrels.js';
+import buckets from './buckets/buckets.js';
+import transactions from './transactions/transactions.js';
+import rules from './rules/rules.js';
+import * as utils from './utils.js';
 
-const database = require('./database');
-const secrets = require('./secrets');
+import database from './database.js';
+import secrets from './secrets.js';
+
+import path from 'path';
 
 const app = express();
 
@@ -90,7 +92,7 @@ app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.g
 			if(!user) {
 				return res.status(401)
 					.set({ 'WWW-Authenticate': 'Bearer realm="Sludge tool"' })
-					.sendFile(require.resolve('../app/401.html'));
+					.sendFile(path.resolve('../app/401.html'));
 			}
 
 			setTokens(res, email);
@@ -148,13 +150,13 @@ app.get('/auth/barrel/:id', authenticator(authFail), xsrfCheck(authFail), (req, 
 			// user no longer exists in the DB, or requested an invalid barrel, clear cookies and redirect
 			res.clearCookie('token');
 			res.clearCookie('xsrf-token');
+
 			return res.status(403)
 				.set({ 'WWW-Authenticate': 'Bearer realm="Sludge tool"' })
-				.sendFile(require.resolve('../app/401.html'));
+				.sendFile(path.resolve(import.meta.dirname, '../app/401.html'));
 		}
 
 		setTokens(res, req.decoded.email, req.params.id);
-
 		res.json({ id: req.params.id });
 	});
 });
@@ -195,4 +197,4 @@ function stop() {
 	});
 }
 
-module.exports = { createTokens, verifyToken, app, start, stop };
+export { createTokens, verifyToken, app, start, stop };

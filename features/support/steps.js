@@ -2,7 +2,7 @@ const { Given, When, Then } = require('@cucumber/cucumber');
 require('chromedriver');
 const { By, Key } = require('selenium-webdriver');
 const assert = require('assert').strict;
-const path = require('path');
+import path from 'path';
 
 const matchClass = cls => `[contains(concat(' ',normalize-space(@class),' '),' ${cls} ')]`;
 

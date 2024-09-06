@@ -1,10 +1,11 @@
-require('dotenv').config();
-var fs = require('fs');
-var csv = require('csv');
+import dotenv from 'dotenv';
+dotenv.config();
+import fs from 'fs';
+import * as csv from 'csv';
 
-const parser = require('./api/parser');
-const database = require('./api/database');
-const api = require('./api');
+import parser from './api/parser.js';
+import database from './api/database.js';
+import api from './api/index.js';
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at:', p, 'reason:', reason);
