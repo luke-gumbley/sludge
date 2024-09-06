@@ -92,7 +92,7 @@ app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.g
 			if(!user) {
 				return res.status(401)
 					.set({ 'WWW-Authenticate': 'Bearer realm="Sludge tool"' })
-					.sendFile(path.resolve('../app/401.html'));
+					.sendFile(path.resolve(import.meta.dirname, '../app/401.html'));
 			}
 
 			setTokens(res, email);

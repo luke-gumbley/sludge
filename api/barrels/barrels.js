@@ -1,7 +1,7 @@
 import express from 'express';
-import Sequelize from 'sequelize';
+import path from 'path';
 
-import * as database from '../database.js';
+import database from '../database.js';
 
 const app = express();
 export default app;
@@ -18,7 +18,7 @@ app.get('/', function (req, res) {
 				res.clearCookie('xsrf-token');
 				return res.status(403)
 					.set({ 'WWW-Authenticate': 'Bearer realm="Sludge tool"' })
-					.sendFile(require.resolve('../../app/401.html'));
+					.sendFile(path.resolve(import.meta.dirname, '../../app/401.html'));
 			}
 			res.json(user.barrels.map(barrel => ({ id: barrel.id, name: barrel.name })));
 		});

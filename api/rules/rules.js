@@ -3,7 +3,7 @@ import moment from 'moment';
 import * as csv from 'csv';
 import rfc6902 from 'rfc6902';
 
-import * as database from '../database.js';
+import database from '../database.js';
 import * as utils from '../utils.js';
 
 const app = express();
