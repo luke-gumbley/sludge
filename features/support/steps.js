@@ -42,7 +42,7 @@ When('I click the {string} button', async function (text) {
 
 When('I upload {word} {string}', async function (type, filename) {
 	const field = await this.driver.findElement({ name: `${type}Upload` });
-	field.sendKeys(path.resolve(__dirname,'../uploads',filename));
+	field.sendKeys(path.resolve(import.meta.dirname,'../uploads',filename));
 });
 
 When(/I wait (\d+)ms/, function (duration) {

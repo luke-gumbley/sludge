@@ -13,7 +13,7 @@ BeforeAll(async function() {
 	// https://developer.chrome.com/blog/chrome-for-testing/
 	// https://www.selenium.dev/selenium/docs/api/javascript/module-selenium-webdriver_chrome.html
 
-	let options = new chrome.Options().addArguments('--headless');
+	let options = new chrome.Options().addArguments('headless','allow-insecure-localhost');
 	driver = new Builder().forBrowser('chrome').setChromeOptions(options).build();
 	await database.connectTemp();
 	await database.testData();

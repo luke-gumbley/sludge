@@ -50,5 +50,6 @@ Feature: Transactions list
 			And I enter "food" in the bucket field
 			And I click the "Save" button
 		Then a modal should close
+			And I wait 500ms
 			And I should see 1 transaction
 			And the txnBucket field should contain "food"
