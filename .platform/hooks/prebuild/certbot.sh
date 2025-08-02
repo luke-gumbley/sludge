@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Install certbot if not present
-# (https://aws.amazon.com/blogs/compute/extending-amazon-linux-2-with-epel-and-lets-encrypt/)
+# (https://unix.stackexchange.com/questions/741450/installing-lets-encrypt-on-amazon-linux-2023#answer-778976)
 if ! [ -x "$(command -v certbot)" ]; then
-	amazon-linux-extras install -y epel
-	yum install -y certbot.noarch
+	dnf -y install certbot
+	dnf -y install python3-certbot-nginx
 fi
 
 # Add 12-hourly check for cert expiry, renew if old and reload nginx when successfully renewed
