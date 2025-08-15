@@ -173,7 +173,7 @@ app.use('/api/rules', barrelCheck(authFail), rules);
 
 app.use('/blank', (req, res, next) => res.sendStatus(200));
 app.use(authenticator(res => res.redirect('/auth/google')));
-app.use(express.static('dist_app/'));
+app.use(express.static('dist/app'));
 
 let server;
 

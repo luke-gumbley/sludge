@@ -7,7 +7,7 @@ export default {
 	entry: './app/index.js',
 	output: {
 		filename: 'bundle.js',
-		path: path.resolve(import.meta.dirname, 'dist_app')
+		path: path.resolve(import.meta.dirname, 'dist/app')
 	},
 	module: {
 		rules: [
