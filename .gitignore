@@ -1,5 +1,6 @@
 # Compiled outputs
-dist/
+dist_api/
+dist_app/
 *.zip
 
 # Dependency directory

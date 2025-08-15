@@ -1,6 +1,6 @@
 import { Provider } from 'react-redux';
 import Cookies from 'js-cookie';
-import configureStore from './configureStore'
+import configureStore from './configureStore.js'
 
 // naive convenience function for supplying tokens and xsrf header
 const nativeFetch = fetch;
@@ -25,7 +25,7 @@ moment.locale('en-NZ');
 import React from 'react';
 import { render } from 'react-dom';
 import Modal from 'react-modal';
-import Root from './containers/Root';
+import Root from './containers/Root.js';
 import styles from './sludge.css';
 
 history.replaceState(history.state, '', '/');

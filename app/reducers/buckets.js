@@ -6,7 +6,7 @@ import {
 	PATCH_BUCKET_RESPONSE,
 	EDIT_BUCKET,
 	DELETE_BUCKET_RESPONSE
-} from '../actions/buckets';
+} from '../actions/buckets.js';
 
 function buckets(
 	state = {

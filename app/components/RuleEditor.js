@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Modal from 'react-modal';
 
-import BucketPicker from './BucketPicker';
+import BucketPicker from './BucketPicker.js';
 import { createRule, updateRule, editRule } from '../actions/rules.js';
 
 class RuleEditor extends Component {

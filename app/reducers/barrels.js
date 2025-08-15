@@ -3,7 +3,7 @@ import {
 	GET_BARRELS_RESPONSE,
 	SET_BARREL_REQUEST,
 	SET_BARREL_RESPONSE,
-} from '../actions/barrels';
+} from '../actions/barrels.js';
 
 function barrels(
 	state = {

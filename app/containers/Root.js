@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Sludge from './Sludge';
-import BarrelPicker from '../components/BarrelPicker';
-import { getBarrels } from '../actions/barrels';
+import Sludge from './Sludge.js';
+import BarrelPicker from '../components/BarrelPicker.js';
+import { getBarrels } from '../actions/barrels.js';
 
 class Root extends Component {
 	render() {

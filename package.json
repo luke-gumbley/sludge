@@ -5,6 +5,7 @@
   "main": "server.js",
   "type": "module",
   "dependencies": {
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "big.js": "^6.2.1",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
@@ -62,7 +63,9 @@
     }
   },
   "scripts": {
-    "build": "npm version patch --no-git-tag-version; webpack; zip -r sludge.zip api app dist lib .platform .ebextensions server.js package.json",
+    "build_app": "webpack",
+    "build_api": "ncc build server.js -o dist_api",
+    "build": "npm version patch --no-git-tag-version; webpack; zip -r sludge.zip api app dist lib server.js package.json",
     "deploy": "eb deploy -l sludge-$npm_package_version --staged",
     "test": "NODE_TLS_REJECT_UNAUTHORIZED=0 NODE_ENV=test ./node_modules/.bin/mocha --recursive api/**/*.test.js",
     "e2e": "NODE_ENV=test ./node_modules/.bin/cucumber-js",

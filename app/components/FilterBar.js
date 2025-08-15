@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Filter from '../components/Filter';
-import Search from '../components/Search';
-import GlyphButton from '../components/GlyphButton';
+import Filter from '../components/Filter.js';
+import Search from '../components/Search.js';
+import GlyphButton from '../components/GlyphButton.js';
 import { getSortedTransactions } from '../selectors/transactions.js';
 import { getBuckets } from '../selectors/buckets.js';
 import { updateFilter } from '../actions/transactions.js';

@@ -3,7 +3,7 @@ import {
 	GET_TRANSACTIONS_RESPONSE,
 	PATCH_TRANSACTION_RESPONSE,
 	UPDATE_FILTER
-} from '../actions/transactions';
+} from '../actions/transactions.js';
 
 function transactions(
 	state = {

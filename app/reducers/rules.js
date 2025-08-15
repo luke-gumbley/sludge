@@ -6,7 +6,7 @@ import {
 	PATCH_RULE_RESPONSE,
 	EDIT_RULE,
 	DELETE_RULE_RESPONSE
-} from '../actions/rules';
+} from '../actions/rules.js';
 
 function rules(
 	state = {

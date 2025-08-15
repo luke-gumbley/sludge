@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Column, Table, AutoSizer } from 'react-virtualized';
 import 'react-virtualized/styles.css';
-import Bucket from './Bucket';
-import GlyphButton from './GlyphButton';
+import Bucket from './Bucket.js';
+import GlyphButton from './GlyphButton.js';
 import { editRule, deleteRule } from '../actions/rules.js';
 import { getRules } from '../selectors/rules.js';
 

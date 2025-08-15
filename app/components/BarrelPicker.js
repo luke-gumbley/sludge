@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { setBarrel } from '../actions/barrels';
-import { getBarrels } from '../selectors/barrels';
+import { setBarrel } from '../actions/barrels.js';
+import { getBarrels } from '../selectors/barrels.js';
 
 class BarrelPicker extends Component {
 

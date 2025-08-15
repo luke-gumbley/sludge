@@ -3,19 +3,19 @@ import { connect } from 'react-redux';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
-import FilterBar from '../components/FilterBar';
-import TransactionList from '../components/TransactionList';
-import RuleList from '../components/RuleList';
-import RuleEditor from '../components/RuleEditor';
-import BucketList from '../components/BucketList';
-import BucketDataList from '../components/BucketDataList';
-import BucketEditor from '../components/BucketEditor';
-import Budgets from '../components/Budgets';
-import Header from './Header';
+import FilterBar from '../components/FilterBar.js';
+import TransactionList from '../components/TransactionList.js';
+import RuleList from '../components/RuleList.js';
+import RuleEditor from '../components/RuleEditor.js';
+import BucketList from '../components/BucketList.js';
+import BucketDataList from '../components/BucketDataList.js';
+import BucketEditor from '../components/BucketEditor.js';
+import Budgets from '../components/Budgets.js';
+import Header from './Header.js';
 
-import { getTransactions } from '../actions/transactions';
-import { getRules } from '../actions/rules';
-import { getBuckets } from '../actions/buckets';
+import { getTransactions } from '../actions/transactions.js';
+import { getRules } from '../actions/rules.js';
+import { getBuckets } from '../actions/buckets.js';
 
 class Sludge extends Component {
 	render() {

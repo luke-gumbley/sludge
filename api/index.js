@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import http from 'http';
 import https from 'https';
 import fs from 'fs';
@@ -22,7 +25,7 @@ import secrets from './secrets.js';
 
 import path from 'path';
 
-const app = express();
+export const app = express();
 
 passport.serializeUser((user, done) => done(null, user) );
 passport.deserializeUser((user, done) => done(null, user) );
@@ -59,7 +62,7 @@ app.use(passport.initialize());
 app.use(bodyParser.json({ type: ['application/json', 'application/json-patch+json'] }));
 app.use(cookieParser());
 
-function createTokens(email, barrelId) {
+export function createTokens(email, barrelId) {
 	const xsrfToken = crypto.randomBytes(33).toString('base64');
 	const payload = { email, barrelId, xsrfToken };
 	const token = jwt.sign(payload, secrets.jwtSecret, { expiresIn: '24h' });
@@ -101,7 +104,7 @@ app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.g
 		});
 });
 
-function verifyToken(token) {
+export function verifyToken(token) {
 	return new Promise(resolve => {
 		jwt.verify(token, secrets.jwtSecret, (err, decoded) => {
 			resolve({ err, decoded });
@@ -170,11 +173,11 @@ app.use('/api/rules', barrelCheck(authFail), rules);
 
 app.use('/blank', (req, res, next) => res.sendStatus(200));
 app.use(authenticator(res => res.redirect('/auth/google')));
-app.use(express.static('dist/'));
+app.use(express.static('dist_app/'));
 
 let server;
 
-function start(secure, port) {
+export function start(secure, port) {
 	server = secure
 		? https.createServer({
 				key: fs.readFileSync('./certs/server.key'),
@@ -189,7 +192,7 @@ function start(secure, port) {
 	});
 }
 
-function stop() {
+export function stop() {
 	return new Promise(resolve => {
 		server.close(() => {
 			resolve();

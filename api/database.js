@@ -1,4 +1,5 @@
 import Sequelize from 'sequelize';
+import Postgres from 'pg';
 import { generate as randomWords } from 'random-words';
 import { execSync } from 'child_process';
 import testData from './test_data.js';
@@ -158,6 +159,7 @@ const database = {
 	connect: function({ sync, ...options }) {
 		sequelize = new Sequelize(Object.assign({
 			dialect: 'postgres',
+			dialectModule: Postgres,
 			logging: false
 		}, options));
 
@@ -238,7 +240,7 @@ const database = {
 		console.log('db: ' + dbname);
 
 		// sudo -u postgres psql
-		// create user "sludge_test" with password 'sludge_test' createdb
+		// create user "sludge_test" with password 'sludge_test' createdb;
 		execSync(`psql -f ./api/ephemeral.sql -c "create database ${dbname}" postgresql://sludge_test:sludge_test@localhost/postgres `, { encoding: 'utf8' });
 
 		await database.connect({

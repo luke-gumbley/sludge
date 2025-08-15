@@ -2,7 +2,7 @@ import {applyPatch, createPatch, createTests} from 'rfc6902';
 import Big from 'big.js';
 import moment from 'moment';
 
-import {getBucket} from './buckets';
+import {getBucket} from './buckets.js';
 
 export const GET_TRANSACTIONS_REQUEST = 'GET_TRANSACTIONS_REQUEST';
 export const GET_TRANSACTIONS_RESPONSE = 'GET_TRANSACTIONS_RESPONSE';

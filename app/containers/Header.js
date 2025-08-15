@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { postStatement } from '../actions/transactions.js';
 import { importBuckets } from '../actions/buckets.js';
 import { importRules } from '../actions/rules.js';
-import Upload from '../components/Upload';
-import Download from '../components/Download';
+import Upload from '../components/Upload.js';
+import Download from '../components/Download.js';
 
 class Header extends Component {
 

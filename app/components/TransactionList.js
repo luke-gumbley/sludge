@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import { InfiniteLoader, Column, AutoSizer } from 'react-virtualized';
 import 'react-virtualized/styles.css';
 
-import CustomTable from './CustomTable';
-import BucketPicker from './BucketPicker';
-import GlyphButton from './GlyphButton';
+import CustomTable from './CustomTable.js';
+import BucketPicker from './BucketPicker.js';
+import GlyphButton from './GlyphButton.js';
 import { updateBucket } from '../actions/buckets.js';
 import { categoriseTransaction, getTransactions } from '../actions/transactions.js';
 import { getSortedTransactions } from '../selectors/transactions.js';

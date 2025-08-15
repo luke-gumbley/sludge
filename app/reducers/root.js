@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import barrels from './barrels';
-import transactions from './transactions';
-import rules from './rules';
-import buckets from './buckets';
+import barrels from './barrels.js';
+import transactions from './transactions.js';
+import rules from './rules.js';
+import buckets from './buckets.js';
 
 const rootReducer = combineReducers({
 	barrels,

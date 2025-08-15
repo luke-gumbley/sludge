@@ -5,7 +5,7 @@ import { Column, Table, AutoSizer } from 'react-virtualized';
 import 'react-virtualized/styles.css';
 import moment from 'moment';
 
-import GlyphButton from './GlyphButton';
+import GlyphButton from './GlyphButton.js';
 import { editBucket, deleteBucket } from '../actions/buckets.js';
 import { getBuckets, getBudgets } from '../selectors/buckets.js';
 
