@@ -63,7 +63,7 @@
     }
   },
   "scripts": {
-    "build": "webpack; ncc build server.js -o dist/api; zip -FSr sludge.zip dist",
+    "build": "webpack; ncc build server.js -o dist/api; tar -C dist -cJf sludge.tar.xz www api",
     "version": "npm version patch --no-git-tag-version;",
     "deploy": "eb deploy -l sludge-$npm_package_version --staged",
     "test": "NODE_TLS_REJECT_UNAUTHORIZED=0 NODE_ENV=test ./node_modules/.bin/mocha --recursive api/**/*.test.js",

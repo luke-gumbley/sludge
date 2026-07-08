@@ -173,11 +173,12 @@ app.use('/api/rules', barrelCheck(authFail), rules);
 
 app.use('/blank', (req, res, next) => res.sendStatus(200));
 app.use(authenticator(res => res.redirect('/auth/google')));
-app.use(express.static('dist/app'));
+app.use(express.static(process.env['WWW_ROOT']));
 
 let server;
 
 export function start(secure, port) {
+	console.log(`Sludge ${secure ? 'HTTPS ' : ''}API server listening on port ${port}`)
 	server = secure
 		? https.createServer({
 				key: fs.readFileSync('./certs/server.key'),

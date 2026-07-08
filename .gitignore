@@ -1,6 +1,10 @@
 # Compiled outputs
 dist/
 *.zip
+.infra/.terraform/
+.infra/.terraform.tfstate.lock.info
+.infra/terraform.tfstate
+.infra/terraform.tfstate.backup
 
 # Dependency directory
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
@@ -10,11 +14,15 @@ node_modules/
 /data/
 
 # Various secrets
+notes
 api/secrets.js
 syncprod.sh
 *.sql
 *.pgsql
 !api/ephemeral.sql
+
+# Image secrets
+.image/secrets.auto.pkrvars.hcl
 
 # IntelliJ files
 .idea

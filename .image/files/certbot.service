@@ -1,0 +1,11 @@
+[Unit]
+Description=Certbot setup
+After=nginx.service
+
+[Service]
+Type=simple
+User=ubuntu
+ExecStart=/home/ubuntu/setup_cert.sh
+
+[Install]
+WantedBy=multi-user.target
