@@ -178,6 +178,21 @@ var formatDefinitions = [{
 		amount: r.Amount
 	})
 },{
+	name: 'westpac_acct',
+	regex: /A(\d{2})(\d{4})(\d{7})(\d{3})-(\d{2}[A-Za-z]{3}\d{2}).csv/,
+	data: match => ({ account: `${match[1]}-${match[2]}-${match[3]}-${match[4]}`, start: moment.tz(match[5],'DDMMMYY', 'Pacific/Auckland') }),
+	header: ['columns'],
+	columns: ['Date', 'Amount', 'Other Party', 'Description', 'Reference', 'Particulars', 'Analysis Code'],
+	map: r => Object.assign({}, r, {
+		date: moment.tz(r['Date'], 'DD/MM/YYYY', 'Pacific/Auckland'),
+		amount: r.Amount,
+		party: r['Other Party'],
+		type: r.Description,
+		reference: r.Reference,
+		particulars: r.Particulars,
+		code: r['Analysis Code']
+	})
+},{
 	name: 'westpac_credit',
 	regex: /AXXXX_XXXX_XXXX_(\d{4})-(\d{2}[A-Za-z]{3}\d{2}).csv/,
 	data: match => ({ account: `XXXX_${match[1]}`, start: moment.tz(match[2],'DDMMMYY', 'Pacific/Auckland') }),
