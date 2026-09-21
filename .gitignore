@@ -1,6 +1,6 @@
 # Compiled outputs
 dist/
-*.zip
+*.tar.xz
 .infra/.terraform/
 .infra/.terraform.tfstate.lock.info
 .infra/terraform.tfstate
