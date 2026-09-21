@@ -44,8 +44,8 @@ resource "aws_cloudwatch_metric_alarm" "instance" {
   dimensions                = { InstanceId: aws_instance.app_server.id }
   statistic                 = "Maximum"
   period                    = "300"
-  evaluation_periods        = "3"
-  datapoints_to_alarm       = "3"
+  evaluation_periods        = "1"
+  datapoints_to_alarm       = "1"
   threshold                 = "1"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   tags                      = { "Name": "sludge_instance_check_fail" }
