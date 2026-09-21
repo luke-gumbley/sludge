@@ -73,6 +73,16 @@ build {
     inline_shebang = "/bin/bash -e"
     environment_vars = ["NEEDRESTART_SUSPEND=true","DEBIAN_FRONTEND=noninteractive"]
     inline = [
+      "echo Update all packages",
+      "echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections",
+      "sudo apt-get update",
+    ]
+  }
+
+  provisioner "shell" {
+    inline_shebang = "/bin/bash -e"
+    environment_vars = ["NEEDRESTART_SUSPEND=true","DEBIAN_FRONTEND=noninteractive"]
+    inline = [
       "echo Install Node",
       "echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections",
       "sudo apt-get install -y -qq unzip",
